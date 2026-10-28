@@ -73,7 +73,9 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 .yn-explain .hint { margin-top: 4px; }
 .cme-add { margin-top: 10px; padding: 8px 14px; font-size: 13px; border-style: dashed; border-color: var(--teal); color: var(--teal); }
 .row-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-.ext-hide.is-hidden { display: none; }
+.ext-hide.is-hidden, .int-hide.is-hidden { display: none !important; }
+.pw-back { margin-left: auto; align-self: center; font-size: 13px; font-weight: 600; color: var(--teal); text-decoration: none; }
+.pw-back:hover { text-decoration: underline; }
 .row-name { display: grid; grid-template-columns: 120px 1fr 1fr 1fr; gap: 12px; }
 @media (max-width: 640px) { .row-name { grid-template-columns: 1fr 1fr; } }
 
@@ -424,7 +426,9 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 <main>
 
 <div class="pathway">
-  <span class="chip-label">Your Pathway</span>
+  <span class="chip-label" style="flex-basis:auto;">Your Pathway</span>
+  <a href="./" class="pw-back">&larr; Portal home</a>
+  <span style="flex-basis:100%; height:0;"></span>
   <div class="pw-field">
     <label>Application</label>
     <div class="pw-fixed">Re-Credentialing</div>
@@ -473,7 +477,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       <div class="doc-item" data-doc="docLic"><span class="cbox"></span><span class="doc-label">Current Antigua &amp; Barbuda Medical Licence &mdash; valid and in good standing<span class="doc-fname"></span></span><span class="doc-attach"><input type="file" id="docLic" accept="image/*,.pdf" hidden onchange="refreshDocs()"><label for="docLic" class="doc-btn">Attach</label></span></div>
       <div class="doc-item" data-doc="docBLS"><span class="cbox"></span><span class="doc-label">Current Basic Life Support (BLS) and Advanced Cardiac Life Support (ACLS) Certification<span class="doc-fname"></span></span><span class="doc-attach"><input type="file" id="docBLS" accept="image/*,.pdf" hidden onchange="refreshDocs()"><label for="docBLS" class="doc-btn">Attach</label></span></div>
       <div class="doc-item" data-doc="cme"><span class="cbox"></span><span class="doc-label">Continuing Medical Education (CME) Records <span class="cme-tag" id="cmeTargetTag">30 credits / year</span><span class="doc-fname"></span></span><span class="doc-attach"><a href="#secCME" class="doc-where">Attach in Section VIII</a></span></div>
-      <div class="doc-item" data-doc="docInd"><span class="cbox"></span><span class="doc-label">Professional Indemnity / Malpractice Insurance Certificate <span class="opt" style="font-weight:400;">(applicable to practice in Antigua)</span><span class="doc-fname"></span></span><span class="doc-attach"><input type="file" id="docInd" accept="image/*,.pdf" hidden onchange="refreshDocs()"><label for="docInd" class="doc-btn">Attach</label></span></div>
+      <div class="doc-item int-hide" data-doc="docInd"><span class="cbox"></span><span class="doc-label">Professional Indemnity / Malpractice Insurance Certificate <span class="opt" style="font-weight:400;">(applicable to practice in Antigua)</span><span class="doc-fname"></span></span><span class="doc-attach"><input type="file" id="docInd" accept="image/*,.pdf" hidden onchange="refreshDocs()"><label for="docInd" class="doc-btn">Attach</label></span></div>
       <div class="doc-item" data-doc="fit"><span class="cbox"></span><span class="doc-label">Medical Fitness Certificate &mdash; signed and stamped by your examining physician <span class="opt" style="font-weight:400;">(template provided in Section VI)</span><span class="doc-fname"></span></span><span class="doc-attach"><a href="#secVI" class="doc-where">Attach in Section VI</a></span></div>
     </div>
     <div class="other-docs">
@@ -1157,6 +1161,9 @@ function applyPathway() {
   document.querySelectorAll('.ext-hide').forEach(function(el) {
     el.classList.toggle('is-hidden', status === 'external');
   });
+  document.querySelectorAll('.int-hide').forEach(function(el) {
+    el.classList.toggle('is-hidden', status !== 'external');
+  });
   document.getElementById('printPathway').innerHTML =
     '<strong>Pathway:</strong> Re-Credentialing &middot; ' + CATEGORY_LABELS[cat] + ' &middot; ' +
     (status === 'external' ? 'External' : 'Internal (employed at SLBMC)');
@@ -1679,7 +1686,7 @@ function missingDocuments() {
   if (!fileNames('docCV').length) miss.push('Curriculum Vitae / Résumé');
   if (!fileNames('docLic').length) miss.push('Antigua & Barbuda Medical Licence');
   if (!fileNames('docBLS').length) miss.push('BLS / ACLS Certification');
-  if (!fileNames('docInd').length) miss.push('Professional Indemnity / Malpractice Insurance Certificate');
+  if (document.getElementById('pwStatus').value === 'external' && !fileNames('docInd').length) miss.push('Professional Indemnity / Malpractice Insurance Certificate');
   if (!fileNames('fitUpload').length) miss.push('Medical Fitness Certificate');
   const waived = document.getElementById('cmeWaiver').classList.contains('on');
   if (waived && !fileNames('waiverUpload').length) miss.push('Training programme enrolment letter (CME waiver)');
@@ -1898,6 +1905,7 @@ function buildPdfDoc(ref, sigImg) {
   const secI = document.getElementById('secI');
   const docRows = [];
   secI.querySelectorAll('.doc-item').forEach(function(item) {
+    if (!isShown(item)) return;
     const label = item.querySelector('.doc-label').cloneNode(true);
     label.querySelectorAll('.doc-fname, .cme-tag').forEach(function(x) { x.remove(); });
     const f = item.querySelector('.doc-fname');
