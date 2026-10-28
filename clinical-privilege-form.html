@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLBMC Clinical Privilege Re-Credentialing Form</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0d2340;
+  --navy-mid: #163660;
+  --navy-light: #1a4a7a;
+  --teal: #007a8c;
+  --teal-light: #00a3b8;
+  --teal-pale: #f3fbfc;
+  --gold: #c9962a;
+  --gold-light: #e8b84b;
+  --gold-pale: #fdf6e3;
+  --cream: #f8f5ef;
+  --white: #ffffff;
+  --gray-light: #eef0f3;
+  --gray-mid: #b0b8c4;
+  --gray-dark: #4a5568;
+  --green: #2d7a4f;
+  --green-light: #e8f5ee;
+  --amber: #b8761a;
+  --amber-bg: #fff5e5;
+  --coral: #b8431e;
+  --coral-bg: #fbeae2;
+  --text: #1a2535;
+  --shadow: 0 4px 24px rgba(13,35,64,0.10);
+  --shadow-sm: 0 2px 8px rgba(13,35,64,0.08);
+  --radius: 10px;
+  --radius-lg: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; line-height: 1.5; }
+
+/* HEADER */
+header { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%); color: var(--white); padding: 24px 32px 20px; position: relative; overflow: hidden; }
+header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px; border-radius: 50%; background: rgba(201,150,42,0.12); }
+header::after { content: ''; position: absolute; bottom: -20px; left: 30%; width: 140px; height: 140px; border-radius: 50%; background: rgba(0,122,140,0.15); }
+.header-top { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; position: relative; z-index: 2; }
+.logo-mark { width: 48px; height: 48px; background: var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 20px; color: var(--navy); flex-shrink: 0; }
+.header-text { flex: 1; }
+header h1 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; letter-spacing: 0.3px; line-height: 1.2; }
+header .subtitle { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.85); letter-spacing: 0.4px; margin-top: 4px; }
+header .committee { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.65); letter-spacing: 0.6px; text-transform: uppercase; margin-top: 2px; }
+.header-contact { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 20px; padding-top: 12px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.15); font-size: 12px; color: rgba(255,255,255,0.8); }
+.header-contact strong { color: var(--white); font-weight: 500; }
+
+/* MAIN */
+main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
+
+/* Path chips */
+.path-chips { display: flex; flex-wrap: wrap; gap: 8px; background: var(--white); border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow-sm); margin-bottom: 20px; align-items: center; }
+.path-chips .chip-label { font-size: 11px; font-weight: 700; color: var(--gray-dark); text-transform: uppercase; letter-spacing: 0.6px; margin-right: 4px; }
+.path-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; background: var(--teal-pale); border: 1px solid #d8f0f4; color: var(--navy); border-radius: 20px; font-size: 12px; font-weight: 600; }
+.path-chip.renewal { background: var(--gold-pale); border-color: #e8d9a8; color: #6a5020; }
+.path-chip .change { color: var(--teal); text-decoration: underline; font-size: 11px; font-weight: 500; cursor: pointer; }
+
+/* SECTIONS */
+.form-section { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden; }
+.section-head { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%); color: var(--white); padding: 16px 24px; display: flex; align-items: center; gap: 16px; position: relative; }
+.section-num { background: var(--gold); color: var(--navy); width: 42px; height: 42px; border-radius: 50%; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.section-title { flex: 1; min-width: 0; }
+.section-title h2 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; line-height: 1.25; }
+.section-title .sub { font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.72); margin-top: 2px; }
+.section-body { padding: 24px; position: relative; }
+
+/* FIELDS */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+.label { display: block; font-size: 11.5px; font-weight: 600; color: var(--navy); margin-bottom: 5px; letter-spacing: 0.3px; }
+.label .req { color: var(--coral); margin-left: 2px; }
+.label .opt { color: var(--gray-mid); font-weight: 400; font-size: 11px; margin-left: 4px; }
+.input, .select, .textarea { display: block; width: 100%; padding: 10px 12px; border: 1.5px solid var(--gray-mid); border-radius: 6px; background: var(--white); font-family: inherit; font-size: 14px; color: var(--text); outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+.input:focus, .select:focus, .textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,150,42,0.15); }
+.textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+.select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--gray-dark) 50%), linear-gradient(135deg, var(--gray-dark) 50%, transparent 50%); background-position: calc(100% - 17px) 50%, calc(100% - 12px) 50%; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 32px; }
+.hint { margin-top: 4px; font-size: 11.5px; color: var(--gray-dark); font-style: italic; line-height: 1.4; }
+
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+.row-21 { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .row-2, .row-3, .row-4, .row-21 { grid-template-columns: 1fr; } }
+
+.sec-divider { margin: 22px -24px; border: 0; border-top: 1px solid var(--gray-light); }
+.sub-h { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 12px; padding-left: 10px; border-left: 3px solid var(--gold); }
+.sub-h.first { margin-top: 0; }
+
+/* NOTES BLOCKS */
+.doc-note { background: var(--gold-pale); border: 1px solid #e8d9a8; border-left: 4px solid var(--gold); border-radius: 6px; padding: 12px 16px; font-size: 13px; color: #6a5020; line-height: 1.55; margin-bottom: 18px; }
+.doc-note strong { color: #4a3610; }
+.doc-list { display: flex; flex-direction: column; gap: 6px; }
+.doc-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: var(--teal-pale); border: 1px solid #d8f0f4; border-left: 3px solid var(--teal); border-radius: 4px; }
+.doc-item .cbox { width: 16px; height: 16px; flex-shrink: 0; border: 1.5px solid var(--gray-mid); border-radius: 3px; background: var(--white); margin-top: 2px; }
+.doc-item .doc-label { font-size: 13px; font-weight: 500; color: var(--navy); line-height: 1.45; }
+.doc-item .cme-tag { display: inline-block; background: var(--gold-pale); color: var(--amber); font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 3px; margin-left: 6px; }
+
+.cmt-box { margin-top: 18px; padding: 14px 18px; background: var(--gold-pale); border: 1px dashed var(--gold); border-radius: 8px; }
+.cmt-ttl { font-size: 10.5px; font-weight: 700; color: var(--amber); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+
+/* RADIO ROWS */
+.radio-row { display: flex; gap: 20px; align-items: center; margin-top: 4px; }
+.radio-row label { display: inline-flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 500; color: var(--text); cursor: pointer; }
+.radio-row input[type="radio"] { width: 18px; height: 18px; accent-color: var(--navy); }
+
+/* YES/NO QUESTIONS */
+.yn-wrap { border: 1px solid var(--gray-light); border-radius: 8px; overflow: hidden; }
+.yn-row { display: flex; align-items: flex-start; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--gray-light); flex-wrap: wrap; }
+.yn-row:last-child { border-bottom: none; }
+.yn-row:nth-child(even) { background: #fafbfc; }
+.yn-q { flex: 1 1 60%; font-size: 13.5px; line-height: 1.5; color: var(--text); }
+.yn-q .num { font-weight: 700; color: var(--navy); margin-right: 4px; }
+.yn-opts { display: flex; gap: 12px; flex-shrink: 0; align-items: center; }
+.yn-opts label { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 500; color: var(--gray-dark); cursor: pointer; }
+.yn-opts input[type="radio"] { width: 16px; height: 16px; accent-color: var(--navy); }
+.yn-adv { display: none; flex-basis: 100%; margin-top: 8px; padding: 8px 12px; background: var(--amber-bg); border-left: 3px solid var(--amber); border-radius: 4px; font-size: 12px; color: var(--amber); font-style: italic; line-height: 1.5; }
+.yn-row.yes .yn-adv { display: block; }
+.yn-explain { display: none; flex-basis: 100%; margin-top: 10px; }
+.yn-explain .label { font-size: 11px; font-weight: 600; color: var(--navy); margin-bottom: 5px; letter-spacing: 0.3px; }
+.yn-explain textarea { display: block; width: 100%; padding: 9px 11px; border: 1.5px solid var(--gray-mid); border-radius: 6px; background: var(--white); font-family: inherit; font-size: 13.5px; color: var(--text); outline: none; min-height: 70px; resize: vertical; line-height: 1.5; }
+.yn-explain textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,150,42,0.15); }
+.yn-row.yes .yn-explain { display: block; }
+
+/* TOGGLE SWITCH (private practice) */
+.toggle-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; background: var(--teal-pale); border: 1px solid #d8f0f4; border-radius: 7px; margin-top: 14px; cursor: pointer; }
+.toggle-row.on { background: #e8f5ee; border-color: #b8dcc5; }
+.toggle-sw { width: 38px; height: 22px; background: var(--gray-mid); border-radius: 100px; position: relative; flex-shrink: 0; margin-top: 2px; transition: background 0.2s; }
+.toggle-sw::after { content: ""; position: absolute; width: 18px; height: 18px; background: var(--white); border-radius: 50%; top: 2px; left: 2px; transition: left 0.2s; }
+.toggle-row.on .toggle-sw { background: var(--green); }
+.toggle-row.on .toggle-sw::after { left: 18px; }
+.toggle-title { font-size: 13.5px; font-weight: 600; color: var(--text); }
+.toggle-desc { font-size: 12px; color: var(--gray-dark); margin-top: 2px; line-height: 1.4; }
+.pp-block { display: none; margin-top: 14px; padding: 16px; background: #f7fcfd; border: 1px solid #c8e8ee; border-radius: 8px; }
+.pp-block.on { display: block; }
+.pp-ttl { font-size: 11.5px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; }
+
+/* CME CARD */
+.cme-progress { background: linear-gradient(135deg, #fff8ec 0%, #fffaf4 100%); border: 1.5px solid #f0d490; border-radius: 10px; padding: 18px; margin-bottom: 18px; }
+.cme-prog-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+.cme-prog-label { font-size: 11px; font-weight: 700; color: var(--amber); text-transform: uppercase; letter-spacing: 0.6px; }
+.cme-prog-sub { font-size: 11.5px; color: #6a5020; margin-top: 2px; }
+.cme-prog-value { font-size: 24px; font-weight: 700; color: var(--amber); white-space: nowrap; }
+.cme-prog-value .target { color: var(--gray-dark); font-weight: 400; font-size: 16px; }
+.cme-bar-bg { height: 10px; background: var(--white); border: 1px solid #f0d490; border-radius: 100px; overflow: hidden; margin-top: 12px; }
+.cme-bar-fill { height: 100%; background: var(--amber); border-radius: 100px; width: 0%; }
+.cme-period-row { display: flex; gap: 12px; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px dashed #e8d9a8; flex-wrap: wrap; font-size: 13px; color: #6a5020; }
+.cme-period-row label { font-weight: 600; }
+.cme-period-row select { padding: 6px 28px 6px 10px; border: 1.5px solid #e8d9a8; border-radius: 5px; background-color: var(--white); font-family: inherit; font-size: 13px; appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--gray-dark) 50%), linear-gradient(135deg, var(--gray-dark) 50%, transparent 50%); background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+
+.cme-waiver { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; background: var(--teal-pale); border: 1.5px solid #c8e8ee; border-radius: 7px; margin: 14px 0; cursor: pointer; transition: all 0.15s; }
+.cme-waiver:hover { background: #e9f6f8; }
+.cme-waiver.on { background: var(--green-light); border-color: var(--green); }
+.cme-waiver .cbox { width: 20px; height: 20px; flex-shrink: 0; border: 1.5px solid var(--gray-mid); border-radius: 4px; background: var(--white); display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+.cme-waiver.on .cbox { background: var(--green); border-color: var(--green); }
+.cme-waiver .cbox svg { opacity: 0; }
+.cme-waiver.on .cbox svg { opacity: 1; }
+.cme-waiver-title { font-size: 13.5px; font-weight: 600; color: var(--text); }
+.cme-waiver-desc { font-size: 12px; color: var(--gray-dark); margin-top: 2px; line-height: 1.45; }
+
+.cme-table-wrap { margin-top: 14px; }
+.cme-table-wrap.hidden { display: none; }
+.cme-waived-note { display: none; margin-top: 14px; padding: 12px 14px; background: var(--green-light); border: 1.5px solid var(--green); border-radius: 7px; font-size: 13px; color: #1e5a3a; line-height: 1.5; }
+.cme-waived-note.on { display: block; }
+.cme-waived-note strong { display: block; margin-bottom: 3px; color: #0e4a2a; }
+
+.cme-table { width: 100%; border-collapse: collapse; font-size: 12.5px; border: 1px solid var(--gray-light); border-radius: 6px; overflow: hidden; }
+.cme-table th { background: var(--navy); color: var(--white); padding: 9px 10px; text-align: left; font-weight: 700; font-size: 11px; letter-spacing: 0.4px; text-transform: uppercase; }
+.cme-table th:last-child { text-align: right; }
+.cme-table td { padding: 2px; border-bottom: 1px solid var(--gray-light); background: var(--white); }
+.cme-table td:last-child { background: #fafbfc; }
+.cme-table input { width: 100%; border: 0; padding: 8px 10px; font-family: inherit; font-size: 13px; background: transparent; outline: none; color: var(--text); }
+.cme-table input:focus { background: #fff5e5; }
+.cme-table .credit-cell input { text-align: right; }
+.cme-table tr.total-row td { background: var(--gold-pale); font-weight: 700; color: var(--amber); font-size: 13px; padding: 10px 10px; border-top: 2px solid var(--gold); }
+
+/* CME CERTIFICATE UPLOAD */
+.cert-upload { margin-top: 16px; padding: 14px; border: 1.5px dashed var(--teal); border-radius: 8px; background: var(--teal-pale); text-align: center; }
+.cert-upload-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--white); border: 1.5px solid var(--teal); color: var(--teal); font-weight: 600; font-size: 13px; border-radius: 6px; cursor: pointer; font-family: inherit; }
+.cert-upload-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.cert-upload-note { font-size: 12px; color: var(--gray-dark); margin-top: 8px; }
+
+/* SIGNATURE UPLOAD */
+.sig-upload { margin-top: 4px; }
+.sig-upload-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 20px; background: var(--teal-pale); border: 1.5px dashed var(--teal); color: var(--teal); font-weight: 600; font-size: 13.5px; border-radius: 8px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.sig-upload-btn:hover { background: #e7f6f8; border-style: solid; }
+.sig-upload-note { background: var(--amber-bg); border: 1px solid #e8c088; border-left: 3px solid var(--amber); border-radius: 6px; padding: 10px 14px; margin-top: 10px; font-size: 12px; color: #6a4a10; line-height: 1.55; }
+.sig-upload-note strong { color: #4a3a10; display: block; margin-bottom: 3px; }
+.sig-preview-wrap { display: inline-flex; align-items: center; gap: 14px; padding: 12px 14px; background: var(--white); border: 1.5px solid var(--green); border-radius: 8px; margin-top: 4px; }
+.sig-preview-wrap img { max-height: 60px; max-width: 180px; border: 1px solid var(--gray-light); background: var(--white); display: block; }
+.sig-preview-remove { background: none; border: 0; color: var(--coral); font-size: 12px; font-weight: 500; cursor: pointer; padding: 4px 10px; font-family: inherit; border-radius: 4px; }
+.sig-preview-remove:hover { background: var(--coral-bg); }
+
+/* EXAMINING PHYSICIAN BIGGER */
+.exam-phys { min-height: 90px; resize: vertical; line-height: 1.5; }
+
+/* CERTIFICATION & WARN BLOCKS */
+.cert-block { background: var(--gold-pale); border: 1px solid #e8d9a8; border-radius: 8px; padding: 18px 22px; margin-bottom: 16px; font-size: 13px; color: #5a4810; line-height: 1.65; font-style: italic; }
+.warn-block { background: var(--coral-bg); border: 1px solid #e6c8b8; border-left: 3px solid var(--coral); border-radius: 6px; padding: 10px 14px; margin-top: 14px; font-size: 12.5px; color: var(--coral); text-align: center; font-weight: 500; }
+
+/* ACTION BAR */
+.action-bar { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; padding: 18px; background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); flex-wrap: wrap; }
+.btn-action { padding: 10px 20px; border-radius: 7px; border: none; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; }
+.btn-ghost { background: var(--white); color: var(--navy); border: 1.5px solid var(--gray-light); }
+.btn-ghost:hover { border-color: var(--teal-light); background: var(--teal-pale); }
+.btn-primary { background: var(--navy); color: var(--white); }
+.btn-primary:hover { background: var(--navy-mid); }
+
+/* FLOATING BACK TO TOP */
+.scroll-top { position: fixed; bottom: 20px; right: 20px; width: 42px; height: 42px; background: var(--navy); color: var(--white); border-radius: 50%; border: 0; box-shadow: var(--shadow); cursor: pointer; font-size: 20px; display: none; align-items: center; justify-content: center; z-index: 100; }
+.scroll-top.visible { display: flex; }
+
+/* PRINT STYLES */
+@media print {
+  @page { size: A4; margin: 0.4in; }
+  body { background: var(--white); font-size: 10.5px; line-height: 1.4; }
+  main { max-width: 100%; padding: 0; }
+  .path-chips, .action-bar, .scroll-top, .cert-upload { display: none !important; }
+  .form-section { break-inside: avoid; margin-bottom: 10px; box-shadow: none; border: 1px solid var(--gray-light); }
+  .section-body { padding: 14px 18px; }
+  .section-head { padding: 10px 18px; }
+  .section-num { width: 32px; height: 32px; font-size: 13px; }
+  .section-title h2 { font-size: 14px; }
+  header, header::before, header::after, .section-head, .section-num, .doc-note, .doc-item, .cmt-box, .yn-row:nth-child(even), .cert-block, .warn-block, .toggle-row, .toggle-row.on, .pp-block.on, .cme-progress, .cme-waiver, .cme-waiver.on, .cme-waived-note, .cme-table th, .cme-table tr.total-row td {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    forced-color-adjust: none !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="logo-mark">SL</div>
+    <div class="header-text">
+      <h1>Sir Lester Bird Medical Centre</h1>
+      <div class="subtitle">Clinical Privilege Re-Credentialing Form</div>
+      <div class="committee">Medical Staff Executive Committee &middot; Credentialing Committee</div>
+    </div>
+  </div>
+  <div class="header-contact">
+    <span>&#9993; <strong>clinical.privileges@msjmc.org</strong></span>
+    <span>&#9742; <strong>+1 (268) 484-2700 / 484-2713</strong></span>
+  </div>
+</header>
+
+<main>
+
+<div class="path-chips">
+  <span class="chip-label">Your Pathway</span>
+  <span class="path-chip renewal">Re-Credentialing <span class="change">change</span></span>
+  <span class="path-chip">Consultant / Specialist <span class="change">change</span></span>
+  <span class="path-chip">Internal <span class="change">change</span></span>
+</div>
+
+
+<!-- ============================================================
+     I. INSTRUCTIONS
+     ============================================================ -->
+<section class="form-section">
+  <div class="section-head">
+    <div class="section-num">I</div>
+    <div class="section-title">
+      <h2>Instructions</h2>
+      <div class="sub">For existing SLBMC practitioners renewing their clinical privileges</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="doc-note">
+      This re-credentialing form is for practitioners already credentialed at SLBMC whose credentialing period is coming to an end. It captures only the information that may have changed since your last cycle; your education, training, and other on-file information do not need to be re-entered. This form must be typed or completed legibly by hand in <strong>blue or black ink</strong>. If more space is required when answering a question, attach a clearly labelled continuation sheet referencing the section and question number.
+    </div>
+
+    <h3 class="sub-h first">Required Supporting Documents</h3>
+    <p class="hint" style="margin-bottom:12px;">Please attach the following with your re-credentialing application. These are mandatory for all re-credentialing applicants.</p>
+
+    <div class="doc-list">
+      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Completed SLBMC Clinical Privilege Re-Credentialing Form</span></label>
+      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Updated Curriculum Vitae / R&eacute;sum&eacute; <span class="opt" style="font-weight:400;">(reflecting any new training, posts, or publications since last credentialing)</span></span></label>
+      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Current Antigua &amp; Barbuda Medical Licence &mdash; valid and in good standing</span></label>
+      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Current Basic Life Support (BLS) and Advanced Cardiac Life Support (ACLS) Certification</span></label>
+      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Continuing Medical Education (CME) Records <span class="cme-tag" id="cmeTargetTag">30 credits / year</span></span></label>
+      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Professional Indemnity / Malpractice Insurance Certificate <span class="opt" style="font-weight:400;">(applicable to practice in Antigua)</span></span></label>
+    </div>
+
+    <div class="cmt-box">
+      <div class="cmt-ttl">For Credentialing Committee Use Only</div>
+      <div class="row-3">
+        <div class="field" style="margin-bottom:0;">
+          <label class="label">Practitioner&rsquo;s Full Name</label>
+          <input class="input" type="text" readonly style="background:#fff;">
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label class="label">Previous Credentialing Period</label>
+          <input class="input" type="text" readonly placeholder="MM/YYYY &ndash; MM/YYYY" style="background:#fff;">
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label class="label">Review Date</label>
+          <input class="input" type="date" readonly style="background:#fff;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     II. APPLICANT IDENTIFICATION
+     ============================================================ -->
+<section class="form-section">
+  <div class="section-head">
+    <div class="section-num">II</div>
+    <div class="section-title">
+      <h2>Applicant Identification</h2>
+      <div class="sub">Current details &mdash; please confirm or update</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="field">
+      <label class="label">Full Name <span class="req">*</span></label>
+      <input class="input" type="text" placeholder="Surname, First Name, Middle Name">
+    </div>
+
+    <div class="row-3">
+      <div class="field">
+        <label class="label">Current Role / Grade <span class="req">*</span></label>
+        <select class="select" id="roleSelect" onchange="updateCMETarget()">
+          <option value="consultant">Consultant / Specialist</option>
+          <option value="registrar">Registrar</option>
+          <option value="ho-gp">House Officer / General Practitioner</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="label">SLBMC Department <span class="req">*</span></label>
+        <input class="input" type="text" placeholder="e.g. Internal Medicine">
+      </div>
+      <div class="field">
+        <label class="label">SLBMC Appointment Title <span class="req">*</span></label>
+        <input class="input" type="text" placeholder="e.g. Consultant Physician">
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label class="label">Previous Credentialing Period <span class="req">*</span></label>
+        <input class="input" type="text" placeholder="MM/YYYY &ndash; MM/YYYY">
+        <div class="hint">From the date of your previous credentialing to today.</div>
+      </div>
+      <div class="field">
+        <label class="label">Date of Original SLBMC Appointment</label>
+        <input class="input" type="date">
+      </div>
+    </div>
+
+    <hr class="sec-divider">
+    <h3 class="sub-h first">Contact Details</h3>
+
+    <div class="row-21">
+      <div class="field">
+        <label class="label">Street Address <span class="req">*</span></label>
+        <input class="input" type="text">
+      </div>
+      <div class="field">
+        <label class="label">City <span class="req">*</span></label>
+        <input class="input" type="text">
+      </div>
+    </div>
+    <div class="row-4">
+      <div class="field">
+        <label class="label">State / Parish / Province</label>
+        <input class="input" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Country <span class="req">*</span></label>
+        <input class="input" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Post Office Box</label>
+        <input class="input" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Postal Code</label>
+        <input class="input" type="text">
+      </div>
+    </div>
+    <div class="row-3">
+      <div class="field">
+        <label class="label">Mobile <span class="req">*</span></label>
+        <input class="input" type="tel" placeholder="+1 (000) 000-0000">
+      </div>
+      <div class="field">
+        <label class="label">Home Telephone</label>
+        <input class="input" type="tel">
+      </div>
+      <div class="field">
+        <label class="label">E-mail Address <span class="req">*</span></label>
+        <input class="input" type="email">
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     III. CURRENT MEDICAL LICENCES
+     ============================================================ -->
+<section class="form-section">
+  <div class="section-head">
+    <div class="section-num">III</div>
+    <div class="section-title">
+      <h2>Current Medical Licences</h2>
+      <div class="sub">Confirm all licences currently held</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <h3 class="sub-h first">Antigua &amp; Barbuda Medical Council Licence</h3>
+    <p class="hint" style="margin-bottom:12px;">A current Antigua &amp; Barbuda medical licence is required for re-credentialing. Please enter its details as they appear on your licence.</p>
+    <div class="row-3">
+      <div class="field">
+        <label class="label">Registration Number <span class="req">*</span></label>
+        <input class="input" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Registration Type <span class="req">*</span></label>
+        <select class="select">
+          <option value="">Select</option>
+          <option>Provisional</option>
+          <option>Full</option>
+          <option>Specialist</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="label">Current Expiry Date <span class="req">*</span></label>
+        <input class="input" type="date">
+      </div>
+    </div>
+
+    <hr class="sec-divider">
+    <h3 class="sub-h first">Other Current Medical Licences</h3>
+    <p class="hint" style="margin-bottom:12px;">Any additional licences you currently hold in other countries or jurisdictions. If none, leave blank.</p>
+
+    <div id="otherLicences"></div>
+    <button type="button" class="btn-action btn-ghost" style="padding:9px 16px; font-size:13px; border-style:dashed; border-color:var(--teal); color:var(--teal);" onclick="addLicence()">+ Add another licence</button>
+
+    <hr class="sec-divider">
+    <div class="field" style="margin-bottom:0;">
+      <label class="label">Have there been any changes to your medical licences since your last credentialing cycle? <span class="req">*</span></label>
+      <div class="radio-row">
+        <label><input type="radio" name="lic_change" value="yes" onchange="toggleLicChange(this)"> Yes</label>
+        <label><input type="radio" name="lic_change" value="no" onchange="toggleLicChange(this)"> No</label>
+      </div>
+      <div id="licChangeExplain" style="display:none; margin-top:12px;">
+        <label class="label">Please describe the changes</label>
+        <textarea class="textarea" rows="3" placeholder="e.g. new licence obtained, licence lapsed, type changed, authority changed, etc."></textarea>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     IV. CURRENT PRACTICE LOCATION
+     ============================================================ -->
+<section class="form-section">
+  <div class="section-head">
+    <div class="section-num">IV</div>
+    <div class="section-title">
+      <h2>Current Practice Location</h2>
+      <div class="sub">Your SLBMC appointment and any private practice</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <h3 class="sub-h first">SLBMC Appointment</h3>
+    <p class="hint" style="margin-bottom:12px;">If any details here have changed since your last credentialing, please update them.</p>
+    <div class="row-2">
+      <div class="field">
+        <label class="label">Department</label>
+        <input class="input" type="text" placeholder="Pre-filled from Section II">
+      </div>
+      <div class="field">
+        <label class="label">Appointment Title</label>
+        <input class="input" type="text" placeholder="Pre-filled from Section II">
+      </div>
+    </div>
+
+    <div class="toggle-row" onclick="togglePrivatePractice(this)">
+      <div class="toggle-sw"></div>
+      <div>
+        <div class="toggle-title">I also hold a private practice</div>
+        <div class="toggle-desc">Tick to declare your private practice location and billing details.</div>
+      </div>
+    </div>
+
+    <div class="pp-block" id="ppBlock">
+      <div class="pp-ttl">Private Practice Declaration</div>
+      <div class="row-2">
+        <div class="field">
+          <label class="label">Name of Clinic / Place of Practice <span class="req">*</span></label>
+          <input class="input" type="text">
+        </div>
+        <div class="field">
+          <label class="label">Date Established</label>
+          <input class="input" type="date">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Address <span class="req">*</span></label>
+        <input class="input" type="text" placeholder="Street, City, State / Parish, Country">
+      </div>
+      <div class="row-3">
+        <div class="field">
+          <label class="label">Office Telephone</label>
+          <input class="input" type="tel">
+        </div>
+        <div class="field">
+          <label class="label">Fax Number</label>
+          <input class="input" type="tel">
+        </div>
+        <div class="field">
+          <label class="label">Office E-mail</label>
+          <input class="input" type="email">
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <label class="label">Billing Address <span class="opt">(if different)</span></label>
+        <input class="input" type="text">
+      </div>
+    </div>
+
+    <hr class="sec-divider">
+    <div class="field" style="margin-bottom:0;">
+      <label class="label">Have there been any changes to your practice location(s) since your last credentialing cycle? <span class="req">*</span></label>
+      <div class="radio-row">
+        <label><input type="radio" name="prac_change" value="yes" onchange="togglePracChange(this)"> Yes</label>
+        <label><input type="radio" name="prac_change" value="no" onchange="togglePracChange(this)"> No</label>
+      </div>
+      <div id="pracChangeExplain" style="display:none; margin-top:12px;">
+        <label class="label">Please describe the changes</label>
+        <textarea class="textarea" rows="3" placeholder="e.g. new department, change in appointment title, started / closed private practice, etc."></textarea>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     V. CONTINUING MEDICAL EDUCATION SUMMARY
+     ============================================================ -->
+<section class="form-section">
+  <div class="section-head">
+    <div class="section-num">V</div>
+    <div class="section-title">
+      <h2>Continuing Medical Education Summary</h2>
+      <div class="sub">CME credits earned during the previous credentialing period</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="cme-progress">
+      <div class="cme-prog-top">
+        <div>
+          <div class="cme-prog-label">Credits earned this cycle</div>
+          <div class="cme-prog-sub" id="cmeTargetLine">Target: <strong>30 credits per year</strong> &times; your cycle length</div>
+        </div>
+        <div class="cme-prog-value">0 <span class="target" id="cmeTargetTotal">/ 60</span></div>
+      </div>
+      <div class="cme-bar-bg"><div class="cme-bar-fill"></div></div>
+      <div class="cme-period-row">
+        <label for="cyclePeriod">Credentialing cycle length:</label>
+        <select id="cyclePeriod" onchange="updateCMETotal()">
+          <option value="1">1 year</option>
+          <option value="2" selected>2 years</option>
+          <option value="3">3 years</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="cme-waiver" id="cmeWaiver" onclick="toggleCMEWaiver(this)">
+      <div class="cbox"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div>
+        <div class="cme-waiver-title">I am currently enrolled in an active educational programme</div>
+        <div class="cme-waiver-desc">If you are in a formal training programme (fellowship, higher specialty training, further degree), CME credits are not required for this cycle. Attach a letter from your training programme confirming active enrolment instead.</div>
+      </div>
+    </div>
+
+    <div class="cme-waived-note" id="cmeWaivedNote">
+      <strong>CME requirement waived.</strong>
+      Attach a letter from your training programme confirming active enrolment in lieu of the CME summary.
+    </div>
+
+    <div class="cme-table-wrap" id="cmeTableWrap">
+      <p class="hint" style="margin-bottom:10px;">List CME activities earned during the previous credentialing period. If multiple credits were obtained from the same facilitator, they may be grouped on a single line.</p>
+      <table class="cme-table">
+        <thead>
+          <tr>
+            <th style="width:40%;">Name of Activity</th>
+            <th style="width:25%;">Facilitator</th>
+            <th style="width:20%;">Date</th>
+            <th style="width:15%;">Credits Earned</th>
+          </tr>
+        </thead>
+        <tbody id="cmeTableBody">
+          <!-- 16 default rows generated by JS -->
+        </tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;">TOTAL CREDITS</td>
+            <td class="credit-cell"><input type="text" id="cmeTotal" readonly value="0" style="text-align:right; font-weight:700; color:var(--amber);"></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="cert-upload">
+        <div style="font-size:12.5px; color:var(--navy); font-weight:600; margin-bottom:8px;">Attach your CME certificates or summary sheets</div>
+        <input type="file" id="cmeUpload" multiple accept="image/*,.pdf" style="display:none;" onchange="handleCMEUpload(this)">
+        <label for="cmeUpload" class="cert-upload-btn">
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M8 2v8m0 0l-3-3m3 3l3-3M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Upload CME certificates
+        </label>
+        <div class="cert-upload-note">Accepted: JPG, PNG, PDF. Multiple files allowed.</div>
+        <div id="cmeFileList" style="margin-top:10px; font-size:12px; color:var(--navy);"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     VI. CHANGES SINCE LAST CREDENTIALING CYCLE
+     ============================================================ -->
+<section class="form-section">
+  <div class="section-head">
+    <div class="section-num">VI</div>
+    <div class="section-title">
+      <h2>Changes Since Last Credentialing Cycle</h2>
+      <div class="sub">Report anything that has happened since your previous credentialing</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <p class="hint" style="margin-bottom:14px;">Answer each question in relation to the period since your last credentialing. If Yes, provide details in the box that appears or attach a signed disclosure sheet.</p>
+
+    <div class="yn-wrap">
+
+      <div class="yn-row" onclick="toggleYN(this,event)">
+        <div class="yn-q"><span class="num">1.</span> Have you been subject to any new disciplinary action by, or do you currently have proceedings pending before, any Medical Board, Professional Association, or regulatory authority?</div>
+        <div class="yn-opts">
+          <label><input type="radio" name="c1"> Yes</label>
+          <label><input type="radio" name="c1"> No</label>
+        </div>
+        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+      </div>
+
+      <div class="yn-row" onclick="toggleYN(this,event)">
+        <div class="yn-q"><span class="num">2.</span> Has any of your medical or professional licences been denied, limited, suspended, revoked or allowed to lapse since your last cycle?</div>
+        <div class="yn-opts">
+          <label><input type="radio" name="c2"> Yes</label>
+          <label><input type="radio" name="c2"> No</label>
+        </div>
+        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+      </div>
+
+      <div class="yn-row" onclick="toggleYN(this,event)">
+        <div class="yn-q"><span class="num">3.</span> Have you been charged with, or convicted of, any criminal offence (excluding minor traffic violations)?</div>
+        <div class="yn-opts">
+          <label><input type="radio" name="c3"> Yes</label>
+          <label><input type="radio" name="c3"> No</label>
+        </div>
+        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+      </div>
+
+      <div class="yn-row" onclick="toggleYN(this,event)">
+        <div class="yn-q"><span class="num">4.</span> Has any new malpractice action been filed, or any previous malpractice action settled or closed, against you?</div>
+        <div class="yn-opts">
+          <label><input type="radio" name="c4"> Yes</label>
+          <label><input type="radio" name="c4"> No</label>
+        </div>
+        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+      </div>
+
+      <div class="yn-row" onclick="toggleYN(this,event)">
+        <div class="yn-q"><span class="num">5.</span> Have any restrictions been placed on your authority to prescribe, dispense, or handle controlled substances?</div>
+        <div class="yn-opts">
+          <label><input type="radio" name="c5"> Yes</label>
+          <label><input type="radio" name="c5"> No</label>
+        </div>
+        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+      </div>
+
+      <div class="yn-row" onclick="toggleYN(this,event)">
+        <div class="yn-q"><span class="num">6.</span> Have you been the subject of any disciplinary measures, investigations, or restrictions at any hospital or health institution (including SLBMC)?</div>
+        <div class="yn-opts">
+          <label><input type="radio" name="c6"> Yes</label>
+          <label><input type="radio" name="c6"> No</label>
+        </div>
+        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+      </div>
+
+      <div class="yn-row" onclick="toggleYN(this,event)">
+        <div class="yn-q"><span class="num">7.</span> Have you resigned, declined to renew, or had reduced, any clinical privileges or medical staff membership at any institution during this period?</div>
+        <div class="yn-opts">
+          <label><input type="radio" name="c7"> Yes</label>
+          <label><input type="radio" name="c7"> No</label>
+        </div>
+        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     VII. HEALTH STATUS DECLARATION
+     ============================================================ -->
+<section class="form-section">
+  <div class="section-head">
+    <div class="section-num">VII</div>
+    <div class="section-title">
+      <h2>Health Status Declaration</h2>
+      <div class="sub">Current health status at the time of re-credentialing</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="yn-wrap">
+      <div class="yn-row" onclick="toggleYN(this,event)">
+        <div class="yn-q"><span class="num">1.</span> Do you currently suffer from any physical or mental condition &mdash; including dependence on alcohol or drugs &mdash; that affects, or is reasonably expected to progress within the next two (2) years to the point of affecting, your ability to perform the requested clinical privileges or other medical tasks?</div>
+        <div class="yn-opts">
+          <label><input type="radio" name="h1"> Yes</label>
+          <label><input type="radio" name="h1"> No</label>
+        </div>
+        <div class="yn-adv">If Yes, include details of any reasonable accommodation that could facilitate safe performance of the requested clinical privileges.</div>
+      </div>
+      <div class="yn-row" onclick="toggleYN(this,event)">
+        <div class="yn-q"><span class="num">2.</span> Are you currently taking medication, or under treatment for a condition that could affect your ability, medical performance, or professional obligations if the treatment / medication were discontinued?</div>
+        <div class="yn-opts">
+          <label><input type="radio" name="h2"> Yes</label>
+          <label><input type="radio" name="h2"> No</label>
+        </div>
+        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+      </div>
+      <div class="yn-row" onclick="toggleYN(this,event)">
+        <div class="yn-q"><span class="num">3.</span> Have you been hospitalised or received institutional care within the last five (5) years for any condition described in the previous questions?</div>
+        <div class="yn-opts">
+          <label><input type="radio" name="h3"> Yes</label>
+          <label><input type="radio" name="h3"> No</label>
+        </div>
+        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+      </div>
+    </div>
+
+    <hr class="sec-divider">
+    <div class="field">
+      <label class="label">Date of Most Recent Physical Examination</label>
+      <input class="input" type="date" style="max-width:260px;">
+    </div>
+    <div class="field">
+      <label class="label">Examining Physician <span class="opt">(Name, Signature and Stamp)</span></label>
+      <textarea class="input exam-phys" placeholder="Enter the examining physician's full name here. A signature and official stamp should be placed on the printed form, or supplied on a separate signed and stamped document uploaded with your application."></textarea>
+    </div>
+    <div class="field" style="margin-bottom:0;">
+      <label class="label">Additional Notes <span class="opt">(if any)</span></label>
+      <textarea class="textarea" rows="2"></textarea>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     VIII. CERTIFICATION & SIGNATURE
+     ============================================================ -->
+<section class="form-section">
+  <div class="section-head">
+    <div class="section-num">VIII</div>
+    <div class="section-title">
+      <h2>Certification &amp; Signature</h2>
+      <div class="sub">Please read and sign</div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="cert-block">
+      I hereby certify that all information provided in this re-credentialing application is complete, correct, and current to the best of my knowledge and belief. I acknowledge that any lack of disclosure, omission, misrepresentation, or falsification of information constitutes grounds for denial of this application. A photocopy or electronic copy of this signed application shall have the same force and effect as the original. I have reviewed this information up to the date indicated below.
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label class="label">Full Printed Name <span class="req">*</span></label>
+        <input class="input" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Date <span class="req">*</span></label>
+        <input class="input" type="date">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Signature <span class="req">*</span></label>
+      <div class="sig-upload">
+        <input type="file" accept="image/*,.pdf" id="sigUpload" style="display:none;" onchange="previewSignature(this)">
+        <label for="sigUpload" class="sig-upload-btn" id="sigUploadBtn">
+          <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M9 2v10m0 0l-4-4m4 4l4-4M3 15h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Upload signature photograph
+        </label>
+        <div id="sigPreview" class="sig-preview-wrap" style="display:none;">
+          <img id="sigPreviewImg" alt="Signature preview">
+          <button type="button" class="sig-preview-remove" onclick="clearSignature()">&times; Remove</button>
+        </div>
+      </div>
+      <div class="sig-upload-note">
+        <strong>No scanned signature? No problem.</strong>
+        Sign a clean white sheet of paper with blue or black ink, take a clear photograph (or scan) of your signature, and upload it here. Accepted formats: JPG, PNG, PDF.
+      </div>
+    </div>
+
+    <div class="warn-block">
+      Rubber-stamp signatures are not accepted. The signature must be that of the applying practitioner. Applications with incomplete or missing signatures will not be processed.
+    </div>
+
+  </div>
+</section>
+
+
+<div class="action-bar">
+  <button class="btn-action btn-ghost">Save draft</button>
+  <button class="btn-action btn-ghost" onclick="window.print()">Print / Save as PDF</button>
+  <button class="btn-action btn-primary">Submit re-credentialing application</button>
+</div>
+
+</main>
+
+<button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">&#8593;</button>
+
+<script>
+/* CME target based on role */
+function updateCMETarget() {
+  const role = document.getElementById('roleSelect').value;
+  const annual = (role === 'ho-gp') ? 15 : 30;
+  const annualWord = (annual === 15) ? 'fifteen (15)' : 'thirty (30)';
+  document.getElementById('cmeTargetTag').textContent = annual + ' credits / year';
+  document.getElementById('cmeTargetLine').innerHTML = 'Target: <strong>' + annualWord + ' credits per year</strong> &times; your cycle length';
+  updateCMETotal();
+}
+
+/* CME total based on cycle length */
+function updateCMETotal() {
+  const role = document.getElementById('roleSelect').value;
+  const annual = (role === 'ho-gp') ? 15 : 30;
+  const years = parseInt(document.getElementById('cyclePeriod').value, 10);
+  const total = annual * years;
+  document.getElementById('cmeTargetTotal').textContent = '/ ' + total;
+  calcCMETotal();
+}
+
+/* CME waiver toggle */
+function toggleCMEWaiver(el) {
+  el.classList.toggle('on');
+  const on = el.classList.contains('on');
+  document.getElementById('cmeTableWrap').classList.toggle('hidden', on);
+  document.getElementById('cmeWaivedNote').classList.toggle('on', on);
+}
+
+/* Yes/No advisory + explanation reveal */
+function toggleYN(row, event) {
+  if (event.target.closest('.yn-adv') || event.target.closest('.yn-explain')) return;
+  setTimeout(function(){
+    const radios = row.querySelectorAll('input[type="radio"]');
+    const checked = row.querySelector('input[type="radio"]:checked');
+    if (!checked) return;
+    if (checked === radios[0]) row.classList.add('yes');
+    else row.classList.remove('yes');
+  }, 0);
+}
+
+/* Private practice toggle */
+function togglePrivatePractice(el) {
+  el.classList.toggle('on');
+  document.getElementById('ppBlock').classList.toggle('on');
+}
+
+/* Licence change explanation */
+function toggleLicChange(radio) {
+  document.getElementById('licChangeExplain').style.display = (radio.value === 'yes') ? 'block' : 'none';
+}
+function togglePracChange(radio) {
+  document.getElementById('pracChangeExplain').style.display = (radio.value === 'yes') ? 'block' : 'none';
+}
+
+/* Additional licence slots */
+let licCount = 0;
+function addLicence() {
+  licCount++;
+  const container = document.getElementById('otherLicences');
+  const slot = document.createElement('div');
+  slot.className = 'lic-slot';
+  slot.style.cssText = 'background:#fafbfc; border:1px solid var(--gray-light); border-radius:8px; padding:16px; margin-bottom:12px;';
+  slot.innerHTML =
+    '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">' +
+      '<span style="font-size:11px; font-weight:700; color:var(--teal); text-transform:uppercase; letter-spacing:0.6px;">Licence ' + licCount + '</span>' +
+      '<button type="button" style="background:none; border:0; color:var(--coral); font-size:12px; font-weight:500; cursor:pointer; font-family:inherit;" onclick="removeLicence(this)">&times; Remove</button>' +
+    '</div>' +
+    '<div class="row-2">' +
+      '<div class="field"><label class="label">Country of Issue</label><input class="input" type="text"></div>' +
+      '<div class="field"><label class="label">Issuing Authority</label><input class="input" type="text"></div>' +
+    '</div>' +
+    '<div class="row-3">' +
+      '<div class="field"><label class="label">Licence Number</label><input class="input" type="text"></div>' +
+      '<div class="field"><label class="label">Current Expiry Date</label><input class="input" type="date"></div>' +
+      '<div class="field" style="margin-bottom:0;"><label class="label">Narcotic Authorisation <span class="opt">(if applicable)</span></label><input class="input" type="text"></div>' +
+    '</div>';
+  container.appendChild(slot);
+}
+function removeLicence(btn) {
+  const slot = btn.closest('.lic-slot');
+  slot.parentNode.removeChild(slot);
+  const slots = document.querySelectorAll('#otherLicences > .lic-slot');
+  licCount = slots.length;
+  slots.forEach(function(s, i) {
+    const num = s.querySelector('span');
+    if (num) num.textContent = 'Licence ' + (i + 1);
+  });
+}
+
+/* CME table — 16 rows */
+function buildCMETable() {
+  const tbody = document.getElementById('cmeTableBody');
+  for (let i = 0; i < 16; i++) {
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><input type="text"></td>' +
+      '<td><input type="text"></td>' +
+      '<td><input type="text" placeholder="MM/YYYY"></td>' +
+      '<td class="credit-cell"><input type="number" step="0.5" min="0" oninput="calcCMETotal()"></td>';
+    tbody.appendChild(tr);
+  }
+}
+function calcCMETotal() {
+  const inputs = document.querySelectorAll('.cme-table tbody .credit-cell input');
+  let total = 0;
+  inputs.forEach(function(inp) {
+    const v = parseFloat(inp.value);
+    if (!isNaN(v)) total += v;
+  });
+  const shown = total % 1 === 0 ? total : total.toFixed(1);
+  const totalCell = document.getElementById('cmeTotal');
+  if (totalCell) totalCell.value = shown;
+  const valDisplay = document.querySelector('.cme-prog-value');
+  if (valDisplay) {
+    const targetSpan = valDisplay.querySelector('.target');
+    const targetText = targetSpan ? targetSpan.outerHTML : '';
+    valDisplay.innerHTML = shown + ' ' + targetText;
+  }
+  const role = document.getElementById('roleSelect').value;
+  const annual = (role === 'ho-gp') ? 15 : 30;
+  const years = parseInt(document.getElementById('cyclePeriod').value, 10);
+  const target = annual * years;
+  const pct = Math.min(100, Math.round((total / target) * 100));
+  const bar = document.querySelector('.cme-bar-fill');
+  if (bar) bar.style.width = pct + '%';
+}
+
+/* CME file upload */
+function handleCMEUpload(input) {
+  const list = document.getElementById('cmeFileList');
+  list.innerHTML = '';
+  Array.from(input.files).forEach(function(file) {
+    const div = document.createElement('div');
+    div.style.cssText = 'display:inline-block; margin:3px 6px 3px 0; padding:4px 10px; background:var(--teal-pale); border:1px solid #d8f0f4; border-radius:4px; font-size:12px;';
+    div.textContent = '📄 ' + file.name;
+    list.appendChild(div);
+  });
+}
+
+/* Signature upload */
+function previewSignature(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = document.getElementById('sigPreviewImg');
+    img.src = e.target.result;
+    document.getElementById('sigPreview').style.display = 'inline-flex';
+    document.getElementById('sigUploadBtn').style.display = 'none';
+  };
+  if (file.type.startsWith('image/')) {
+    reader.readAsDataURL(file);
+  } else {
+    const preview = document.getElementById('sigPreview');
+    preview.insertAdjacentHTML('afterbegin', '<span style="font-size:13px; color:var(--navy); font-weight:500;">📄 ' + file.name + '</span>');
+    document.getElementById('sigPreviewImg').style.display = 'none';
+    preview.style.display = 'inline-flex';
+    document.getElementById('sigUploadBtn').style.display = 'none';
+  }
+}
+function clearSignature() {
+  document.getElementById('sigUpload').value = '';
+  document.getElementById('sigPreview').style.display = 'none';
+  document.getElementById('sigUploadBtn').style.display = '';
+  document.getElementById('sigPreviewImg').style.display = '';
+  document.getElementById('sigPreview').querySelectorAll('span').forEach(function(s) { s.remove(); });
+}
+
+/* Scroll-to-top */
+window.addEventListener('scroll', function() {
+  const btn = document.querySelector('.scroll-top');
+  if (window.scrollY > 300) btn.classList.add('visible');
+  else btn.classList.remove('visible');
+});
+
+/* Initial setup */
+document.addEventListener('DOMContentLoaded', function() {
+  addLicence();
+  buildCMETable();
+  updateCMETarget();
+});
+</script>
+</body>
+</html>
