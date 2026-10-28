@@ -945,7 +945,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
     <div class="field">
       <label class="label">Signature <span class="req">*</span></label>
       <div class="sig-upload">
-        <input type="file" accept="image/*,.pdf" id="sigUpload" style="display:none;" onchange="previewSignature(this)">
+        <input type="file" accept="image/png,image/jpeg" id="sigUpload" style="display:none;" onchange="previewSignature(this)">
         <label for="sigUpload" class="sig-upload-btn" id="sigUploadBtn">
           <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M9 2v10m0 0l-4-4m4 4l4-4M3 15h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Upload signature photograph
@@ -957,7 +957,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       </div>
       <div class="sig-upload-note">
         <strong>No scanned signature? No problem.</strong>
-        Sign a clean white sheet of paper with blue or black ink, take a clear photograph (or scan) of your signature, and upload it here. Accepted formats: JPG, PNG, PDF.
+        Sign a clean white sheet of paper with blue or black ink, take a clear photograph (or scan) of your signature, and upload it here. Accepted formats: JPG or PNG photo. Your signature is placed on your form only &mdash; it is not stored as a separate file.
       </div>
     </div>
 
@@ -2025,7 +2025,7 @@ function overlay(on) { document.getElementById('subOverlay').classList.toggle('o
 async function collectFiles() {
   const groups = [
     ['docCV', 'Curriculum Vitae'], ['docLic', 'AB Medical Licence'], ['docBLS', 'BLS-ACLS Certificate'],
-    ['docInd', 'Indemnity Insurance Certificate'], ['fitUpload', 'Medical Fitness Certificate'], ['sigUpload', 'Signature'],
+    ['docInd', 'Indemnity Insurance Certificate'], ['fitUpload', 'Medical Fitness Certificate'],
     ['cmeUpload', 'CME Certificate'], ['waiverUpload', 'Training Programme Enrolment Letter'], ['docOther', 'Supporting Document']
   ];
   if (!document.getElementById('cmeWaiver').classList.contains('on')) groups.splice(7, 1);
@@ -2066,6 +2066,7 @@ async function submitApplication() {
     await loadPdfMake();
     const ref = makeRef();
     const sig = await signatureImage();
+    if (!sig) throw new Error('We could not read your signature image. Please upload your signature as a JPG or PNG photograph in Section VII and try again.');
     const docDef = buildPdfDoc(ref, sig);
     const pdf = await pdfBase64(docDef);
     setStatus('Attaching your documents…');
