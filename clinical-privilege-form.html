@@ -63,6 +63,15 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 .pw-field select { padding: 6px 30px 6px 12px; border: 1.5px solid #d8f0f4; border-radius: 20px; background-color: var(--teal-pale); color: var(--navy); font-family: inherit; font-size: 13px; font-weight: 600; appearance: none; cursor: pointer; background-image: linear-gradient(45deg, transparent 50%, var(--navy) 50%), linear-gradient(135deg, var(--navy) 50%, transparent 50%); background-position: calc(100% - 15px) 50%, calc(100% - 10px) 50%; background-size: 5px 5px; background-repeat: no-repeat; max-width: 100%; }
 .pw-field select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,150,42,0.15); }
 .print-pathway { display: none; }
+.print-only { display: none; }
+.sec-head-inner { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
+/* On screen each section's layout table behaves like ordinary blocks */
+.sec-table, .sec-table > thead, .sec-table > tbody, .sec-table > thead > tr, .sec-table > tbody > tr, .sec-table > thead > tr > td, .sec-table > tbody > tr > td { display: block; width: 100%; padding: 0; border: 0; }
+.cme-instr { background: var(--gold-pale); border: 1px solid #e8d9a8; border-left: 4px solid var(--gold); border-radius: 6px; padding: 10px 14px; font-size: 12.5px; color: #5a4810; line-height: 1.5; margin-bottom: 12px; }
+.cme-instr ul { margin: 4px 0 0 18px; }
+.yn-ref, #secAddl { display: none; }
+.yn-explain .hint { margin-top: 4px; }
+.cme-add { margin-top: 10px; padding: 8px 14px; font-size: 13px; border-style: dashed; border-color: var(--teal); color: var(--teal); }
 .row-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
 .ext-hide.is-hidden { display: none; }
 .row-name { display: grid; grid-template-columns: 120px 1fr 1fr 1fr; gap: 12px; }
@@ -258,61 +267,101 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 .scroll-top { position: fixed; bottom: 20px; right: 20px; width: 42px; height: 42px; background: var(--navy); color: var(--white); border-radius: 50%; border: 0; box-shadow: var(--shadow); cursor: pointer; font-size: 20px; display: none; align-items: center; justify-content: center; z-index: 100; }
 .scroll-top.visible { display: flex; }
 
-/* PRINT STYLES */
+/* PRINT STYLES — US Letter (8.5 x 11 in) */
+@page { size: letter; margin: 0.5in 0.5in 0.6in; }
 @media print {
-  @page { size: A4; margin: 10mm 10mm 14mm; }
-  .fit-print-line { display: block; padding: 6px 8px; border: 1px solid var(--gray-mid); border-radius: 3px; font-size: 10px; }
-  body { background: var(--white); font-size: 10px; line-height: 1.35; }
+  body { background: var(--white); font-size: 10.5px; line-height: 1.4; }
   main { max-width: 100%; padding: 0; }
-  header { padding: 10px 14px 8px; }
+  header { padding: 12px 16px 10px; border-radius: 6px; }
   header::before, header::after { display: none; }
-  .logo-mark { width: 34px; height: 34px; font-size: 15px; }
-  header h1 { font-size: 16px; }
+  .logo-mark { width: 38px; height: 38px; font-size: 16px; }
+  header h1 { font-size: 18px; }
   .header-top { margin-bottom: 4px; }
-  .header-contact { padding-top: 6px; margin-top: 4px; font-size: 10px; }
-  .pathway, .action-bar, .scroll-top, .cert-upload, .fit-box, .modal-backdrop, .sig-upload-btn, .sig-upload-note, .sig-preview-remove,
-  .hint, .cme-progress, .cme-waiver:not(.on), #otherLicences + button, .lic-slot button, .yn-adv { display: none !important; }
-  .print-pathway { display: block; margin: 6px 0 8px; padding: 5px 10px; border: 1px solid var(--gray-mid); border-radius: 4px; font-size: 10px; }
-  .form-section { margin-bottom: 8px; box-shadow: none; border: 1px solid var(--gray-mid); border-radius: 6px; }
-  .section-head { padding: 6px 12px; gap: 10px; break-after: avoid; }
-  .section-num { width: 24px; height: 24px; font-size: 11px; }
-  .section-title h2 { font-size: 12.5px; }
-  .section-title .sub { font-size: 9.5px; }
-  .section-body { padding: 10px 12px; }
-  .field { margin-bottom: 6px; break-inside: avoid; }
-  .label { font-size: 9px; margin-bottom: 2px; }
-  .input, .select, .textarea { padding: 4px 7px; font-size: 10px; border-width: 1px; border-radius: 3px; min-height: 22px; }
-  .textarea, .exam-phys { min-height: 38px; }
-  .row-2, .row-3, .row-4, .row-21, .row-auto { gap: 8px; }
-  .sec-divider { margin: 8px -12px; }
-  .sub-h { font-size: 11.5px; margin-bottom: 6px; }
-  .doc-note { padding: 6px 10px; font-size: 9.5px; margin-bottom: 8px; }
-  .doc-list { gap: 3px; }
-  .doc-item { padding: 4px 8px; break-inside: avoid; }
-  .doc-item .doc-label { font-size: 9.5px; }
-  .cmt-box { margin-top: 8px; padding: 8px 10px; }
-  .radio-row { gap: 14px; }
-  .radio-row label { font-size: 10px; }
-  .yn-row { padding: 5px 10px; gap: 10px; break-inside: avoid; }
-  .yn-q { font-size: 9.8px; }
-  .yn-opts label { font-size: 9.5px; }
-  .toggle-row { padding: 6px 10px; }
-  .lic-slot { padding: 8px !important; margin-bottom: 6px !important; break-inside: avoid; }
-  .cme-table { font-size: 9.5px; }
-  .cme-table th { padding: 4px 8px; font-size: 8.5px; }
-  .cme-table td { padding: 0 2px; }
-  .cme-table input { padding: 3px 6px; font-size: 9.5px; }
+  .header-contact { padding-top: 6px; margin-top: 6px; font-size: 10.5px; }
+
+  /* screen-only items */
+  .pathway, .action-bar, .scroll-top, .cert-upload, .fit-box, .modal-backdrop, .cme-add,
+  .sig-upload-btn, .sig-upload-note, .sig-preview-remove, .hint, .cme-progress, .cme-waiver:not(.on),
+  #otherLicences + button, .lic-slot button, .yn-adv { display: none !important; }
+  .print-only { display: block; }
+  .print-pathway { display: block; margin: 8px 0 10px; padding: 6px 10px; border: 1px solid var(--gray-mid); border-radius: 4px; font-size: 10.5px; }
+
+  /* Page plan: Section I alone on page 1; every other section kept whole where it fits;
+     Section VIII (CME) on its own final page(s), then the Additional Information Sheet if needed. */
+  .form-section { margin-bottom: 12px; box-shadow: none; border: 1px solid var(--gray-mid); border-radius: 6px; break-inside: avoid; }
+  #secI { break-after: page; }
+  #secCME { break-before: page; break-inside: auto; }
+
+  /* Continuation header: if a section ever has to run onto a new page, its title bar repeats at the top */
+  .sec-table { display: table; width: 100%; border-collapse: collapse; }
+  .sec-table > thead { display: table-header-group; }
+  .sec-table > tbody { display: table-row-group; }
+  .sec-table > thead > tr, .sec-table > tbody > tr { display: table-row; }
+  .sec-table > thead > tr > td, .sec-table > tbody > tr > td { display: table-cell; padding: 0; }
+  .section-head { background: none !important; padding: 0 !important; }
+  .section-body { padding: 0 !important; }
+  .sec-head-inner { display: flex; align-items: center; gap: 10px; padding: 7px 14px; background: var(--navy); color: var(--white); border-radius: 5px 5px 0 0; }
+
+  .section-num { width: 26px; height: 26px; font-size: 12px; }
+  .section-title h2 { font-size: 13.5px; }
+  .section-title .sub { font-size: 10px; }
+  .section-body > .sec-body-inner { padding: 12px 14px; }
+  .field { margin-bottom: 8px; break-inside: avoid; }
+  .label { font-size: 9.5px; margin-bottom: 2px; }
+  .input, .select, .textarea { padding: 5px 8px; font-size: 10.5px; border-width: 1px; border-radius: 3px; min-height: 24px; }
+  .textarea, .exam-phys { min-height: 44px; }
+  .row-2, .row-3, .row-4, .row-21, .row-auto, .row-name { gap: 10px; }
+  .sec-divider { margin: 10px 0; }
+  .sub-h { font-size: 12px; margin-bottom: 7px; }
+  .doc-note { padding: 9px 12px; font-size: 10.5px; margin-bottom: 12px; }
+  .doc-list { gap: 4px; }
+  .doc-item { padding: 6px 10px; break-inside: avoid; }
+  .doc-item .doc-label { font-size: 10.5px; }
+  .cmt-box { margin-top: 14px; padding: 10px 12px; }
+  .radio-row { gap: 16px; }
+  .radio-row label { font-size: 10.5px; }
+  .yn-row { padding: 6px 12px; gap: 10px; break-inside: avoid; }
+  .yn-q { font-size: 10.3px; }
+  .yn-opts label { font-size: 10px; }
+  .toggle-row { padding: 7px 12px; }
+  .lic-slot { padding: 9px !important; margin-bottom: 8px !important; break-inside: avoid; }
+  .cme-instr { font-size: 10px; padding: 7px 12px; margin-bottom: 8px; }
+  .cme-table { font-size: 10.5px; }
+  .cme-table thead { display: table-header-group; }
+  .cme-table th { padding: 5px 8px; font-size: 9px; }
+  .cme-table td { padding: 0 2px; height: 24px; }
+  .cme-table input { padding: 3px 6px; font-size: 10.5px; }
   .cme-table tr { break-inside: avoid; }
-  .cme-table tr.total-row td { padding: 4px 8px; font-size: 10px; }
-  .cme-waiver.on, .cme-waived-note { padding: 6px 10px; margin: 6px 0; }
-  .cert-block { padding: 8px 12px; font-size: 9.5px; line-height: 1.5; margin-bottom: 8px; }
-  .warn-block { padding: 5px 10px; margin-top: 8px; font-size: 9.5px; }
+  .cme-table tr.total-row td { padding: 6px 8px; font-size: 11px; }
+  .cme-waiver.on, .cme-waived-note { padding: 7px 12px; margin: 8px 0; }
+  .cert-block { padding: 10px 14px; font-size: 10.5px; line-height: 1.55; margin-bottom: 10px; }
+  .warn-block { padding: 6px 10px; margin-top: 10px; font-size: 10px; }
   .sig-preview-wrap { padding: 4px 8px; }
   .input::placeholder, .textarea::placeholder, .cme-table input::placeholder { color: transparent; }
-  /* Blank signature box on paper when no signature has been uploaded */
-  .sig-upload::after { content: ''; display: block; height: 40px; border: 1px solid var(--gray-mid); border-radius: 3px; }
+  input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number] { -moz-appearance: textfield; }
+  /* Yes-answer explanations move to the Additional Information Sheet */
+  .yn-explain, #licChangeExplain, #pracChangeExplain { display: none !important; }
+  .yn-ref.on { display: block; flex-basis: 100%; margin-top: 3px; font-size: 9.5px; font-style: italic; color: var(--text); }
+  #secAddl.has-items { display: block; break-before: page; break-inside: auto; }
+  .addl-table { width: 100%; border-collapse: collapse; font-size: 10.5px; }
+  .addl-table thead { display: table-header-group; }
+  .addl-table th { background: var(--navy); color: var(--white); text-align: left; padding: 5px 8px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .addl-table td { border: 1px solid var(--gray-mid); padding: 6px 8px; vertical-align: top; line-height: 1.45; }
+  .addl-table tr { break-inside: avoid; }
+  .addl-table td.ex { white-space: pre-wrap; }
+  .addl-table .q { color: var(--gray-dark); }
+  .addl-confirm { margin-top: 14px; break-inside: avoid; font-size: 10.5px; }
+  .addl-confirm p { margin-bottom: 8px; font-style: italic; }
+  .addl-sign { display: grid; grid-template-columns: 2fr 1fr 2fr; gap: 10px; }
+  .addl-box { border: 1px solid var(--gray-mid); border-radius: 3px; min-height: 26px; padding: 5px 8px; font-size: 10.5px; }
+  .addl-sigbox { min-height: 44px; }
+  .addl-sigbox img { max-height: 40px; max-width: 100%; }
+  .addl-table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .fit-print-line { display: block; padding: 7px 10px; border: 1px solid var(--gray-mid); border-radius: 3px; font-size: 10.5px; }
+  .sig-upload::after { content: ''; display: block; height: 44px; border: 1px solid var(--gray-mid); border-radius: 3px; }
   .sig-upload:has(#sigPreview[style*="inline-flex"])::after { display: none; }
-  header, .section-head, .section-num, .doc-note, .doc-item, .cmt-box, .yn-row:nth-child(even), .cert-block, .warn-block, .toggle-row, .toggle-row.on, .pp-block.on, .cme-waiver.on, .cme-waived-note, .cme-table th, .cme-table tr.total-row td {
+  header, .sec-head-inner, .section-num, .doc-note, .doc-item, .cmt-box, .yn-row:nth-child(even), .cert-block, .warn-block, .toggle-row, .toggle-row.on, .pp-block.on, .cme-waiver.on, .cme-waived-note, .cme-instr, .cme-table th, .cme-table tr.total-row td {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     forced-color-adjust: none !important;
@@ -367,15 +416,15 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 <!-- ============================================================
      I. INSTRUCTIONS
      ============================================================ -->
-<section class="form-section">
-  <div class="section-head">
+<section class="form-section" id="secI"><table class="sec-table" role="presentation"><thead><tr><td>
+  <div class="section-head" data-sec="secI"><div class="sec-head-inner">
     <div class="section-num">I</div>
     <div class="section-title">
       <h2>Instructions</h2>
       <div class="sub">For existing SLBMC practitioners renewing their clinical privileges</div>
-    </div>
-  </div>
-  <div class="section-body">
+    </div></div>
+  </div></td></tr></thead><tbody><tr><td>
+  <div class="section-body"><div class="sec-body-inner">
     <div class="doc-note">
       This re-credentialing form is for practitioners already credentialed at SLBMC whose credentialing period is coming to an end. It captures only the information that may have changed since your last cycle; your education, training, and other on-file information do not need to be re-entered. This form must be typed or completed legibly by hand in <strong>blue or black ink</strong>. If more space is required when answering a question, attach a clearly labelled continuation sheet referencing the section and question number.
     </div>
@@ -390,7 +439,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       <label class="doc-item"><span class="cbox"></span><span class="doc-label">Current Basic Life Support (BLS) and Advanced Cardiac Life Support (ACLS) Certification</span></label>
       <label class="doc-item"><span class="cbox"></span><span class="doc-label">Continuing Medical Education (CME) Records <span class="cme-tag" id="cmeTargetTag">30 credits / year</span></span></label>
       <label class="doc-item"><span class="cbox"></span><span class="doc-label">Professional Indemnity / Malpractice Insurance Certificate <span class="opt" style="font-weight:400;">(applicable to practice in Antigua)</span></span></label>
-      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Medical Fitness Certificate &mdash; signed and stamped by your examining physician <span class="opt" style="font-weight:400;">(template provided in Section VII)</span></span></label>
+      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Medical Fitness Certificate &mdash; signed and stamped by your examining physician <span class="opt" style="font-weight:400;">(template provided in Section VI)</span></span></label>
     </div>
 
     <div class="cmt-box">
@@ -410,22 +459,22 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
         </div>
       </div>
     </div>
-  </div>
+  </div></div></td></tr></tbody></table>
 </section>
 
 
 <!-- ============================================================
      II. APPLICANT IDENTIFICATION
      ============================================================ -->
-<section class="form-section">
-  <div class="section-head">
+<section class="form-section" id="secII"><table class="sec-table" role="presentation"><thead><tr><td>
+  <div class="section-head" data-sec="secII"><div class="sec-head-inner">
     <div class="section-num">II</div>
     <div class="section-title">
       <h2>Applicant Identification</h2>
       <div class="sub">Current details &mdash; please confirm or update</div>
-    </div>
-  </div>
-  <div class="section-body">
+    </div></div>
+  </div></td></tr></thead><tbody><tr><td>
+  <div class="section-body"><div class="sec-body-inner">
 
     <div class="row-name">
       <div class="field">
@@ -462,10 +511,6 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       <div class="field">
         <label class="label" for="prevPeriod">Previous Credentialing Period <span class="opt">(if known)</span></label>
         <input class="input" type="text" id="prevPeriod" data-mask="period" inputmode="numeric" maxlength="17" placeholder="MM/YYYY &ndash; MM/YYYY">
-      </div>
-      <div class="field">
-        <label class="label">Date First Granted Privileges at SLBMC <span class="opt">(if known)</span></label>
-        <input class="input" type="date">
       </div>
     </div>
 
@@ -515,22 +560,22 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       </div>
     </div>
 
-  </div>
+  </div></div></td></tr></tbody></table>
 </section>
 
 
 <!-- ============================================================
      III. CURRENT MEDICAL LICENCES
      ============================================================ -->
-<section class="form-section">
-  <div class="section-head">
+<section class="form-section" id="secIII"><table class="sec-table" role="presentation"><thead><tr><td>
+  <div class="section-head" data-sec="secIII"><div class="sec-head-inner">
     <div class="section-num">III</div>
     <div class="section-title">
       <h2>Current Medical Licences</h2>
       <div class="sub">Confirm all licences currently held</div>
-    </div>
-  </div>
-  <div class="section-body">
+    </div></div>
+  </div></td></tr></thead><tbody><tr><td>
+  <div class="section-body"><div class="sec-body-inner">
 
     <h3 class="sub-h first">Antigua &amp; Barbuda Medical Council Licence</h3>
     <p class="hint" style="margin-bottom:12px;">A current Antigua &amp; Barbuda medical licence is required for re-credentialing. Please enter its details as they appear on your licence.</p>
@@ -572,24 +617,25 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
         <label class="label">Please describe the changes</label>
         <textarea class="textarea" rows="3" placeholder="e.g. new licence obtained, licence lapsed, type changed, authority changed, etc."></textarea>
       </div>
+      <div class="yn-ref" id="licRef"></div>
     </div>
 
-  </div>
+  </div></div></td></tr></tbody></table>
 </section>
 
 
 <!-- ============================================================
      IV. CURRENT PRACTICE LOCATION
      ============================================================ -->
-<section class="form-section">
-  <div class="section-head">
+<section class="form-section" id="secIV"><table class="sec-table" role="presentation"><thead><tr><td>
+  <div class="section-head" data-sec="secIV"><div class="sec-head-inner">
     <div class="section-num">IV</div>
     <div class="section-title">
       <h2>Current Practice Location</h2>
       <div class="sub">Private practice and any changes since your last cycle</div>
-    </div>
-  </div>
-  <div class="section-body">
+    </div></div>
+  </div></td></tr></thead><tbody><tr><td>
+  <div class="section-body"><div class="sec-body-inner">
 
     <div class="toggle-row" style="margin-top:0;" onclick="togglePrivatePractice(this)">
       <div class="toggle-sw"></div>
@@ -646,107 +692,25 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
         <label class="label">Please describe the changes</label>
         <textarea class="textarea" rows="3" placeholder="e.g. moved department, changed role, started or closed a private practice, etc."></textarea>
       </div>
+      <div class="yn-ref" id="pracRef"></div>
     </div>
 
-  </div>
+  </div></div></td></tr></tbody></table>
 </section>
 
 
 <!-- ============================================================
-     V. CONTINUING MEDICAL EDUCATION SUMMARY
+     V. CHANGES SINCE LAST CREDENTIALING CYCLE
      ============================================================ -->
-<section class="form-section">
-  <div class="section-head">
+<section class="form-section" id="secVI"><table class="sec-table" role="presentation"><thead><tr><td>
+  <div class="section-head" data-sec="secVI"><div class="sec-head-inner">
     <div class="section-num">V</div>
-    <div class="section-title">
-      <h2>Continuing Medical Education Summary</h2>
-      <div class="sub">CME credits earned during the previous credentialing period</div>
-    </div>
-  </div>
-  <div class="section-body">
-
-    <div class="cme-progress">
-      <div class="cme-prog-top">
-        <div>
-          <div class="cme-prog-label">Credits earned this cycle</div>
-          <div class="cme-prog-sub" id="cmeTargetLine">Target: <strong>30 credits per year</strong> &times; your cycle length</div>
-        </div>
-        <div class="cme-prog-value">0 <span class="target" id="cmeTargetTotal">/ 60</span></div>
-      </div>
-      <div class="cme-bar-bg"><div class="cme-bar-fill"></div></div>
-      <div class="cme-period-row">
-        <label for="cyclePeriod">Credentialing cycle length:</label>
-        <select id="cyclePeriod" onchange="updateCMETotal()">
-          <option value="1">1 year</option>
-          <option value="2" selected>2 years</option>
-          <option value="3">3 years</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="cme-waiver" id="cmeWaiver" onclick="toggleCMEWaiver(this)">
-      <div class="cbox"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div>
-        <div class="cme-waiver-title">I am currently enrolled in an active educational programme</div>
-        <div class="cme-waiver-desc">If you are in a formal training programme (fellowship, higher specialty training, further degree), CME credits are not required for this cycle. Attach a letter from your training programme confirming active enrolment instead.</div>
-      </div>
-    </div>
-
-    <div class="cme-waived-note" id="cmeWaivedNote">
-      <strong>CME requirement waived.</strong>
-      Attach a letter from your training programme confirming active enrolment in lieu of the CME summary.
-    </div>
-
-    <div class="cme-table-wrap" id="cmeTableWrap">
-      <p class="hint" style="margin-bottom:10px;">List CME activities earned during the previous credentialing period. If multiple credits were obtained from the same facilitator, they may be grouped on a single line.</p>
-      <table class="cme-table">
-        <thead>
-          <tr>
-            <th style="width:40%;">Name of Activity</th>
-            <th style="width:25%;">Facilitator</th>
-            <th style="width:20%;">Date</th>
-            <th style="width:15%;">Credits Earned</th>
-          </tr>
-        </thead>
-        <tbody id="cmeTableBody">
-          <!-- 16 default rows generated by JS -->
-        </tbody>
-        <tfoot>
-          <tr class="total-row">
-            <td colspan="3" style="text-align:right;">TOTAL CREDITS</td>
-            <td class="credit-cell"><input type="text" id="cmeTotal" readonly value="0" style="text-align:right; font-weight:700; color:var(--amber);"></td>
-          </tr>
-        </tfoot>
-      </table>
-
-      <div class="cert-upload">
-        <div style="font-size:12.5px; color:var(--navy); font-weight:600; margin-bottom:8px;">Attach your CME certificates or summary sheets</div>
-        <input type="file" id="cmeUpload" multiple accept="image/*,.pdf" style="display:none;" onchange="handleCMEUpload(this)">
-        <label for="cmeUpload" class="cert-upload-btn">
-          <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M8 2v8m0 0l-3-3m3 3l3-3M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Upload CME certificates
-        </label>
-        <div class="cert-upload-note">Accepted: JPG, PNG, PDF. Multiple files allowed.</div>
-        <div id="cmeFileList" style="margin-top:10px; font-size:12px; color:var(--navy);"></div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ============================================================
-     VI. CHANGES SINCE LAST CREDENTIALING CYCLE
-     ============================================================ -->
-<section class="form-section">
-  <div class="section-head">
-    <div class="section-num">VI</div>
     <div class="section-title">
       <h2>Changes Since Last Credentialing Cycle</h2>
       <div class="sub">Report anything that has happened since your previous credentialing</div>
-    </div>
-  </div>
-  <div class="section-body">
+    </div></div>
+  </div></td></tr></thead><tbody><tr><td>
+  <div class="section-body"><div class="sec-body-inner">
     <p class="hint" style="margin-bottom:14px;">Answer each question in relation to the period since your last credentialing. If Yes, provide details in the box that appears or attach a signed disclosure sheet.</p>
 
     <div class="yn-wrap">
@@ -757,7 +721,8 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
           <label><input type="radio" name="c1"> Yes</label>
           <label><input type="radio" name="c1"> No</label>
         </div>
-        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+        <div class="yn-explain"><label class="label">Please explain &mdash; include dates, the body or institution involved, and the outcome or current status</label><textarea placeholder="Your explanation will be printed on the Additional Information Sheet at the end of this form."></textarea><div class="hint">Attach any supporting documents with your application.</div></div>
+        <div class="yn-ref"></div>
       </div>
 
       <div class="yn-row" onclick="toggleYN(this,event)">
@@ -766,7 +731,8 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
           <label><input type="radio" name="c2"> Yes</label>
           <label><input type="radio" name="c2"> No</label>
         </div>
-        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+        <div class="yn-explain"><label class="label">Please explain &mdash; include dates, the body or institution involved, and the outcome or current status</label><textarea placeholder="Your explanation will be printed on the Additional Information Sheet at the end of this form."></textarea><div class="hint">Attach any supporting documents with your application.</div></div>
+        <div class="yn-ref"></div>
       </div>
 
       <div class="yn-row" onclick="toggleYN(this,event)">
@@ -775,7 +741,8 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
           <label><input type="radio" name="c3"> Yes</label>
           <label><input type="radio" name="c3"> No</label>
         </div>
-        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+        <div class="yn-explain"><label class="label">Please explain &mdash; include dates, the body or institution involved, and the outcome or current status</label><textarea placeholder="Your explanation will be printed on the Additional Information Sheet at the end of this form."></textarea><div class="hint">Attach any supporting documents with your application.</div></div>
+        <div class="yn-ref"></div>
       </div>
 
       <div class="yn-row" onclick="toggleYN(this,event)">
@@ -784,7 +751,8 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
           <label><input type="radio" name="c4"> Yes</label>
           <label><input type="radio" name="c4"> No</label>
         </div>
-        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+        <div class="yn-explain"><label class="label">Please explain &mdash; include dates, the body or institution involved, and the outcome or current status</label><textarea placeholder="Your explanation will be printed on the Additional Information Sheet at the end of this form."></textarea><div class="hint">Attach any supporting documents with your application.</div></div>
+        <div class="yn-ref"></div>
       </div>
 
       <div class="yn-row" onclick="toggleYN(this,event)">
@@ -793,7 +761,8 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
           <label><input type="radio" name="c5"> Yes</label>
           <label><input type="radio" name="c5"> No</label>
         </div>
-        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+        <div class="yn-explain"><label class="label">Please explain &mdash; include dates, the body or institution involved, and the outcome or current status</label><textarea placeholder="Your explanation will be printed on the Additional Information Sheet at the end of this form."></textarea><div class="hint">Attach any supporting documents with your application.</div></div>
+        <div class="yn-ref"></div>
       </div>
 
       <div class="yn-row" onclick="toggleYN(this,event)">
@@ -802,7 +771,8 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
           <label><input type="radio" name="c6"> Yes</label>
           <label><input type="radio" name="c6"> No</label>
         </div>
-        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+        <div class="yn-explain"><label class="label">Please explain &mdash; include dates, the body or institution involved, and the outcome or current status</label><textarea placeholder="Your explanation will be printed on the Additional Information Sheet at the end of this form."></textarea><div class="hint">Attach any supporting documents with your application.</div></div>
+        <div class="yn-ref"></div>
       </div>
 
       <div class="yn-row" onclick="toggleYN(this,event)">
@@ -811,27 +781,28 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
           <label><input type="radio" name="c7"> Yes</label>
           <label><input type="radio" name="c7"> No</label>
         </div>
-        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+        <div class="yn-explain"><label class="label">Please explain &mdash; include dates, the body or institution involved, and the outcome or current status</label><textarea placeholder="Your explanation will be printed on the Additional Information Sheet at the end of this form."></textarea><div class="hint">Attach any supporting documents with your application.</div></div>
+        <div class="yn-ref"></div>
       </div>
 
     </div>
 
-  </div>
+  </div></div></td></tr></tbody></table>
 </section>
 
 
 <!-- ============================================================
-     VII. HEALTH STATUS DECLARATION
+     VI. HEALTH STATUS DECLARATION
      ============================================================ -->
-<section class="form-section">
-  <div class="section-head">
-    <div class="section-num">VII</div>
+<section class="form-section" id="secVII"><table class="sec-table" role="presentation"><thead><tr><td>
+  <div class="section-head" data-sec="secVII"><div class="sec-head-inner">
+    <div class="section-num">VI</div>
     <div class="section-title">
       <h2>Health Status Declaration</h2>
       <div class="sub">Current health status at the time of re-credentialing</div>
-    </div>
-  </div>
-  <div class="section-body">
+    </div></div>
+  </div></td></tr></thead><tbody><tr><td>
+  <div class="section-body"><div class="sec-body-inner">
 
     <div class="yn-wrap">
       <div class="yn-row" onclick="toggleYN(this,event)">
@@ -840,7 +811,8 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
           <label><input type="radio" name="h1"> Yes</label>
           <label><input type="radio" name="h1"> No</label>
         </div>
-        <div class="yn-adv">If Yes, include details of any reasonable accommodation that could facilitate safe performance of the requested clinical privileges.</div>
+        <div class="yn-explain"><label class="label">Please give details, including any reasonable accommodation that could support safe performance of the requested clinical privileges</label><textarea placeholder="Your explanation will be printed on the Additional Information Sheet at the end of this form."></textarea><div class="hint">Attach any supporting documents with your application.</div></div>
+        <div class="yn-ref"></div>
       </div>
       <div class="yn-row" onclick="toggleYN(this,event)">
         <div class="yn-q"><span class="num">2.</span> Are you currently taking medication, or under treatment for a condition that could affect your ability, medical performance, or professional obligations if the treatment / medication were discontinued?</div>
@@ -848,7 +820,8 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
           <label><input type="radio" name="h2"> Yes</label>
           <label><input type="radio" name="h2"> No</label>
         </div>
-        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+        <div class="yn-explain"><label class="label">Please explain &mdash; include dates, the body or institution involved, and the outcome or current status</label><textarea placeholder="Your explanation will be printed on the Additional Information Sheet at the end of this form."></textarea><div class="hint">Attach any supporting documents with your application.</div></div>
+        <div class="yn-ref"></div>
       </div>
       <div class="yn-row" onclick="toggleYN(this,event)">
         <div class="yn-q"><span class="num">3.</span> Have you been hospitalised or received institutional care within the last five (5) years for any condition described in the previous questions?</div>
@@ -856,13 +829,14 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
           <label><input type="radio" name="h3"> Yes</label>
           <label><input type="radio" name="h3"> No</label>
         </div>
-        <div class="yn-adv">If Yes, attach a comprehensive written disclosure on a separate signed and dated document.</div>
+        <div class="yn-explain"><label class="label">Please explain &mdash; include dates, the body or institution involved, and the outcome or current status</label><textarea placeholder="Your explanation will be printed on the Additional Information Sheet at the end of this form."></textarea><div class="hint">Attach any supporting documents with your application.</div></div>
+        <div class="yn-ref"></div>
       </div>
     </div>
 
     <hr class="sec-divider">
     <h3 class="sub-h first">Medical Fitness</h3>
-    <div class="row-2">
+    <div class="row-3">
       <div class="field">
         <label class="label">Date of Most Recent Physical Examination <span class="req">*</span></label>
         <input class="input" type="date">
@@ -870,6 +844,10 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       <div class="field">
         <label class="label">Examining Physician&rsquo;s Full Name <span class="req">*</span></label>
         <input class="input" type="text" placeholder="e.g. Dr A. Example">
+      </div>
+      <div class="field">
+        <label class="label">Examining Physician&rsquo;s Contact Number <span class="req">*</span></label>
+        <input class="input" type="tel" placeholder="+1 (000) 000-0000">
       </div>
     </div>
 
@@ -897,22 +875,22 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       <textarea class="textarea" rows="2"></textarea>
     </div>
 
-  </div>
+  </div></div></td></tr></tbody></table>
 </section>
 
 
 <!-- ============================================================
-     VIII. CERTIFICATION & SIGNATURE
+     VII. CERTIFICATION & SIGNATURE
      ============================================================ -->
-<section class="form-section">
-  <div class="section-head">
-    <div class="section-num">VIII</div>
+<section class="form-section" id="secVIII"><table class="sec-table" role="presentation"><thead><tr><td>
+  <div class="section-head" data-sec="secVIII"><div class="sec-head-inner">
+    <div class="section-num">VII</div>
     <div class="section-title">
       <h2>Certification &amp; Signature</h2>
       <div class="sub">Please read and sign</div>
-    </div>
-  </div>
-  <div class="section-body">
+    </div></div>
+  </div></td></tr></thead><tbody><tr><td>
+  <div class="section-body"><div class="sec-body-inner">
 
     <div class="cert-block">
       I hereby certify that all information provided in this re-credentialing application is complete, correct, and current to the best of my knowledge and belief. I acknowledge that any lack of disclosure, omission, misrepresentation, or falsification of information constitutes grounds for denial of this application. A photocopy or electronic copy of this signed application shall have the same force and effect as the original. I have reviewed this information up to the date indicated below.
@@ -953,9 +931,129 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       Rubber-stamp signatures are not accepted. The signature must be that of the applying practitioner. Applications with incomplete or missing signatures will not be processed.
     </div>
 
-  </div>
+  </div></div></td></tr></tbody></table>
 </section>
 
+
+<!-- ============================================================
+     VIII. CONTINUING MEDICAL EDUCATION SUMMARY (always printed on its own final page)
+     ============================================================ -->
+<section class="form-section" id="secCME"><table class="sec-table" role="presentation"><thead><tr><td>
+  <div class="section-head" data-sec="secCME"><div class="sec-head-inner">
+    <div class="section-num">VIII</div>
+    <div class="section-title">
+      <h2>Continuing Medical Education Summary</h2>
+      <div class="sub">CME credits earned during the previous credentialing period</div>
+    </div></div>
+  </div></td></tr></thead><tbody><tr><td>
+  <div class="section-body"><div class="sec-body-inner">
+
+    <div class="cme-progress">
+      <div class="cme-prog-top">
+        <div>
+          <div class="cme-prog-label">Credits earned this cycle</div>
+          <div class="cme-prog-sub" id="cmeTargetLine">Target: <strong>30 credits per year</strong> &times; your cycle length</div>
+        </div>
+        <div class="cme-prog-value">0 <span class="target" id="cmeTargetTotal">/ 60</span></div>
+      </div>
+      <div class="cme-bar-bg"><div class="cme-bar-fill"></div></div>
+      <div class="cme-period-row">
+        <label for="cyclePeriod">Credentialing cycle length:</label>
+        <select id="cyclePeriod" onchange="updateCMETotal()">
+          <option value="1">1 year</option>
+          <option value="2" selected>2 years</option>
+          <option value="3">3 years</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="cme-waiver" id="cmeWaiver" onclick="toggleCMEWaiver(this)">
+      <div class="cbox"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div>
+        <div class="cme-waiver-title">I am currently enrolled in an active educational programme</div>
+        <div class="cme-waiver-desc">If you are in a formal training programme (fellowship, higher specialty training, further degree), CME credits are not required for this cycle. Attach a letter from your training programme confirming active enrolment instead.</div>
+      </div>
+    </div>
+
+    <div class="cme-waived-note" id="cmeWaivedNote">
+      <strong>CME requirement waived.</strong>
+      Attach a letter from your training programme confirming active enrolment in lieu of the CME summary.
+    </div>
+
+    <div class="cme-table-wrap" id="cmeTableWrap">
+      <div class="cme-instr">
+        <strong>How to complete this summary</strong>
+        <ul>
+          <li>List each CME activity completed during your previous credentialing period.</li>
+          <li>Activities from the <strong>same facilitator</strong> may be grouped on one line &mdash; enter the month of the most recent activity and the combined credits.</li>
+          <li>Upload a certificate for <strong>every</strong> activity listed, including each activity within a grouped line, so that credits can be verified.</li>
+          <li>Need more lines? Use &ldquo;+ Add another line&rdquo; below the table.</li>
+        </ul>
+      </div>
+      <table class="cme-table">
+        <thead>
+          <tr>
+            <th style="width:37%;">Name of Activity</th>
+            <th style="width:34%;">Facilitator</th>
+            <th style="width:13%;">Date</th>
+            <th style="width:16%;">Credits Earned</th>
+          </tr>
+        </thead>
+        <tbody id="cmeTableBody">
+          <!-- 16 default rows generated by JS -->
+        </tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;">TOTAL CREDITS</td>
+            <td class="credit-cell"><input type="text" id="cmeTotal" readonly value="0" style="text-align:right; font-weight:700; color:var(--amber);"></td>
+          </tr>
+        </tfoot>
+      </table>
+      <button type="button" class="btn-action btn-ghost cme-add" onclick="addCMERow()">+ Add another line</button>
+
+      <div class="cert-upload">
+        <div style="font-size:12.5px; color:var(--navy); font-weight:600; margin-bottom:8px;">Attach a certificate for each CME activity listed above</div>
+        <input type="file" id="cmeUpload" multiple accept="image/*,.pdf" style="display:none;" onchange="handleCMEUpload(this)">
+        <label for="cmeUpload" class="cert-upload-btn">
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M8 2v8m0 0l-3-3m3 3l3-3M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Upload CME certificates
+        </label>
+        <div class="cert-upload-note">Accepted: JPG, PNG, PDF. Multiple files allowed.</div>
+        <div id="cmeFileList" style="margin-top:10px; font-size:12px; color:var(--navy);"></div>
+      </div>
+    </div>
+
+  </div></div></td></tr></tbody></table>
+</section>
+
+
+
+<!-- ============================================================
+     ADDITIONAL INFORMATION SHEET (print only; appears when any question is answered Yes)
+     ============================================================ -->
+<section class="form-section" id="secAddl"><table class="sec-table" role="presentation"><thead><tr><td>
+  <div class="section-head" data-sec="secAddl"><div class="sec-head-inner">
+    <div class="section-num">+</div>
+    <div class="section-title">
+      <h2>Additional Information Sheet</h2>
+      <div class="sub">Explanations for questions answered &ldquo;Yes&rdquo;</div>
+    </div>
+  </div></div></td></tr></thead><tbody><tr><td>
+  <div class="section-body"><div class="sec-body-inner">
+    <table class="addl-table">
+      <thead><tr><th style="width:7%;">Item</th><th style="width:38%;">Section and question</th><th>Explanation</th></tr></thead>
+      <tbody id="addlBody"></tbody>
+    </table>
+    <div class="addl-confirm">
+      <p>I confirm that the explanations above are complete and accurate, and form part of my re-credentialing application.</p>
+      <div class="addl-sign">
+        <div><span class="label">Full Printed Name</span><div class="addl-box" id="addlName"></div></div>
+        <div><span class="label">Date</span><div class="addl-box" id="addlDate"></div></div>
+        <div><span class="label">Signature</span><div class="addl-box addl-sigbox" id="addlSig"></div></div>
+      </div>
+    </div>
+  </div></div></td></tr></tbody></table>
+</section>
 
 <div class="action-bar">
   <button class="btn-action btn-ghost">Save draft</button>
@@ -973,7 +1071,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       <button type="button" class="modal-close" onclick="closeTemplate()" aria-label="Close">&times;</button>
     </div>
     <div class="modal-body">
-      <p class="modal-intro">Send this to the physician who examined you. They should complete it on their practice letterhead (or on this template), sign it, apply their official stamp and return it to you. Then upload it in Section VII.</p>
+      <p class="modal-intro">Send this to the physician who examined you. They should complete it on their practice letterhead (or on this template), sign it, apply their official stamp and return it to you. Then upload it in Section VI.</p>
       <div class="tpl-letter" id="tplLetter"></div>
       <div class="field modal-email">
         <label class="label" for="tplEmail">Your physician&rsquo;s e-mail address <span class="opt">(optional &mdash; used by &ldquo;E-mail to my physician&rdquo;)</span></label>
@@ -1052,6 +1150,7 @@ function toggleYN(row, event) {
     if (!checked) return;
     if (checked === radios[0]) row.classList.add('yes');
     else row.classList.remove('yes');
+    updateAddl();
   }, 0);
 }
 
@@ -1104,7 +1203,7 @@ function removeLicence(btn) {
   });
 }
 
-/* ---------- Names: build the full name and copy it to page one, Section VIII and the footer ---------- */
+/* ---------- Names: build the full name and copy it to page one, Section VII and the footer ---------- */
 function fullName() {
   const v = function(id) { return document.getElementById(id).value.trim(); };
   return [v('nmTitle'), v('nmFirst'), v('nmMiddle'), v('nmLast')].filter(Boolean).join(' ');
@@ -1286,18 +1385,70 @@ function printTemplate() {
   setTimeout(function() { w.print(); }, 300);
 }
 
-/* CME table — 16 rows */
-function buildCMETable() {
-  const tbody = document.getElementById('cmeTableBody');
-  for (let i = 0; i < 16; i++) {
+/* ---------- Additional Information Sheet: gathers every "Yes" explanation ---------- */
+function esc(t) { return String(t).replace(/[&<>"]/g, function(c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function sectionLabel(el) {
+  const sec = el.closest('section');
+  return 'Section ' + sec.querySelector('.section-num').textContent.trim() + ' \u2013 ' + sec.querySelector('.section-title h2').textContent.trim();
+}
+function updateAddl() {
+  const items = [];
+  const lic = document.querySelector('input[name="lic_change"][value="yes"]');
+  const licRef = document.getElementById('licRef');
+  licRef.classList.remove('on'); licRef.textContent = '';
+  if (lic && lic.checked) items.push({ ref: licRef, sec: sectionLabel(lic), q: 'Changes to your medical licences since your last credentialing cycle', ex: document.querySelector('#licChangeExplain textarea').value });
+  const prac = document.querySelector('input[name="prac_change"][value="yes"]');
+  const pracRef = document.getElementById('pracRef');
+  pracRef.classList.remove('on'); pracRef.textContent = '';
+  if (prac && prac.checked) items.push({ ref: pracRef, sec: sectionLabel(prac), q: 'Changes to your practice location(s) since your last credentialing cycle', ex: document.querySelector('#pracChangeExplain textarea').value });
+  document.querySelectorAll('.yn-row').forEach(function(row) {
+    const ref = row.querySelector('.yn-ref');
+    ref.classList.remove('on'); ref.textContent = '';
+    if (!row.classList.contains('yes')) return;
+    const qEl = row.querySelector('.yn-q').cloneNode(true);
+    const numEl = qEl.querySelector('.num');
+    const num = numEl ? numEl.textContent.replace('.', '').trim() : '';
+    if (numEl) numEl.remove();
+    items.push({ ref: ref, sec: sectionLabel(row) + (num ? ', Question ' + num : ''), q: qEl.textContent.trim(), ex: row.querySelector('.yn-explain textarea').value });
+  });
+  const body = document.getElementById('addlBody');
+  body.innerHTML = '';
+  items.forEach(function(it, i) {
+    const n = i + 1;
+    it.ref.textContent = 'Answered Yes \u2014 explanation on the Additional Information Sheet, item ' + n + '.';
+    it.ref.classList.add('on');
     const tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td><input type="text"></td>' +
-      '<td><input type="text"></td>' +
-      '<td><input type="text" placeholder="MM/YYYY" data-mask="my" inputmode="numeric" maxlength="7"></td>' +
-      '<td class="credit-cell"><input type="number" step="0.5" min="0" oninput="calcCMETotal()"></td>';
-    tbody.appendChild(tr);
+    tr.innerHTML = '<td>' + n + '</td><td><strong>' + esc(it.sec) + '</strong><br><span class="q">' + esc(it.q) + '</span></td>' +
+      '<td class="ex">' + (it.ex.trim() ? esc(it.ex.trim()) : '<em>No explanation entered.</em>') + '</td>';
+    body.appendChild(tr);
+  });
+  document.getElementById('secAddl').classList.toggle('has-items', items.length > 0);
+  document.getElementById('addlName').textContent = document.getElementById('sigName').value.trim() || fullName();
+  document.getElementById('addlDate').textContent = formatLongDate(document.getElementById('sigDate').value);
+  const sigBox = document.getElementById('addlSig');
+  sigBox.innerHTML = '';
+  const img = document.getElementById('sigPreviewImg');
+  if (img && img.getAttribute('src') && document.getElementById('sigPreview').style.display !== 'none' && img.style.display !== 'none') {
+    const copy = document.createElement('img'); copy.src = img.src; copy.alt = 'Signature'; sigBox.appendChild(copy);
   }
+}
+document.addEventListener('input', function() { updateAddl(); });
+document.addEventListener('change', function() { setTimeout(updateAddl, 0); });
+
+/* CME table — 16 rows */
+function addCMERow() {
+  const tbody = document.getElementById('cmeTableBody');
+  const tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><input type="text"></td>' +
+    '<td><input type="text"></td>' +
+    '<td><input type="text" placeholder="MM/YYYY" data-mask="my" inputmode="numeric" maxlength="7"></td>' +
+    '<td class="credit-cell"><input type="number" step="0.5" min="0" oninput="calcCMETotal()"></td>';
+  tbody.appendChild(tr);
+  return tr;
+}
+function buildCMETable() {
+  for (let i = 0; i < 16; i++) addCMERow();
 }
 function calcCMETotal() {
   const inputs = document.querySelectorAll('.cme-table tbody .credit-cell input');
@@ -1346,6 +1497,7 @@ function previewSignature(input) {
     img.src = e.target.result;
     document.getElementById('sigPreview').style.display = 'inline-flex';
     document.getElementById('sigUploadBtn').style.display = 'none';
+    updateAddl();
   };
   if (file.type.startsWith('image/')) {
     reader.readAsDataURL(file);
