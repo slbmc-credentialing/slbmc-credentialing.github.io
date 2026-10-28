@@ -285,6 +285,11 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 .warn-block { background: var(--coral-bg); border: 1px solid #e6c8b8; border-left: 3px solid var(--coral); border-radius: 6px; padding: 10px 14px; margin-top: 14px; font-size: 12.5px; color: var(--coral); text-align: center; font-weight: 500; }
 
 /* ACTION BAR */
+.draft-status { margin-right: auto; align-self: center; font-size: 12.5px; color: var(--green); font-weight: 600; }
+.draft-body p { font-size: 14px; line-height: 1.55; color: var(--text); margin-bottom: 10px; }
+.draft-notes { margin: 0 0 12px 18px; font-size: 13.5px; line-height: 1.55; color: var(--text); }
+.draft-notes li { margin-bottom: 6px; }
+.draft-small { font-size: 12px !important; color: var(--gray-dark) !important; }
 .action-bar { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; padding: 18px; background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); flex-wrap: wrap; }
 .btn-action { padding: 10px 20px; border-radius: 7px; border: none; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; }
 .btn-ghost { background: var(--white); color: var(--navy); border: 1.5px solid var(--gray-light); }
@@ -1094,12 +1099,25 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 <div class="sub-done" id="subDone"></div>
 <input type="text" name="website" id="hpWebsite" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px;">
 <div class="action-bar" id="actionBar">
-  <button class="btn-action btn-ghost" onclick="alert('Save draft is coming soon. For now, please complete the form in one sitting, or keep this page open.')">Save draft</button>
+  <span class="draft-status" id="draftStatus"></span>
+  <button class="btn-action btn-ghost" onclick="saveDraftClicked()">Save draft</button>
   <button class="btn-action btn-ghost" onclick="window.print()">Print / Save as PDF</button>
   <button class="btn-action btn-primary" id="submitBtn" onclick="submitApplication()">Submit re-credentialing application</button>
 </div>
 
 </main>
+
+<!-- SAVE DRAFT POP-UP -->
+<div class="modal-backdrop" id="draftModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="draftTitle" style="max-width:600px;">
+    <div class="modal-head">
+      <h3 id="draftTitle">Save draft</h3>
+      <button type="button" class="modal-close" onclick="closeDraftModal()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body draft-body" id="draftBody"></div>
+    <div class="modal-actions" id="draftActions"></div>
+  </div>
+</div>
 
 <!-- SUBMITTING OVERLAY -->
 <div class="sub-overlay" id="subOverlay"><div class="sub-card"><div class="spinner"></div><div class="sub-status" id="subStatus">Preparing your application&hellip;</div><div class="sub-note">Please keep this page open until it finishes.</div></div></div>
@@ -1389,7 +1407,7 @@ function closeTemplate() {
   document.getElementById('tplModal').classList.remove('open');
   document.body.style.overflow = '';
 }
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeTemplate(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeTemplate(); if (document.getElementById('draftModal').classList.contains('open') && !document.querySelector('#draftTitle').textContent.startsWith('Continue')) closeDraftModal(); } });
 function copyTemplate() {
   const text = templateText();
   const done = function() { document.getElementById('copyOk').classList.add('show'); };
@@ -2103,6 +2121,7 @@ async function submitApplication() {
   }
 }
 function showSubmitted(ref, email, docDef, fileName) {
+  deleteDraft();   /* the application is in; no need to keep a draft on this device */
   document.getElementById('actionBar').style.display = 'none';
   const box = document.getElementById('subDone');
   box.innerHTML = '<h3>Application submitted</h3>' +
@@ -2113,6 +2132,191 @@ function showSubmitted(ref, email, docDef, fileName) {
   box.classList.add('on');
   document.getElementById('dlCopy').onclick = function() { pdfMake.createPdf(docDef).download(fileName); };
   box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/* ======================================================================
+   SAVE DRAFT (kept only on this device, in this browser)
+   Nothing is saved until the applicant presses "Save draft"; after that
+   the form keeps saving automatically as they type. Uploaded files are
+   never kept in a draft.
+   ====================================================================== */
+const DRAFT_KEY = 'slbmc-clinical-privilege-form-draft-v1';
+const DRAFT_MAX_DAYS = 60;
+let draftOn = false;
+let draftTimer = null;
+
+function draftControls() {
+  return Array.from(document.querySelectorAll('main input, main select, main textarea')).filter(function(el) {
+    return el.type !== 'file' && el.id !== 'hpWebsite' && !el.readOnly;
+  });
+}
+function collectDraft() {
+  return {
+    v: 1,
+    savedAt: Date.now(),
+    lic: document.querySelectorAll('#otherLicences .lic-slot').length,
+    cme: document.querySelectorAll('#cmeTableBody tr').length,
+    pp: document.getElementById('ppBlock').classList.contains('on'),
+    waiver: document.getElementById('cmeWaiver').classList.contains('on'),
+    sigEdited: !!document.getElementById('sigName').dataset.edited,
+    values: draftControls().map(function(el) { return (el.type === 'radio' || el.type === 'checkbox') ? el.checked : el.value; })
+  };
+}
+function readDraft() {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return null;
+    const d = JSON.parse(raw);
+    if (!d || d.v !== 1 || !Array.isArray(d.values)) return null;
+    if (Date.now() - d.savedAt > DRAFT_MAX_DAYS * 86400000) { deleteDraft(); return null; }
+    return d;
+  } catch (e) { return null; }
+}
+function writeDraft() {
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collectDraft())); updateDraftStatus(); return true; }
+  catch (e) { return false; }
+}
+function deleteDraft() {
+  try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+  draftOn = false;
+  updateDraftStatus();
+}
+function draftWhen(ts) {
+  const d = new Date(ts);
+  let h = d.getHours(); const m = String(d.getMinutes()).padStart(2, '0');
+  const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+  return { date: formatLongDate(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')), time: h + ':' + m + ' ' + ap };
+}
+function updateDraftStatus() {
+  const el = document.getElementById('draftStatus');
+  if (!el) return;
+  const d = draftOn ? readDraft() : null;
+  el.textContent = d ? '✓ Draft saved on this device at ' + draftWhen(d.savedAt).time : '';
+}
+/* keep saving automatically once a draft has been started */
+function scheduleDraftSave() {
+  if (!draftOn) return;
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(writeDraft, 700);
+}
+document.addEventListener('input', scheduleDraftSave);
+document.addEventListener('change', scheduleDraftSave);
+document.addEventListener('click', function(e) {
+  if (e.target.closest && e.target.closest('.toggle-row, #cmeWaiver, .lic-slot button, #otherLicences + button, .cme-add')) scheduleDraftSave();
+});
+
+/* ---------- pop-up ---------- */
+function openDraftModal(title, bodyHTML, buttons) {
+  document.getElementById('draftTitle').textContent = title;
+  document.getElementById('draftBody').innerHTML = bodyHTML;
+  const acts = document.getElementById('draftActions');
+  acts.innerHTML = '';
+  buttons.forEach(function(b) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn-action ' + (b.primary ? 'btn-primary' : 'btn-ghost');
+    if (b.danger) btn.style.color = 'var(--coral)';
+    btn.textContent = b.label;
+    btn.onclick = b.action;
+    acts.appendChild(btn);
+  });
+  document.getElementById('draftModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDraftModal() {
+  document.getElementById('draftModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+const DRAFT_NOTES =
+  '<ul class="draft-notes">' +
+  '<li><strong>Attached documents are not kept in a draft.</strong> Please attach them again before you submit &mdash; the ticks in Section I show what is still needed.</li>' +
+  '<li><strong>The draft stays on this device only.</strong> Nothing is sent to the hospital until you press &ldquo;Submit&rdquo;. To continue on another device you would need to start again.</li>' +
+  '<li><strong>Using a shared or public computer?</strong> Delete the draft when you have finished, so the next person cannot see your details.</li>' +
+  '</ul>';
+
+function saveDraftClicked() {
+  draftOn = true;
+  if (!writeDraft()) {
+    draftOn = false;
+    openDraftModal('Draft could not be saved',
+      '<p>This browser is not allowing the form to save a draft. This usually happens in a private or incognito window, or when site storage has been switched off.</p>' +
+      '<p>Please open the form in a normal browser window to use Save draft, or complete the form in one sitting.</p>',
+      [{ label: 'OK', primary: true, action: closeDraftModal }]);
+    return;
+  }
+  const w = draftWhen(Date.now());
+  openDraftModal('Draft saved on this device',
+    '<p>Your progress was saved at <strong>' + w.time + '</strong> on ' + w.date + '. From now on the form will keep saving automatically as you type.</p>' +
+    '<p><strong>To continue later,</strong> open the same link on <em>this device</em>, in <em>the same browser</em>. You will be asked whether you would like to carry on from your draft.</p>' +
+    '<p style="margin-bottom:6px;">Please note:</p>' + DRAFT_NOTES +
+    '<p class="draft-small">Drafts are kept for up to ' + DRAFT_MAX_DAYS + ' days and are removed automatically once your application has been submitted.</p>',
+    [
+      { label: 'Delete draft from this device', danger: true, action: function() {
+        deleteDraft();
+        openDraftModal('Draft deleted', '<p>The saved draft has been removed from this device. What you have typed is still on the screen until you close this page.</p>', [{ label: 'OK', primary: true, action: closeDraftModal }]);
+      } },
+      { label: 'OK', primary: true, action: closeDraftModal }
+    ]);
+}
+
+function restoreDraft(d) {
+  /* recreate the same number of licence boxes and CME lines first */
+  const slots = function() { return document.querySelectorAll('#otherLicences .lic-slot'); };
+  while (slots().length < d.lic) addLicence();
+  while (slots().length > d.lic) { const s = slots(); s[s.length - 1].remove(); }
+  licCount = slots().length;
+  while (document.querySelectorAll('#cmeTableBody tr').length < d.cme) addCMERow();
+
+  const ctrls = draftControls();
+  const n = Math.min(ctrls.length, d.values.length);
+  for (let i = 0; i < n; i++) {
+    const el = ctrls[i], v = d.values[i];
+    if (el.type === 'radio' || el.type === 'checkbox') el.checked = !!v;
+    else el.value = v == null ? '' : v;
+  }
+
+  /* switches and reveal-on-Yes boxes */
+  const tr = document.querySelector('.toggle-row');
+  if (d.pp !== document.getElementById('ppBlock').classList.contains('on')) togglePrivatePractice(tr);
+  const wv = document.getElementById('cmeWaiver');
+  if (d.waiver !== wv.classList.contains('on')) toggleCMEWaiver(wv);
+  document.querySelectorAll('.yn-row').forEach(function(row) {
+    const first = row.querySelector('input[type="radio"]');
+    row.classList.toggle('yes', !!(first && first.checked));
+  });
+  const licYes = document.querySelector('input[name="lic_change"][value="yes"]');
+  document.getElementById('licChangeExplain').style.display = licYes && licYes.checked ? 'block' : 'none';
+  const pracYes = document.querySelector('input[name="prac_change"][value="yes"]');
+  document.getElementById('pracChangeExplain').style.display = pracYes && pracYes.checked ? 'block' : 'none';
+
+  /* recalculate everything that depends on the answers */
+  document.getElementById('sigName').dataset.edited = d.sigEdited ? '1' : '';
+  applyPathway();
+  syncNames();
+  document.getElementById('cmtPeriod').value = document.getElementById('prevPeriod').value.replace(/\s–\s$/, '');
+  calcCMETotal();
+  updateFooter();
+  updateAddl();
+  refreshDocs();
+}
+
+function checkForDraft() {
+  const d = readDraft();
+  if (!d) return;
+  const w = draftWhen(d.savedAt);
+  openDraftModal('Continue your saved draft?',
+    '<p>A draft of this form was saved on this device on <strong>' + w.date + '</strong> at <strong>' + w.time + '</strong>.</p>' +
+    '<p>Would you like to carry on from where you left off?</p>' +
+    '<ul class="draft-notes"><li><strong>Attached documents are not kept in a draft</strong>, so you will need to attach them again before you submit.</li></ul>',
+    [
+      { label: 'Start afresh', action: function() {
+        if (!confirm('Start afresh? Your saved draft will be deleted from this device.')) return;
+        deleteDraft(); closeDraftModal();
+      } },
+      { label: 'Continue my draft', primary: true, action: function() {
+        restoreDraft(d); draftOn = true; updateDraftStatus(); closeDraftModal();
+      } }
+    ]);
 }
 
 /* Scroll-to-top */
@@ -2129,6 +2333,7 @@ document.addEventListener('DOMContentLoaded', function() {
   readPathwayFromAddress();
   applyPathway();
   updateFooter();
+  checkForDraft();
 });
 </script>
 </body>
