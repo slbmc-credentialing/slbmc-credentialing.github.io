@@ -4,17 +4,548 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SLBMC Credentialing Portal</title>
-<!-- Temporary home page: sends visitors straight to the clinical privilege form.
-     It will be replaced by the full portal landing page later, so the
-     site address (and any QR code made from it) never has to change. -->
-<meta http-equiv="refresh" content="0; url=clinical-privilege-form.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f8f5ef; color: #0d2340; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; text-align: center; padding: 16px; }
-  a { color: #007a8c; font-weight: 600; }
+:root {
+  --navy: #0d2340; --navy-mid: #163660; --navy-light: #1a4a7a;
+  --teal: #007a8c; --teal-pale: #f3fbfc;
+  --gold: #c9962a; --gold-pale: #fdf6e3;
+  --cream: #f8f5ef; --white: #ffffff;
+  --gray-light: #eef0f3; --gray-mid: #b0b8c4; --gray-dark: #4a5568;
+  --green: #2d7a4f; --green-light: #e8f5ee;
+  --amber: #b8761a; --amber-bg: #fff5e5;
+  --coral: #b8431e; --coral-bg: #fbeae2;
+  --text: #1a2535;
+  --shadow: 0 4px 24px rgba(13,35,64,0.10); --shadow-sm: 0 2px 8px rgba(13,35,64,0.08);
+  --radius: 10px; --radius-lg: 16px;
+  /* category colours (on screen) */
+  --cat-ho-gp: #007a8c; --cat-registrar: #b8761a; --cat-consultant: #5a3e8f; --cat-emergency: #b8431e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; line-height: 1.5; }
+a { color: var(--teal); }
+
+/* HEADER */
+header { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%); color: var(--white); padding: 26px 24px 20px; position: relative; overflow: hidden; }
+header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px; border-radius: 50%; background: rgba(201,150,42,0.12); }
+header::after { content: ''; position: absolute; bottom: -20px; left: 30%; width: 140px; height: 140px; border-radius: 50%; background: rgba(0,122,140,0.15); }
+.header-inner { max-width: 860px; margin: 0 auto; position: relative; z-index: 2; }
+.header-top { display: flex; align-items: center; gap: 16px; }
+.logo-mark { width: 52px; height: 52px; background: var(--gold); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 21px; color: var(--navy); flex-shrink: 0; }
+header h1 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; line-height: 1.2; }
+header .subtitle { font-size: 13.5px; color: rgba(255,255,255,0.85); margin-top: 3px; }
+header .committee { font-size: 11px; color: rgba(255,255,255,0.65); letter-spacing: 0.6px; text-transform: uppercase; margin-top: 2px; }
+.header-contact { display: flex; flex-wrap: wrap; gap: 6px 20px; padding-top: 12px; margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.15); font-size: 12.5px; color: rgba(255,255,255,0.8); }
+.header-contact strong { color: var(--white); font-weight: 500; }
+.header-contact a { color: var(--white); text-decoration: none; }
+
+main { max-width: 860px; margin: 0 auto; padding: 26px 16px 60px; }
+.screen { animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* HOME */
+.intro { font-size: 15.5px; color: var(--gray-dark); margin-bottom: 18px; }
+.intro strong { color: var(--navy); }
+.tiles { display: grid; gap: 14px; }
+.tile { display: flex; align-items: center; gap: 18px; width: 100%; text-align: left; padding: 20px 22px; background: var(--white); border: 1.5px solid transparent; border-radius: var(--radius-lg); box-shadow: var(--shadow); cursor: pointer; font-family: inherit; color: inherit; transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s; }
+.tile:hover, .tile:focus-visible { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(13,35,64,0.14); outline: none; }
+.tile-icon { width: 50px; height: 50px; border-radius: 50%; background: var(--navy); color: var(--gold); font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tile-title { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: var(--navy); line-height: 1.25; }
+.tile-desc { font-size: 14px; color: var(--gray-dark); margin-top: 3px; }
+.tile-arrow { margin-left: auto; color: var(--gold); font-size: 24px; flex-shrink: 0; }
+.emergency-link { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding: 13px 18px; background: var(--coral-bg); border: 1px solid #e6c8b8; border-left: 4px solid var(--coral); border-radius: var(--radius); font-size: 14px; color: #7a2a10; cursor: pointer; width: 100%; text-align: left; font-family: inherit; }
+.emergency-link:hover { background: #f8ddd1; }
+.emergency-link strong { color: var(--coral); }
+.help { margin-top: 22px; padding: 14px 18px; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); font-size: 13.5px; color: var(--gray-dark); }
+.help strong { color: var(--navy); }
+
+/* WIZARD */
+.back { display: inline-flex; align-items: center; gap: 6px; background: none; border: 0; color: var(--teal); font-family: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; padding: 4px 0; margin-bottom: 14px; }
+.back:hover { text-decoration: underline; }
+.step { font-size: 12px; font-weight: 700; color: var(--gray-dark); text-transform: uppercase; letter-spacing: 0.8px; }
+.progress { height: 6px; background: var(--gray-light); border-radius: 100px; overflow: hidden; margin: 8px 0 20px; }
+.progress > div { height: 100%; background: var(--gold); border-radius: 100px; transition: width 0.3s; }
+.question { font-family: 'Playfair Display', serif; font-size: 25px; font-weight: 700; color: var(--navy); line-height: 1.25; margin-bottom: 6px; }
+.question-hint { font-size: 14.5px; color: var(--gray-dark); margin-bottom: 18px; }
+.options { display: grid; gap: 12px; }
+.option { display: flex; align-items: flex-start; gap: 14px; width: 100%; text-align: left; padding: 17px 20px; background: var(--white); border: 1.5px solid var(--gray-light); border-left: 5px solid var(--opt-colour, var(--navy)); border-radius: var(--radius); box-shadow: var(--shadow-sm); cursor: pointer; font-family: inherit; color: inherit; transition: border-color 0.12s, transform 0.12s; }
+.option:hover, .option:focus-visible { border-color: var(--gold); border-left-color: var(--opt-colour, var(--navy)); transform: translateY(-1px); outline: none; }
+.option-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--gray-mid); flex-shrink: 0; margin-top: 2px; }
+.option-title { font-size: 16.5px; font-weight: 700; color: var(--navy); }
+.option-desc { font-size: 13.5px; color: var(--gray-dark); margin-top: 2px; }
+
+/* CHECKLIST */
+.chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; }
+.chip { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 12.5px; font-weight: 700; background: var(--gold-pale); color: #6a5020; border: 1px solid #e8d9a8; }
+.chip.cat { background: var(--white); color: var(--cat, var(--navy)); border: 1.5px solid var(--cat, var(--navy)); }
+.chip-change { font-size: 13px; font-weight: 600; color: var(--teal); background: none; border: 0; cursor: pointer; text-decoration: underline; font-family: inherit; }
+.cl-card { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; border-top: 5px solid var(--cat, var(--navy)); }
+.cl-head { padding: 20px 22px 14px; }
+.cl-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--navy); line-height: 1.25; }
+.cl-sub { font-size: 14.5px; color: var(--gray-dark); margin-top: 4px; }
+.cl-progress { display: flex; align-items: center; gap: 12px; margin-top: 14px; font-size: 13px; color: var(--gray-dark); font-weight: 600; }
+.cl-progress .bar { flex: 1; height: 8px; background: var(--gray-light); border-radius: 100px; overflow: hidden; }
+.cl-progress .bar > div { height: 100%; width: 0; background: var(--green); border-radius: 100px; transition: width 0.25s; }
+.cl-body { padding: 4px 22px 22px; }
+.group-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--navy); padding-left: 10px; border-left: 3px solid var(--gold); margin: 16px 0 10px; }
+.item { display: flex; gap: 12px; align-items: flex-start; padding: 11px 14px; border: 1px solid var(--gray-light); border-radius: 8px; margin-bottom: 7px; cursor: pointer; background: var(--white); transition: background 0.12s; }
+.item:hover { background: #fafbfc; }
+.item input { width: 19px; height: 19px; accent-color: var(--green); flex-shrink: 0; margin-top: 2px; cursor: pointer; }
+.item-text { flex: 1; min-width: 0; }
+.item-label { font-size: 14.5px; font-weight: 600; color: var(--navy); }
+.item-note { font-size: 13px; color: var(--gray-dark); margin-top: 1px; }
+.item.done { background: var(--green-light); border-color: #b8dcc5; }
+.item.done .item-label { text-decoration: line-through; text-decoration-color: rgba(45,122,79,0.5); color: #2b5a3e; }
+.pill { flex-shrink: 0; align-self: center; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 20px; }
+.pill.req { background: var(--coral-bg); color: var(--coral); }
+.pill.cond { background: var(--amber-bg); color: var(--amber); }
+.cme-card { margin: 16px 0 4px; padding: 14px 16px; background: linear-gradient(135deg, #fff8ec 0%, #fffaf4 100%); border: 1.5px solid #f0d490; border-radius: 10px; font-size: 13.5px; color: #5a4810; line-height: 1.55; }
+.cme-card strong { color: #4a3610; }
+.cme-card .cme-big { font-size: 17px; font-weight: 700; color: var(--amber); }
+.note-box { margin-top: 16px; padding: 13px 16px; border-radius: 8px; font-size: 14px; line-height: 1.55; }
+.note-box.info { background: var(--teal-pale); border: 1px solid #c8e8ee; border-left: 4px solid var(--teal); color: #134a55; }
+.note-box.warn { background: var(--amber-bg); border: 1px solid #e8c088; border-left: 4px solid var(--amber); color: #6a4a10; }
+.sig-line { display: none; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 18px; padding: 16px; background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 20px; border-radius: 8px; font-family: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer; text-decoration: none; border: 1.5px solid transparent; }
+.btn-primary { background: var(--navy); color: var(--white); }
+.btn-primary:hover { background: var(--navy-mid); }
+.btn-ghost { background: var(--white); color: var(--navy); border-color: var(--gray-light); }
+.btn-ghost:hover { border-color: var(--teal); background: var(--teal-pale); }
+.print-only { display: none; }
+
+@media (max-width: 560px) {
+  header h1 { font-size: 20px; }
+  .tile { padding: 16px; gap: 14px; }
+  .tile-icon { width: 42px; height: 42px; font-size: 18px; }
+  .tile-title { font-size: 17px; }
+  .question { font-size: 21px; }
+  .actions .btn { width: 100%; }
+  .pill { align-self: flex-start; margin-top: 2px; }
+}
+
+/* PRINTED CHECKLIST — US Letter */
+@page { size: letter; margin: 0.5in; }
+@media print {
+  body { background: var(--white); font-size: 11px; }
+  header { padding: 12px 16px 10px; border-radius: 6px; }
+  header::before, header::after { display: none; }
+  .logo-mark { width: 38px; height: 38px; font-size: 16px; }
+  header h1 { font-size: 18px; }
+  .header-contact { margin-top: 8px; padding-top: 6px; font-size: 10.5px; }
+  main { padding: 10px 0 0; max-width: 100%; }
+  .screen { animation: none; }
+  .back, .step, .progress, .chip-change, .actions, .cl-progress, .note-box.info, .help { display: none !important; }
+  .cl-card { box-shadow: none; border: 1px solid var(--gray-mid); }
+  .cl-head { padding: 12px 14px 6px; }
+  .cl-title { font-size: 17px; }
+  .cl-body { padding: 0 14px 12px; }
+  .group-name { font-size: 13px; margin: 10px 0 6px; }
+  .item { padding: 6px 10px; margin-bottom: 4px; break-inside: avoid; }
+  .item-label { font-size: 11.5px; }
+  .item-note { font-size: 10px; }
+  .cme-card, .note-box.warn { padding: 8px 12px; font-size: 10.5px; margin: 10px 0 2px; break-inside: avoid; }
+  .print-only { display: block; }
+  .sig-line { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-top: 14px; break-inside: avoid; }
+  .sig-line .lbl { font-size: 9.5px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+  .sig-line .box { border: 1px solid var(--gray-mid); border-radius: 3px; height: 26px; }
+  .print-foot { margin-top: 12px; font-size: 9.5px; color: var(--gray-dark); }
+  header, .cl-card, .chip, .item, .item.done, .pill, .cme-card, .note-box, .group-name {
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+}
 </style>
 </head>
 <body>
-  <p>Opening the SLBMC Clinical Privilege Form&hellip;<br>
-  If nothing happens, <a href="clinical-privilege-form.html">click here</a>.</p>
+
+<header>
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="logo-mark">SL</div>
+      <div>
+        <h1>SLBMC Credentialing Portal</h1>
+        <div class="subtitle">Sir Lester Bird Medical Centre &middot; Office of the Medical Director</div>
+        <div class="committee">Medical Staff Executive Committee &middot; Credentialing Committee</div>
+      </div>
+    </div>
+    <div class="header-contact">
+      <span>&#9993; <strong><a href="mailto:clinical.privileges@msjmc.org">clinical.privileges@msjmc.org</a></strong></span>
+      <span>&#9742; <strong>+1 (268) 484-2700 / 484-2713</strong></span>
+    </div>
+  </div>
+</header>
+
+<main id="app" aria-live="polite"></main>
+
+<script>
+/* =========================================================================
+   SHARED DOCUMENT LIBRARY
+   Edit a document's wording here and it updates on every checklist.
+   flag: 'req' = Required, 'cond' = If applicable
+   ========================================================================= */
+const DOCS = {
+  /* Application & identity */
+  letter:        { label: 'Letter of Application', note: 'Addressed to the Chair, Credentialing Committee', flag: 'req' },
+  form:          { label: 'Completed SLBMC Clinical Privilege Application Form', note: 'Fully completed in blue or black ink and signed', flag: 'req' },
+  formRenewal:   { label: 'Completed SLBMC Clinical Privilege Re-Credentialing Form', note: 'Completed and submitted online through this portal', flag: 'req' },
+  cv:            { label: 'Detailed Curriculum Vitae / Résumé', note: 'Chronological, including all employment history and training', flag: 'req' },
+  cvUpdated:     { label: 'Updated Curriculum Vitae / Résumé', note: 'Reflecting any new training, posts, or publications since last credentialing', flag: 'req' },
+  passport:      { label: 'Copy of Passport Bio Page', note: 'Clear photocopy of the photograph and identification page', flag: 'req' },
+  passportLocal: { label: 'Copy of Birth Certificate or Passport Bio Page', note: 'Government-issued identification', flag: 'req' },
+  photo:         { label: 'Passport-Size Photograph', note: 'Recent, certified on the reverse', flag: 'req' },
+
+  /* Academic & professional qualifications */
+  mbbs:          { label: 'Certified Copies of Medical School Certificate and Transcripts', note: 'Official English translation required where documents are not in English', flag: 'req' },
+  postgrad:      { label: 'Certified Copies of Post-Graduate Certificates and Transcripts', note: 'Specialty training, fellowships, and additional qualifications', flag: 'req' },
+  internship:    { label: 'Internship Certificate', note: 'Evidence of completion of required internship', flag: 'req' },
+  boardCert:     { label: 'Specialty Board Certification', note: 'From the relevant specialty board', flag: 'req' },
+  goodStanding:  { label: 'Certificate of Good Standing', note: 'From every medical council where currently or previously licensed in the last five (5) years. Sent directly by the regulator.', flag: 'req' },
+  qualifyingExam:{ label: 'CAMC Parts 1 & 2, or Equivalent', note: 'Acceptable equivalents include USMLE Steps 1 & 2 or PLAB Parts 1 & 2', flag: 'cond' },
+
+  /* Licensure & certifications */
+  licence:       { label: 'Current Medical Licence', note: 'From your current jurisdiction of practice — valid and in good standing', flag: 'req' },
+  aAndBLicence:  { label: 'Current Antigua & Barbuda Medical Licence', note: 'Or evidence of application in progress', flag: 'cond' },
+  aAndBCurrent:  { label: 'Current Antigua & Barbuda Medical Licence', note: 'Valid and in good standing', flag: 'req' },
+  bls:           { label: 'Basic Life Support (BLS) Certification', note: 'Current and valid at time of submission', flag: 'req' },
+  acls:          { label: 'Advanced Cardiac Life Support (ACLS) Certification', note: 'Current and valid at time of submission', flag: 'req' },
+  blsAcls:       { label: 'Current BLS and ACLS Certification', note: 'Basic Life Support and Advanced Cardiac Life Support, valid at time of submission', flag: 'req' },
+  narcotic:      { label: 'Narcotic Certificate / Dangerous Drugs Authorisation', note: 'Required if prescribing or handling controlled substances', flag: 'cond' },
+
+  /* Background & health */
+  immunisation:  { label: 'Immunisation Record', note: 'Up to date, per Occupational Health policy', flag: 'req' },
+  police:        { label: 'Recent Police Record / Certificate of Character', note: 'Not older than three (3) months at submission', flag: 'req' },
+  references:    { label: 'Three (3) Professional Reference Letters', note: 'Not older than three (3) months; from supervisors or colleagues familiar with your clinical work', flag: 'req' },
+  fitness:       { label: 'Medical Fitness Certificate', note: 'Signed and stamped by your examining physician — a template is provided in the online form', flag: 'req' },
+
+  /* Insurance & work status (externals) */
+  indemnity:     { label: 'Professional Indemnity / Malpractice Insurance Certificate', note: 'Must cover your practice at SLBMC for the full period of credentialing', flag: 'req' },
+  workPermit:    { label: 'Work Permit or CARICOM Skills Certificate', note: 'Required for non-nationals of Antigua & Barbuda', flag: 'cond' },
+  employerLetter:{ label: 'Letter from Current Primary Employer', note: 'Authorising session or locum work at SLBMC', flag: 'cond' },
+
+  /* Re-credentialing specific */
+  cmeRecords15:  { label: 'Continuing Medical Education (CME) Records — fifteen (15) credits per year', note: 'Certificates for every activity listed on your CME summary', flag: 'req' },
+  cmeRecords30:  { label: 'Continuing Medical Education (CME) Records — thirty (30) credits per year', note: 'Certificates for every activity listed on your CME summary', flag: 'req' },
+
+  /* Emergency specific */
+  emergencyNotice: { label: 'Notice / Justification for Emergency or Temporary Credentialing', note: 'Written explanation of the circumstances requiring expedited review', flag: 'req' }
+};
+
+const BACKGROUND_HEALTH = [DOCS.immunisation, DOCS.police, DOCS.references];
+const BACKGROUND_HEALTH_EXT = [DOCS.immunisation, DOCS.police, DOCS.references, DOCS.indemnity, DOCS.workPermit];
+function renewalDocs(cme, external) {
+  const list = [DOCS.formRenewal, DOCS.cvUpdated, DOCS.aAndBCurrent, DOCS.blsAcls, cme];
+  if (external) list.push(DOCS.indemnity);
+  list.push(DOCS.fitness);
+  return [{ name: 'Required Documents', items: list }];
+}
+
+/* =========================================================================
+   CHECKLISTS — key pattern: <category>-<type>[-<status>]
+   ========================================================================= */
+const CHECKLISTS = {
+  /* ------- HOUSE OFFICER / GP ------- */
+  'ho-gp-new-internal': {
+    title: 'House Officer / General Practitioner — New Credentialing',
+    subtitle: 'Complete all items below before submitting your application.',
+    groups: [
+      { name: 'Application & Identity', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.passportLocal, DOCS.photo] },
+      { name: 'Academic & Professional Qualifications', items: [DOCS.mbbs, DOCS.internship, DOCS.goodStanding, DOCS.qualifyingExam] },
+      { name: 'Licensure & Certifications', items: [DOCS.licence, DOCS.bls, DOCS.acls, DOCS.narcotic] },
+      { name: 'Background & Health', items: BACKGROUND_HEALTH }
+    ]
+  },
+  'ho-gp-new-external': {
+    title: 'House Officer / General Practitioner — New Credentialing',
+    subtitle: 'External applicants (not SLBMC staff) offering sessional work.',
+    groups: [
+      { name: 'Application & Identity', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.passport, DOCS.photo] },
+      { name: 'Academic & Professional Qualifications', items: [DOCS.mbbs, DOCS.internship, DOCS.goodStanding, DOCS.qualifyingExam] },
+      { name: 'Licensure & Certifications', items: [DOCS.licence, DOCS.aAndBLicence, DOCS.bls, DOCS.acls, DOCS.narcotic] },
+      { name: 'Background, Health & Status', items: BACKGROUND_HEALTH_EXT.concat([DOCS.employerLetter]) }
+    ]
+  },
+  'ho-gp-renewal-internal': {
+    title: 'House Officer / General Practitioner — Re-Credentialing',
+    subtitle: 'Required at the end of each credentialing period for renewal of privileges.',
+    cme: 15, groups: renewalDocs(DOCS.cmeRecords15, false)
+  },
+  'ho-gp-renewal-external': {
+    title: 'House Officer / General Practitioner — Re-Credentialing',
+    subtitle: 'External applicants (not SLBMC staff) renewing session or locum privileges.',
+    cme: 15, groups: renewalDocs(DOCS.cmeRecords15, true)
+  },
+  'ho-gp-preinterview': {
+    title: 'House Officer / General Practitioner — Pre-Interview Requirements',
+    subtitle: 'Submit these documents prior to your scheduled interview with the Credentialing Committee.',
+    groups: [{ name: 'Pre-Interview Submission', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.references, DOCS.mbbs, DOCS.qualifyingExam, DOCS.licence, DOCS.passport] }]
+  },
+
+  /* ------- REGISTRAR ------- */
+  'registrar-new-internal': {
+    title: 'Registrar — New Credentialing',
+    subtitle: 'Complete all items below before submitting your application.',
+    groups: [
+      { name: 'Application & Identity', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.passportLocal, DOCS.photo] },
+      { name: 'Academic & Professional Qualifications', items: [DOCS.mbbs, DOCS.internship, DOCS.postgrad, DOCS.goodStanding, DOCS.qualifyingExam] },
+      { name: 'Licensure & Certifications', items: [DOCS.licence, DOCS.bls, DOCS.acls, DOCS.narcotic] },
+      { name: 'Background & Health', items: BACKGROUND_HEALTH }
+    ]
+  },
+  'registrar-new-external': {
+    title: 'Registrar — New Credentialing',
+    subtitle: 'External applicants (not SLBMC staff) offering sessional work.',
+    groups: [
+      { name: 'Application & Identity', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.passport, DOCS.photo] },
+      { name: 'Academic & Professional Qualifications', items: [DOCS.mbbs, DOCS.internship, DOCS.postgrad, DOCS.goodStanding, DOCS.qualifyingExam] },
+      { name: 'Licensure & Certifications', items: [DOCS.licence, DOCS.aAndBLicence, DOCS.bls, DOCS.acls, DOCS.narcotic] },
+      { name: 'Background, Health & Status', items: BACKGROUND_HEALTH_EXT.concat([DOCS.employerLetter]) }
+    ]
+  },
+  'registrar-renewal-internal': {
+    title: 'Registrar — Re-Credentialing',
+    subtitle: 'Required at the end of each credentialing period for renewal of privileges.',
+    cme: 30, groups: renewalDocs(DOCS.cmeRecords30, false)
+  },
+  'registrar-renewal-external': {
+    title: 'Registrar — Re-Credentialing',
+    subtitle: 'External applicants (not SLBMC staff) renewing session or locum privileges.',
+    cme: 30, groups: renewalDocs(DOCS.cmeRecords30, true)
+  },
+  'registrar-preinterview': {
+    title: 'Registrar — Pre-Interview Requirements',
+    subtitle: 'Submit these documents prior to your scheduled interview with the Credentialing Committee.',
+    groups: [{ name: 'Pre-Interview Submission', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.references, DOCS.mbbs, DOCS.postgrad, DOCS.licence, DOCS.passport] }]
+  },
+
+  /* ------- CONSULTANT / SPECIALIST ------- */
+  'consultant-new-internal': {
+    title: 'Consultant / Specialist — New Credentialing',
+    subtitle: 'Complete all items below before submitting your application for specialist privileges.',
+    groups: [
+      { name: 'Application & Identity', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.passportLocal, DOCS.photo] },
+      { name: 'Academic & Professional Qualifications', items: [DOCS.mbbs, DOCS.postgrad, DOCS.boardCert, DOCS.goodStanding] },
+      { name: 'Licensure & Certifications', items: [DOCS.licence, DOCS.bls, DOCS.acls, DOCS.narcotic] },
+      { name: 'Background & Health', items: BACKGROUND_HEALTH }
+    ]
+  },
+  'consultant-new-external': {
+    title: 'Consultant / Specialist — New Credentialing',
+    subtitle: 'External applicants seeking privileges for surgery, admitting patients privately, or locum work.',
+    groups: [
+      { name: 'Application & Identity', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.passport, DOCS.photo] },
+      { name: 'Academic & Professional Qualifications', items: [DOCS.mbbs, DOCS.postgrad, DOCS.boardCert, DOCS.goodStanding] },
+      { name: 'Licensure & Certifications', items: [DOCS.licence, DOCS.aAndBLicence, DOCS.bls, DOCS.acls, DOCS.narcotic] },
+      { name: 'Background, Health & Status', items: BACKGROUND_HEALTH_EXT }
+    ]
+  },
+  'consultant-renewal-internal': {
+    title: 'Consultant / Specialist — Re-Credentialing',
+    subtitle: 'Required at the end of each credentialing period for renewal of specialist privileges.',
+    cme: 30, groups: renewalDocs(DOCS.cmeRecords30, false)
+  },
+  'consultant-renewal-external': {
+    title: 'Consultant / Specialist — Re-Credentialing',
+    subtitle: 'External specialists renewing privileges for surgery, admitting patients, or locum work.',
+    cme: 30, groups: renewalDocs(DOCS.cmeRecords30, true)
+  },
+  'consultant-preinterview': {
+    title: 'Consultant / Specialist — Pre-Interview Requirements',
+    subtitle: 'Submit these documents prior to your scheduled interview with the Credentialing Committee.',
+    groups: [{ name: 'Pre-Interview Submission', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.references, DOCS.mbbs, DOCS.postgrad, DOCS.boardCert] }]
+  },
+
+  /* ------- EMERGENCY / TEMPORARY ------- */
+  'emergency': {
+    title: 'Emergency / Temporary Credentialing',
+    subtitle: 'For urgent or temporary clinical appointments. All items must be submitted for Committee review.',
+    groups: [{ name: 'Required Documents', items: [DOCS.form, DOCS.emergencyNotice, DOCS.cv, DOCS.licence, DOCS.aAndBLicence, DOCS.passport, DOCS.indemnity] }],
+    signature: 'Signature of Medical Director (if indemnity coverage is under SLBMC)'
+  }
+};
+
+/* =========================================================================
+   WORDING FOR THE QUESTIONS
+   ========================================================================= */
+const TYPES = {
+  new:       { label: 'New Credentialing', short: 'new' },
+  renewal:   { label: 'Re-Credentialing', short: 'renewal' },
+  interview: { label: 'Pre-Interview', short: 'preinterview' }
+};
+const CATEGORIES = {
+  'ho-gp':      { label: 'House Officer / General Practitioner', desc: 'Including medical officers in general practice', colour: 'var(--cat-ho-gp)', form: 'ho-gp' },
+  'registrar':  { label: 'Registrar', desc: 'Physicians in, or having completed, specialist training below consultant grade', colour: 'var(--cat-registrar)', form: 'registrar' },
+  'consultant': { label: 'Consultant / Specialist', desc: 'Specialists holding, or applying for, specialist privileges', colour: 'var(--cat-consultant)', form: 'consultant' }
+};
+function externalDesc(cat) {
+  return cat === 'consultant'
+    ? 'Not on staff — for example seeking privileges to operate, to admit patients privately, or to do locum work'
+    : 'Not on staff — for example offering sessional or locum work';
+}
+
+/* =========================================================================
+   ROUTING (uses the address bar, so the browser's Back button works)
+   #/                       home
+   #/new  #/renewal  #/interview        choose category
+   #/new/registrar          choose internal / external
+   #/new/registrar/external checklist
+   #/interview/registrar    checklist (no internal / external question)
+   #/emergency              checklist
+   ========================================================================= */
+const app = document.getElementById('app');
+function go(path) { location.hash = '#/' + path; }
+function parts() { return location.hash.replace(/^#\/?/, '').split('/').filter(Boolean); }
+function esc(t) { return String(t).replace(/[&<>"]/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+function render() {
+  const p = parts();
+  window.scrollTo(0, 0);
+  if (!p.length) return renderHome();
+  if (p[0] === 'emergency') return renderChecklist('emergency', null, null);
+  const type = p[0];
+  if (!TYPES[type]) return go('');
+  const cat = p[1];
+  if (!cat || !CATEGORIES[cat]) return renderCategory(type);
+  if (type === 'interview') return renderChecklist(type, cat, null);
+  const status = p[2];
+  if (status !== 'internal' && status !== 'external') return renderStatus(type, cat);
+  return renderChecklist(type, cat, status);
+}
+window.addEventListener('hashchange', render);
+
+/* ---------- Home ---------- */
+function renderHome() {
+  document.title = 'SLBMC Credentialing Portal';
+  app.innerHTML =
+    '<div class="screen">' +
+    '<p class="intro">Welcome. This portal guides physicians through <strong>clinical privileges at Sir Lester Bird Medical Centre</strong>. Choose what you would like to do and we will show you exactly which documents you need.</p>' +
+    '<div class="tiles">' +
+      tile('new', '1', 'Apply for clinical privileges', 'First-time credentialing at SLBMC') +
+      tile('renewal', '2', 'Renew my privileges', 'Re-credentialing for physicians already credentialed at SLBMC') +
+      tile('interview', '3', 'Prepare for my interview', 'What to submit before your pre-interview with the Credentialing Committee') +
+    '</div>' +
+    '<button class="emergency-link" onclick="go(\'emergency\')"><span>&#9888;</span><span><strong>Emergency or temporary credentialing?</strong> See the requirements for urgent or temporary appointments &rarr;</span></button>' +
+    '<div class="help"><strong>Need help?</strong> Contact the Office of the Medical Director on +1 (268) 484-2700 / 484-2713 or e-mail <a href="mailto:clinical.privileges@msjmc.org">clinical.privileges@msjmc.org</a>.</div>' +
+    '</div>';
+}
+function tile(path, n, title, desc) {
+  return '<button class="tile" onclick="go(\'' + path + '\')"><span class="tile-icon">' + n + '</span><span><span class="tile-title" style="display:block;">' + title + '</span><span class="tile-desc" style="display:block;">' + desc + '</span></span><span class="tile-arrow">&rsaquo;</span></button>';
+}
+
+/* ---------- Question: category ---------- */
+function stepHeader(stepNo, total, backTo) {
+  return '<button class="back" onclick="go(\'' + backTo + '\')">&larr; Back</button>' +
+    '<div class="step">' + 'Step ' + stepNo + ' of ' + total + '</div>' +
+    '<div class="progress"><div style="width:' + Math.round(stepNo / total * 100) + '%"></div></div>';
+}
+function renderCategory(type) {
+  const total = type === 'interview' ? 2 : 3;
+  let html = '<div class="screen">' + stepHeader(1, total, '') +
+    '<h2 class="question">Which best describes your position?</h2>' +
+    '<p class="question-hint">' + esc(TYPES[type].label) + ' &mdash; choose your physician category.</p><div class="options">';
+  Object.keys(CATEGORIES).forEach(function(k) {
+    const c = CATEGORIES[k];
+    html += '<button class="option" style="--opt-colour:' + c.colour + '" onclick="go(\'' + type + '/' + k + '\')"><span class="option-dot"></span><span><span class="option-title" style="display:block;">' + esc(c.label) + '</span><span class="option-desc" style="display:block;">' + esc(c.desc) + '</span></span></button>';
+  });
+  app.innerHTML = html + '</div></div>';
+}
+
+/* ---------- Question: internal / external ---------- */
+function renderStatus(type, cat) {
+  const c = CATEGORIES[cat];
+  app.innerHTML = '<div class="screen">' + stepHeader(2, 3, type) +
+    '<h2 class="question">Are you currently employed at SLBMC?</h2>' +
+    '<p class="question-hint">' + esc(TYPES[type].label) + ' &middot; ' + esc(c.label) + '</p>' +
+    '<div class="options">' +
+      '<button class="option" style="--opt-colour:var(--teal)" onclick="go(\'' + type + '/' + cat + '/internal\')"><span class="option-dot"></span><span><span class="option-title" style="display:block;">Yes &mdash; Internal</span><span class="option-desc" style="display:block;">I am on staff at Sir Lester Bird Medical Centre</span></span></button>' +
+      '<button class="option" style="--opt-colour:var(--gold)" onclick="go(\'' + type + '/' + cat + '/external\')"><span class="option-dot"></span><span><span class="option-title" style="display:block;">No &mdash; External</span><span class="option-desc" style="display:block;">' + esc(externalDesc(cat)) + '</span></span></button>' +
+    '</div></div>';
+}
+
+/* ---------- Checklist ---------- */
+function renderChecklist(type, cat, status) {
+  const key = type === 'emergency' ? 'emergency' : cat + '-' + TYPES[type].short + (status ? '-' + status : '');
+  const cl = CHECKLISTS[key];
+  if (!cl) return go('');
+  document.title = cl.title + ' – SLBMC Credentialing Portal';
+  const colour = type === 'emergency' ? 'var(--cat-emergency)' : CATEGORIES[cat].colour;
+  const total = type === 'interview' ? 2 : 3;
+  const backTo = type === 'emergency' ? '' : (type === 'interview' ? type : type + '/' + cat);
+
+  let html = '<div class="screen" style="--cat:' + colour + '">';
+  html += type === 'emergency'
+    ? '<button class="back" onclick="go(\'\')">&larr; Back</button>'
+    : stepHeader(total, total, backTo);
+
+  /* chips summarising the pathway */
+  html += '<div class="chips">';
+  if (type === 'emergency') html += '<span class="chip cat">Emergency / Temporary</span>';
+  else {
+    html += '<span class="chip">' + esc(TYPES[type].label) + '</span><span class="chip cat">' + esc(CATEGORIES[cat].label) + '</span>';
+    if (status) html += '<span class="chip">' + (status === 'internal' ? 'Internal' : 'External') + '</span>';
+  }
+  html += '<button class="chip-change" onclick="go(\'\')">Change</button></div>';
+
+  html += '<div class="cl-card"><div class="cl-head"><div class="cl-title">' + esc(cl.title) + '</div><div class="cl-sub">' + esc(cl.subtitle) + '</div>' +
+    '<div class="cl-progress"><div class="bar"><div id="clBar"></div></div><span id="clCount"></span></div></div><div class="cl-body">';
+
+  let n = 0;
+  cl.groups.forEach(function(g) {
+    html += '<div class="group-name">' + esc(g.name) + '</div>';
+    g.items.forEach(function(d) {
+      n++;
+      html += '<label class="item"><input type="checkbox" onchange="tickItem(this)"><span class="item-text"><span class="item-label" style="display:block;">' + esc(d.label) + '</span><span class="item-note" style="display:block;">' + esc(d.note) + '</span></span>' +
+        '<span class="pill ' + d.flag + '">' + (d.flag === 'req' ? 'Required' : 'If applicable') + '</span></label>';
+    });
+  });
+
+  if (cl.cme) {
+    const words = cl.cme === 15 ? 'fifteen (15)' : 'thirty (30)';
+    html += '<div class="cme-card"><span class="cme-big">CME requirement: ' + words + ' credits per year</span><br>' +
+      'Multiplied by the length of your credentialing cycle. Activities from the same facilitator may be grouped on one line of your CME summary, but you must provide a certificate for <strong>every</strong> activity.<br>' +
+      '<strong>In an active educational programme?</strong> (fellowship, higher specialty training or a further degree) &mdash; the CME requirement is waived. Attach a letter from your training programme confirming active enrolment instead.</div>';
+  }
+  if (cl.signature) html += '<div class="note-box warn"><strong>Please note:</strong> ' + esc(cl.signature) + '.</div>';
+
+  html += nextStepBox(type, cat, status);
+  html += '<div class="print-only sig-line"><div><div class="lbl">Applicant&rsquo;s Full Name</div><div class="box"></div></div><div><div class="lbl">Date</div><div class="box"></div></div></div>' +
+    '<div class="print-only print-foot">SLBMC Credentialing Portal &middot; clinical.privileges@msjmc.org &middot; +1 (268) 484-2700 / 484-2713</div>';
+  html += '</div></div>';
+
+  html += '<div class="actions">' + actionButtons(type, cat, status, cl) + '</div>';
+  app.innerHTML = html + '</div>';
+  updateCount();
+}
+
+function nextStepBox(type, cat, status) {
+  if (type === 'renewal') return '<div class="note-box info"><strong>Next step:</strong> complete the online re-credentialing form. You will attach each of these documents in the form, and it is sent straight to the Office of the Medical Director when you submit.</div>';
+  if (type === 'interview') return '<div class="note-box info"><strong>Next step:</strong> e-mail these documents to <a href="mailto:clinical.privileges@msjmc.org">clinical.privileges@msjmc.org</a> before your scheduled interview, or bring them with you. Print this checklist to keep track.</div>';
+  return '<div class="note-box info"><strong>Next step:</strong> the online application form for this pathway is being prepared. Until it is available, please print this checklist and e-mail your application and documents to <a href="mailto:clinical.privileges@msjmc.org">clinical.privileges@msjmc.org</a>, or contact the Office of the Medical Director.</div>';
+}
+function actionButtons(type, cat, status, cl) {
+  const print = '<button class="btn btn-ghost" onclick="window.print()">Print checklist</button>';
+  if (type === 'renewal') {
+    const url = 'clinical-privilege-form.html?category=' + CATEGORIES[cat].form + '&status=' + status;
+    return print + '<a class="btn btn-primary" href="' + url + '">Continue to the online form &rarr;</a>';
+  }
+  const subject = encodeURIComponent((type === 'emergency' ? 'Emergency / Temporary Credentialing' : cl.title.replace(/—/g, '-')) + ' - application documents');
+  return print + '<a class="btn btn-primary" href="mailto:clinical.privileges@msjmc.org?subject=' + subject + '">E-mail the Credentialing Office</a>';
+}
+function tickItem(cb) {
+  cb.closest('.item').classList.toggle('done', cb.checked);
+  updateCount();
+}
+function updateCount() {
+  const all = app.querySelectorAll('.item input');
+  const done = app.querySelectorAll('.item input:checked').length;
+  const bar = document.getElementById('clBar'), cnt = document.getElementById('clCount');
+  if (!bar) return;
+  bar.style.width = (all.length ? Math.round(done / all.length * 100) : 0) + '%';
+  cnt.textContent = done + ' of ' + all.length + ' ready';
+}
+
+render();
+</script>
 </body>
 </html>
