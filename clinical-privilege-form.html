@@ -54,12 +54,17 @@ header .committee { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0
 /* MAIN */
 main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 
-/* Path chips */
-.path-chips { display: flex; flex-wrap: wrap; gap: 8px; background: var(--white); border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow-sm); margin-bottom: 20px; align-items: center; }
-.path-chips .chip-label { font-size: 11px; font-weight: 700; color: var(--gray-dark); text-transform: uppercase; letter-spacing: 0.6px; margin-right: 4px; }
-.path-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; background: var(--teal-pale); border: 1px solid #d8f0f4; color: var(--navy); border-radius: 20px; font-size: 12px; font-weight: 600; }
-.path-chip.renewal { background: var(--gold-pale); border-color: #e8d9a8; color: #6a5020; }
-.path-chip .change { color: var(--teal); text-decoration: underline; font-size: 11px; font-weight: 500; cursor: pointer; }
+/* Pathway panel */
+.pathway { display: flex; flex-wrap: wrap; gap: 12px 18px; background: var(--white); border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow-sm); margin-bottom: 20px; align-items: flex-end; }
+.pathway .chip-label { flex-basis: 100%; font-size: 11px; font-weight: 700; color: var(--gray-dark); text-transform: uppercase; letter-spacing: 0.6px; }
+.pw-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.pw-field label { font-size: 11px; font-weight: 600; color: var(--navy); letter-spacing: 0.3px; }
+.pw-fixed { padding: 6px 12px; background: var(--gold-pale); border: 1px solid #e8d9a8; color: #6a5020; border-radius: 20px; font-size: 13px; font-weight: 600; }
+.pw-field select { padding: 6px 30px 6px 12px; border: 1.5px solid #d8f0f4; border-radius: 20px; background-color: var(--teal-pale); color: var(--navy); font-family: inherit; font-size: 13px; font-weight: 600; appearance: none; cursor: pointer; background-image: linear-gradient(45deg, transparent 50%, var(--navy) 50%), linear-gradient(135deg, var(--navy) 50%, transparent 50%); background-position: calc(100% - 15px) 50%, calc(100% - 10px) 50%; background-size: 5px 5px; background-repeat: no-repeat; max-width: 100%; }
+.pw-field select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,150,42,0.15); }
+.print-pathway { display: none; }
+.row-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.ext-hide.is-hidden { display: none; }
 
 /* SECTIONS */
 .form-section { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden; }
@@ -217,16 +222,58 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 
 /* PRINT STYLES */
 @media print {
-  @page { size: A4; margin: 0.4in; }
-  body { background: var(--white); font-size: 10.5px; line-height: 1.4; }
+  @page { size: A4; margin: 10mm; }
+  body { background: var(--white); font-size: 10px; line-height: 1.35; }
   main { max-width: 100%; padding: 0; }
-  .path-chips, .action-bar, .scroll-top, .cert-upload { display: none !important; }
-  .form-section { break-inside: avoid; margin-bottom: 10px; box-shadow: none; border: 1px solid var(--gray-light); }
-  .section-body { padding: 14px 18px; }
-  .section-head { padding: 10px 18px; }
-  .section-num { width: 32px; height: 32px; font-size: 13px; }
-  .section-title h2 { font-size: 14px; }
-  header, header::before, header::after, .section-head, .section-num, .doc-note, .doc-item, .cmt-box, .yn-row:nth-child(even), .cert-block, .warn-block, .toggle-row, .toggle-row.on, .pp-block.on, .cme-progress, .cme-waiver, .cme-waiver.on, .cme-waived-note, .cme-table th, .cme-table tr.total-row td {
+  header { padding: 10px 14px 8px; }
+  header::before, header::after { display: none; }
+  .logo-mark { width: 34px; height: 34px; font-size: 15px; }
+  header h1 { font-size: 16px; }
+  .header-top { margin-bottom: 4px; }
+  .header-contact { padding-top: 6px; margin-top: 4px; font-size: 10px; }
+  .pathway, .action-bar, .scroll-top, .cert-upload, .sig-upload-btn, .sig-upload-note, .sig-preview-remove,
+  .hint, .cme-progress, .cme-waiver:not(.on), #otherLicences + button, .lic-slot button, .yn-adv { display: none !important; }
+  .print-pathway { display: block; margin: 6px 0 8px; padding: 5px 10px; border: 1px solid var(--gray-mid); border-radius: 4px; font-size: 10px; }
+  .form-section { margin-bottom: 8px; box-shadow: none; border: 1px solid var(--gray-mid); border-radius: 6px; }
+  .section-head { padding: 6px 12px; gap: 10px; break-after: avoid; }
+  .section-num { width: 24px; height: 24px; font-size: 11px; }
+  .section-title h2 { font-size: 12.5px; }
+  .section-title .sub { font-size: 9.5px; }
+  .section-body { padding: 10px 12px; }
+  .field { margin-bottom: 6px; break-inside: avoid; }
+  .label { font-size: 9px; margin-bottom: 2px; }
+  .input, .select, .textarea { padding: 4px 7px; font-size: 10px; border-width: 1px; border-radius: 3px; min-height: 22px; }
+  .textarea, .exam-phys { min-height: 38px; }
+  .row-2, .row-3, .row-4, .row-21, .row-auto { gap: 8px; }
+  .sec-divider { margin: 8px -12px; }
+  .sub-h { font-size: 11.5px; margin-bottom: 6px; }
+  .doc-note { padding: 6px 10px; font-size: 9.5px; margin-bottom: 8px; }
+  .doc-list { gap: 3px; }
+  .doc-item { padding: 4px 8px; break-inside: avoid; }
+  .doc-item .doc-label { font-size: 9.5px; }
+  .cmt-box { margin-top: 8px; padding: 8px 10px; }
+  .radio-row { gap: 14px; }
+  .radio-row label { font-size: 10px; }
+  .yn-row { padding: 5px 10px; gap: 10px; break-inside: avoid; }
+  .yn-q { font-size: 9.8px; }
+  .yn-opts label { font-size: 9.5px; }
+  .toggle-row { padding: 6px 10px; }
+  .lic-slot { padding: 8px !important; margin-bottom: 6px !important; break-inside: avoid; }
+  .cme-table { font-size: 9.5px; }
+  .cme-table th { padding: 4px 8px; font-size: 8.5px; }
+  .cme-table td { padding: 0 2px; }
+  .cme-table input { padding: 3px 6px; font-size: 9.5px; }
+  .cme-table tr { break-inside: avoid; }
+  .cme-table tr.total-row td { padding: 4px 8px; font-size: 10px; }
+  .cme-waiver.on, .cme-waived-note { padding: 6px 10px; margin: 6px 0; }
+  .cert-block { padding: 8px 12px; font-size: 9.5px; line-height: 1.5; margin-bottom: 8px; }
+  .warn-block { padding: 5px 10px; margin-top: 8px; font-size: 9.5px; }
+  .sig-preview-wrap { padding: 4px 8px; }
+  .input::placeholder, .textarea::placeholder, .cme-table input::placeholder { color: transparent; }
+  /* Blank signature box on paper when no signature has been uploaded */
+  .sig-upload::after { content: ''; display: block; height: 40px; border: 1px solid var(--gray-mid); border-radius: 3px; }
+  .sig-upload:has(#sigPreview[style*="inline-flex"])::after { display: none; }
+  header, .section-head, .section-num, .doc-note, .doc-item, .cmt-box, .yn-row:nth-child(even), .cert-block, .warn-block, .toggle-row, .toggle-row.on, .pp-block.on, .cme-waiver.on, .cme-waived-note, .cme-table th, .cme-table tr.total-row td {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     forced-color-adjust: none !important;
@@ -253,12 +300,29 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 
 <main>
 
-<div class="path-chips">
+<div class="pathway">
   <span class="chip-label">Your Pathway</span>
-  <span class="path-chip renewal">Re-Credentialing <span class="change">change</span></span>
-  <span class="path-chip">Consultant / Specialist <span class="change">change</span></span>
-  <span class="path-chip">Internal <span class="change">change</span></span>
+  <div class="pw-field">
+    <label>Application</label>
+    <div class="pw-fixed">Re-Credentialing</div>
+  </div>
+  <div class="pw-field">
+    <label for="pwCategory">Physician category</label>
+    <select id="pwCategory" onchange="applyPathway()">
+      <option value="consultant">Consultant / Specialist</option>
+      <option value="registrar">Registrar</option>
+      <option value="ho-gp">House Officer / General Practitioner</option>
+    </select>
+  </div>
+  <div class="pw-field">
+    <label for="pwStatus">Status</label>
+    <select id="pwStatus" onchange="applyPathway()">
+      <option value="internal">Internal &mdash; employed at SLBMC</option>
+      <option value="external">External &mdash; not employed at SLBMC</option>
+    </select>
+  </div>
 </div>
+<div class="print-pathway" id="printPathway"></div>
 
 
 <!-- ============================================================
@@ -328,33 +392,17 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       <input class="input" type="text" placeholder="Surname, First Name, Middle Name">
     </div>
 
-    <div class="row-3">
-      <div class="field">
-        <label class="label">Current Role / Grade <span class="req">*</span></label>
-        <select class="select" id="roleSelect" onchange="updateCMETarget()">
-          <option value="consultant">Consultant / Specialist</option>
-          <option value="registrar">Registrar</option>
-          <option value="ho-gp">House Officer / General Practitioner</option>
-        </select>
-      </div>
-      <div class="field">
+    <div class="row-auto">
+      <div class="field ext-hide" id="deptField">
         <label class="label">SLBMC Department <span class="req">*</span></label>
         <input class="input" type="text" placeholder="e.g. Internal Medicine">
       </div>
       <div class="field">
-        <label class="label">SLBMC Appointment Title <span class="req">*</span></label>
-        <input class="input" type="text" placeholder="e.g. Consultant Physician">
-      </div>
-    </div>
-
-    <div class="row-2">
-      <div class="field">
-        <label class="label">Previous Credentialing Period <span class="req">*</span></label>
+        <label class="label">Previous Credentialing Period <span class="opt">(if known)</span></label>
         <input class="input" type="text" placeholder="MM/YYYY &ndash; MM/YYYY">
-        <div class="hint">From the date of your previous credentialing to today.</div>
       </div>
       <div class="field">
-        <label class="label">Date of Original SLBMC Appointment</label>
+        <label class="label">Date First Granted Privileges at SLBMC <span class="opt">(if known)</span></label>
         <input class="input" type="date">
       </div>
     </div>
@@ -476,25 +524,12 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
     <div class="section-num">IV</div>
     <div class="section-title">
       <h2>Current Practice Location</h2>
-      <div class="sub">Your SLBMC appointment and any private practice</div>
+      <div class="sub">Private practice and any changes since your last cycle</div>
     </div>
   </div>
   <div class="section-body">
 
-    <h3 class="sub-h first">SLBMC Appointment</h3>
-    <p class="hint" style="margin-bottom:12px;">If any details here have changed since your last credentialing, please update them.</p>
-    <div class="row-2">
-      <div class="field">
-        <label class="label">Department</label>
-        <input class="input" type="text" placeholder="Pre-filled from Section II">
-      </div>
-      <div class="field">
-        <label class="label">Appointment Title</label>
-        <input class="input" type="text" placeholder="Pre-filled from Section II">
-      </div>
-    </div>
-
-    <div class="toggle-row" onclick="togglePrivatePractice(this)">
+    <div class="toggle-row" style="margin-top:0;" onclick="togglePrivatePractice(this)">
       <div class="toggle-sw"></div>
       <div>
         <div class="toggle-title">I also hold a private practice</div>
@@ -547,7 +582,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       </div>
       <div id="pracChangeExplain" style="display:none; margin-top:12px;">
         <label class="label">Please describe the changes</label>
-        <textarea class="textarea" rows="3" placeholder="e.g. new department, change in appointment title, started / closed private practice, etc."></textarea>
+        <textarea class="textarea" rows="3" placeholder="e.g. moved department, changed role, started or closed a private practice, etc."></textarea>
       </div>
     </div>
 
@@ -847,9 +882,32 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 <button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">&#8593;</button>
 
 <script>
-/* CME target based on role */
+/* Pathway: category and internal/external status */
+const CATEGORY_LABELS = { 'consultant': 'Consultant / Specialist', 'registrar': 'Registrar', 'ho-gp': 'House Officer / General Practitioner' };
+function applyPathway() {
+  const cat = document.getElementById('pwCategory').value;
+  const status = document.getElementById('pwStatus').value;
+  document.querySelectorAll('.ext-hide').forEach(function(el) {
+    el.classList.toggle('is-hidden', status === 'external');
+  });
+  document.getElementById('printPathway').innerHTML =
+    '<strong>Pathway:</strong> Re-Credentialing &middot; ' + CATEGORY_LABELS[cat] + ' &middot; ' +
+    (status === 'external' ? 'External' : 'Internal (employed at SLBMC)');
+  updateCMETarget();
+}
+/* The portal's landing page can open this form with the pathway already chosen, e.g.
+   clinical-privilege-form.html?category=registrar&status=external */
+function readPathwayFromAddress() {
+  const params = new URLSearchParams(window.location.search);
+  const cat = params.get('category');
+  const status = params.get('status');
+  if (cat && CATEGORY_LABELS[cat]) document.getElementById('pwCategory').value = cat;
+  if (status === 'internal' || status === 'external') document.getElementById('pwStatus').value = status;
+}
+
+/* CME target based on physician category */
 function updateCMETarget() {
-  const role = document.getElementById('roleSelect').value;
+  const role = document.getElementById('pwCategory').value;
   const annual = (role === 'ho-gp') ? 15 : 30;
   const annualWord = (annual === 15) ? 'fifteen (15)' : 'thirty (30)';
   document.getElementById('cmeTargetTag').textContent = annual + ' credits / year';
@@ -859,7 +917,7 @@ function updateCMETarget() {
 
 /* CME total based on cycle length */
 function updateCMETotal() {
-  const role = document.getElementById('roleSelect').value;
+  const role = document.getElementById('pwCategory').value;
   const annual = (role === 'ho-gp') ? 15 : 30;
   const years = parseInt(document.getElementById('cyclePeriod').value, 10);
   const total = annual * years;
@@ -965,7 +1023,7 @@ function calcCMETotal() {
     const targetText = targetSpan ? targetSpan.outerHTML : '';
     valDisplay.innerHTML = shown + ' ' + targetText;
   }
-  const role = document.getElementById('roleSelect').value;
+  const role = document.getElementById('pwCategory').value;
   const annual = (role === 'ho-gp') ? 15 : 30;
   const years = parseInt(document.getElementById('cyclePeriod').value, 10);
   const target = annual * years;
@@ -1026,7 +1084,8 @@ window.addEventListener('scroll', function() {
 document.addEventListener('DOMContentLoaded', function() {
   addLicence();
   buildCMETable();
-  updateCMETarget();
+  readPathwayFromAddress();
+  applyPathway();
 });
 </script>
 </body>
