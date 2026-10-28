@@ -151,6 +151,35 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
 .doc-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: var(--teal-pale); border: 1px solid #d8f0f4; border-left: 3px solid var(--teal); border-radius: 4px; }
 .doc-item .cbox { width: 16px; height: 16px; flex-shrink: 0; border: 1.5px solid var(--gray-mid); border-radius: 3px; background: var(--white); margin-top: 2px; }
 .doc-item .doc-label { font-size: 13px; font-weight: 500; color: var(--navy); line-height: 1.45; }
+.doc-item .doc-label { flex: 1; min-width: 0; }
+.doc-fname { display: block; font-size: 11.5px; font-weight: 500; color: var(--green); margin-top: 2px; word-break: break-word; }
+.doc-fname:empty { display: none; }
+.doc-attach { flex-shrink: 0; align-self: center; }
+.doc-btn { display: inline-block; padding: 5px 12px; background: var(--white); border: 1.5px solid var(--teal); color: var(--teal); border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.doc-btn:hover { background: var(--teal); color: var(--white); }
+.doc-where { font-size: 12px; font-weight: 600; color: var(--teal); }
+.doc-item.done .cbox { background: var(--green); border-color: var(--green); position: relative; }
+.doc-item.done .cbox::after { content: ''; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.doc-item.done { border-left-color: var(--green); }
+.other-docs { display: flex; gap: 10px; align-items: center; margin-top: 8px; padding: 10px 12px; border: 1px dashed var(--teal); border-radius: 4px; font-size: 13px; color: var(--navy); }
+.other-docs > div { flex: 1; min-width: 0; }
+.field.invalid .input, .field.invalid .select, .field.invalid .textarea, .yn-row.invalid, .field.invalid .radio-row, .invalid textarea { border-color: var(--coral) !important; box-shadow: 0 0 0 3px rgba(184,67,30,0.12); }
+.yn-row.invalid, .field.invalid .radio-row { border: 1.5px solid var(--coral); border-radius: 6px; }
+.field.invalid .radio-row { padding: 4px 8px; }
+.submit-msg { display: none; margin-top: 20px; padding: 14px 18px; background: var(--coral-bg); border: 1px solid #e6c8b8; border-left: 4px solid var(--coral); border-radius: 8px; font-size: 13.5px; color: #7a2a10; line-height: 1.55; }
+.submit-msg.on { display: block; }
+.submit-msg ul { margin: 6px 0 0 18px; }
+.sub-done { display: none; margin-top: 20px; padding: 22px 24px; background: var(--green-light); border: 1.5px solid var(--green); border-radius: var(--radius-lg); color: #0e4a2a; font-size: 14px; line-height: 1.6; }
+.sub-done.on { display: block; }
+.sub-done h3 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 6px; color: #0e4a2a; }
+.sub-done .ref { display: inline-block; font-size: 18px; font-weight: 700; letter-spacing: 0.5px; padding: 4px 12px; background: var(--white); border: 1px solid var(--green); border-radius: 6px; margin: 4px 0 10px; }
+.sub-overlay { position: fixed; inset: 0; background: rgba(13,35,64,0.6); display: none; align-items: center; justify-content: center; z-index: 400; padding: 16px; }
+.sub-overlay.on { display: flex; }
+.sub-card { background: var(--white); border-radius: var(--radius-lg); padding: 28px 30px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 12px 48px rgba(13,35,64,0.35); }
+.spinner { width: 42px; height: 42px; border: 4px solid var(--gray-light); border-top-color: var(--gold); border-radius: 50%; margin: 0 auto 14px; animation: spin 0.9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.sub-status { font-size: 15px; font-weight: 600; color: var(--navy); }
+.sub-note { font-size: 12.5px; color: var(--gray-dark); margin-top: 6px; }
 .doc-item .cme-tag { display: inline-block; background: var(--gold-pale); color: var(--amber); font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 3px; margin-left: 6px; }
 
 .cmt-box { margin-top: 18px; padding: 14px 18px; background: var(--gold-pale); border: 1px dashed var(--gold); border-radius: 8px; }
@@ -280,6 +309,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
   .header-contact { padding-top: 6px; margin-top: 6px; font-size: 10.5px; }
 
   /* screen-only items */
+  .doc-btn, .doc-where, .other-docs, .submit-msg, .sub-done, .sub-overlay, #hpWebsite,
   .pathway, .action-bar, .scroll-top, .cert-upload, .fit-box, .modal-backdrop, .cme-add,
   .sig-upload-btn, .sig-upload-note, .sig-preview-remove, .hint, .cme-progress, .cme-waiver:not(.on),
   #otherLicences + button, .lic-slot button, .yn-adv { display: none !important; }
@@ -433,13 +463,17 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
     <p class="hint" style="margin-bottom:12px;">Please attach the following with your re-credentialing application. These are mandatory for all re-credentialing applicants.</p>
 
     <div class="doc-list">
-      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Completed SLBMC Clinical Privilege Re-Credentialing Form</span></label>
-      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Updated Curriculum Vitae / R&eacute;sum&eacute; <span class="opt" style="font-weight:400;">(reflecting any new training, posts, or publications since last credentialing)</span></span></label>
-      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Current Antigua &amp; Barbuda Medical Licence &mdash; valid and in good standing</span></label>
-      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Current Basic Life Support (BLS) and Advanced Cardiac Life Support (ACLS) Certification</span></label>
-      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Continuing Medical Education (CME) Records <span class="cme-tag" id="cmeTargetTag">30 credits / year</span></span></label>
-      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Professional Indemnity / Malpractice Insurance Certificate <span class="opt" style="font-weight:400;">(applicable to practice in Antigua)</span></span></label>
-      <label class="doc-item"><span class="cbox"></span><span class="doc-label">Medical Fitness Certificate &mdash; signed and stamped by your examining physician <span class="opt" style="font-weight:400;">(template provided in Section VI)</span></span></label>
+      <div class="doc-item done" data-doc="form"><span class="cbox"></span><span class="doc-label">Completed SLBMC Clinical Privilege Re-Credentialing Form<span class="doc-fname">Included automatically when you submit</span></span></div>
+      <div class="doc-item" data-doc="docCV"><span class="cbox"></span><span class="doc-label">Updated Curriculum Vitae / R&eacute;sum&eacute; <span class="opt" style="font-weight:400;">(reflecting any new training, posts, or publications since last credentialing)</span><span class="doc-fname"></span></span><span class="doc-attach"><input type="file" id="docCV" accept="image/*,.pdf,.doc,.docx" hidden onchange="refreshDocs()"><label for="docCV" class="doc-btn">Attach</label></span></div>
+      <div class="doc-item" data-doc="docLic"><span class="cbox"></span><span class="doc-label">Current Antigua &amp; Barbuda Medical Licence &mdash; valid and in good standing<span class="doc-fname"></span></span><span class="doc-attach"><input type="file" id="docLic" accept="image/*,.pdf" hidden onchange="refreshDocs()"><label for="docLic" class="doc-btn">Attach</label></span></div>
+      <div class="doc-item" data-doc="docBLS"><span class="cbox"></span><span class="doc-label">Current Basic Life Support (BLS) and Advanced Cardiac Life Support (ACLS) Certification<span class="doc-fname"></span></span><span class="doc-attach"><input type="file" id="docBLS" accept="image/*,.pdf" hidden onchange="refreshDocs()"><label for="docBLS" class="doc-btn">Attach</label></span></div>
+      <div class="doc-item" data-doc="cme"><span class="cbox"></span><span class="doc-label">Continuing Medical Education (CME) Records <span class="cme-tag" id="cmeTargetTag">30 credits / year</span><span class="doc-fname"></span></span><span class="doc-attach"><a href="#secCME" class="doc-where">Attach in Section VIII</a></span></div>
+      <div class="doc-item" data-doc="docInd"><span class="cbox"></span><span class="doc-label">Professional Indemnity / Malpractice Insurance Certificate <span class="opt" style="font-weight:400;">(applicable to practice in Antigua)</span><span class="doc-fname"></span></span><span class="doc-attach"><input type="file" id="docInd" accept="image/*,.pdf" hidden onchange="refreshDocs()"><label for="docInd" class="doc-btn">Attach</label></span></div>
+      <div class="doc-item" data-doc="fit"><span class="cbox"></span><span class="doc-label">Medical Fitness Certificate &mdash; signed and stamped by your examining physician <span class="opt" style="font-weight:400;">(template provided in Section VI)</span><span class="doc-fname"></span></span><span class="doc-attach"><a href="#secVI" class="doc-where">Attach in Section VI</a></span></div>
+    </div>
+    <div class="other-docs">
+      <div><strong>Other supporting documents</strong> <span class="opt">(optional &mdash; e.g. documents supporting a &ldquo;Yes&rdquo; answer)</span><span class="doc-fname" id="docOtherList"></span></div>
+      <span class="doc-attach"><input type="file" id="docOther" multiple accept="image/*,.pdf,.doc,.docx" hidden onchange="refreshDocs()"><label for="docOther" class="doc-btn">Attach files</label></span>
     </div>
 
     <div class="cmt-box">
@@ -548,7 +582,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
     <div class="row-3">
       <div class="field">
         <label class="label">Mobile <span class="req">*</span></label>
-        <input class="input" type="tel" placeholder="+1 (000) 000-0000">
+        <input class="input" type="tel" id="appMobile" placeholder="+1 (000) 000-0000">
       </div>
       <div class="field">
         <label class="label">Home Telephone</label>
@@ -556,7 +590,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
       </div>
       <div class="field">
         <label class="label">E-mail Address <span class="req">*</span></label>
-        <input class="input" type="email">
+        <input class="input" type="email" id="appEmail">
       </div>
     </div>
 
@@ -978,6 +1012,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
     <div class="cme-waived-note" id="cmeWaivedNote">
       <strong>CME requirement waived.</strong>
       Attach a letter from your training programme confirming active enrolment in lieu of the CME summary.
+      <div style="margin-top:8px;"><input type="file" id="waiverUpload" accept="image/*,.pdf" hidden onchange="refreshDocs()"><label for="waiverUpload" class="doc-btn">Attach enrolment letter</label> <span class="doc-fname" id="waiverName" style="display:inline;"></span></div>
     </div>
 
     <div class="cme-table-wrap" id="cmeTableWrap">
@@ -1055,13 +1090,19 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
   </div></div></td></tr></tbody></table>
 </section>
 
-<div class="action-bar">
-  <button class="btn-action btn-ghost">Save draft</button>
+<div class="submit-msg" id="submitMsg" role="alert"></div>
+<div class="sub-done" id="subDone"></div>
+<input type="text" name="website" id="hpWebsite" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px;">
+<div class="action-bar" id="actionBar">
+  <button class="btn-action btn-ghost" onclick="alert('Save draft is coming soon. For now, please complete the form in one sitting, or keep this page open.')">Save draft</button>
   <button class="btn-action btn-ghost" onclick="window.print()">Print / Save as PDF</button>
-  <button class="btn-action btn-primary">Submit re-credentialing application</button>
+  <button class="btn-action btn-primary" id="submitBtn" onclick="submitApplication()">Submit re-credentialing application</button>
 </div>
 
 </main>
+
+<!-- SUBMITTING OVERLAY -->
+<div class="sub-overlay" id="subOverlay"><div class="sub-card"><div class="spinner"></div><div class="sub-status" id="subStatus">Preparing your application&hellip;</div><div class="sub-note">Please keep this page open until it finishes.</div></div></div>
 
 <!-- MEDICAL FITNESS CERTIFICATE TEMPLATE (pop-up) -->
 <div class="modal-backdrop" id="tplModal" onclick="if (event.target === this) closeTemplate()">
@@ -1413,8 +1454,12 @@ function updateAddl() {
   });
   const body = document.getElementById('addlBody');
   body.innerHTML = '';
+  window.ADDL_ITEMS = items;
+  document.querySelectorAll('[data-addl-item]').forEach(function(el) { el.removeAttribute('data-addl-item'); });
   items.forEach(function(it, i) {
     const n = i + 1;
+    it.n = n;
+    it.ref.setAttribute('data-addl-item', n);
     it.ref.textContent = 'Answered Yes \u2014 explanation on the Additional Information Sheet, item ' + n + '.';
     it.ref.classList.add('on');
     const tr = document.createElement('tr');
@@ -1515,6 +1560,558 @@ function clearSignature() {
   document.getElementById('sigUploadBtn').style.display = '';
   document.getElementById('sigPreviewImg').style.display = '';
   document.getElementById('sigPreview').querySelectorAll('span').forEach(function(s) { s.remove(); });
+}
+
+/* ======================================================================
+   ONLINE SUBMISSION
+   ----------------------------------------------------------------------
+   SUBMIT_URL is the Google Apps Script web app address. Paste it between
+   the quotes below once the script has been deployed (see setup steps).
+   ====================================================================== */
+const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbwEUXxBaibJ7wIqGLkNNGqo26R4g1sIcDTYUsxgc1dc7tx3qdMk4l6AuyTZd_57x-WKKg/exec';
+
+const MAX_FILE_MB = 10;      /* largest single upload allowed            */
+const MAX_TOTAL_MB = 35;     /* largest total for one application        */
+
+/* ---------- Supporting-document ticks in Section I ---------- */
+function fileNames(id) {
+  const el = document.getElementById(id);
+  return el && el.files ? Array.from(el.files).map(function(f) { return f.name; }) : [];
+}
+function refreshDocs() {
+  const set = function(key, done, text) {
+    const item = document.querySelector('.doc-item[data-doc="' + key + '"]');
+    if (!item) return;
+    item.classList.toggle('done', !!done);
+    const f = item.querySelector('.doc-fname');
+    if (f) f.textContent = text || '';
+  };
+  ['docCV', 'docLic', 'docBLS', 'docInd'].forEach(function(id) {
+    const n = fileNames(id);
+    set(id, n.length, n.length ? '✓ ' + n.join(', ') : '');
+  });
+  const waived = document.getElementById('cmeWaiver').classList.contains('on');
+  const cme = fileNames('cmeUpload'), letter = fileNames('waiverUpload');
+  document.getElementById('waiverName').textContent = letter.length ? '✓ ' + letter[0] : '';
+  if (waived) set('cme', letter.length, letter.length ? '✓ CME waived — enrolment letter attached' : 'CME waived — enrolment letter still needed');
+  else set('cme', cme.length, cme.length ? '✓ ' + cme.length + ' certificate(s) attached in Section VIII' : '');
+  const fit = fileNames('fitUpload');
+  set('fit', fit.length, fit.length ? '✓ ' + fit[0] : '');
+  const other = fileNames('docOther');
+  document.getElementById('docOtherList').textContent = other.length ? '✓ ' + other.join(', ') : '';
+}
+document.addEventListener('change', function(e) { if (e.target.type === 'file') refreshDocs(); });
+document.addEventListener('click', function(e) { if (e.target.closest && e.target.closest('#cmeWaiver')) setTimeout(refreshDocs, 0); });
+
+/* ---------- Checking the form before it is sent ---------- */
+function isShown(el) { return !!(el && (el.offsetParent !== null || el.getClientRects().length)); }
+function fieldLabel(field) {
+  const l = field.querySelector('.label');
+  if (!l) return 'A required field';
+  const c = l.cloneNode(true);
+  c.querySelectorAll('.req, .opt').forEach(function(x) { x.remove(); });
+  return c.textContent.replace(/\s+/g, ' ').trim();
+}
+function sectionOf(el) {
+  const sec = el.closest('section');
+  return sec ? 'Section ' + sec.querySelector('.section-num').textContent.trim() : '';
+}
+function validateForm() {
+  const problems = [];
+  document.querySelectorAll('.invalid').forEach(function(x) { x.classList.remove('invalid'); });
+  const flag = function(box, msg) { box.classList.add('invalid'); problems.push({ el: box, msg: msg }); };
+
+  /* every visible field marked with a red star */
+  document.querySelectorAll('main .field').forEach(function(field) {
+    if (!isShown(field) || !field.querySelector('.label .req')) return;
+    if (field.closest('.cmt-box')) return;
+    const radios = field.querySelectorAll('input[type="radio"]');
+    if (radios.length) {
+      if (!field.querySelector('input[type="radio"]:checked')) flag(field, sectionOf(field) + ': please answer “' + fieldLabel(field) + '”');
+      return;
+    }
+    const ctrl = field.querySelector('input:not([type="file"]):not([type="radio"]), select, textarea');
+    if (!ctrl) return;
+    if (!ctrl.value.trim()) flag(field, sectionOf(field) + ': ' + fieldLabel(field) + ' is required');
+  });
+
+  /* e-mail format */
+  const email = document.getElementById('appEmail');
+  if (email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) flag(email.closest('.field'), 'Section II: please check your e-mail address');
+
+  /* every Yes/No question answered; explanations given for Yes */
+  document.querySelectorAll('.yn-row').forEach(function(row) {
+    const num = (row.querySelector('.num') || {}).textContent || '';
+    if (!row.querySelector('input[type="radio"]:checked')) { flag(row, sectionOf(row) + ': please answer question ' + num.replace('.', '')); return; }
+    if (row.classList.contains('yes') && !row.querySelector('.yn-explain textarea').value.trim())
+      flag(row, sectionOf(row) + ': please explain your “Yes” answer to question ' + num.replace('.', ''));
+  });
+  [['lic_change', 'licChangeExplain', 'changes to your medical licences'], ['prac_change', 'pracChangeExplain', 'changes to your practice location']].forEach(function(q) {
+    const yes = document.querySelector('input[name="' + q[0] + '"][value="yes"]');
+    if (yes && yes.checked && !document.querySelector('#' + q[1] + ' textarea').value.trim())
+      flag(yes.closest('.field'), sectionOf(yes) + ': please describe the ' + q[2]);
+  });
+
+  /* signature */
+  if (!fileNames('sigUpload').length) flag(document.getElementById('sigUpload').closest('.field'), 'Section VII: please upload your signature');
+  return problems;
+}
+function missingDocuments() {
+  const miss = [];
+  if (!fileNames('docCV').length) miss.push('Curriculum Vitae / Résumé');
+  if (!fileNames('docLic').length) miss.push('Antigua & Barbuda Medical Licence');
+  if (!fileNames('docBLS').length) miss.push('BLS / ACLS Certification');
+  if (!fileNames('docInd').length) miss.push('Professional Indemnity / Malpractice Insurance Certificate');
+  if (!fileNames('fitUpload').length) miss.push('Medical Fitness Certificate');
+  const waived = document.getElementById('cmeWaiver').classList.contains('on');
+  if (waived && !fileNames('waiverUpload').length) miss.push('Training programme enrolment letter (CME waiver)');
+  if (!waived && !fileNames('cmeUpload').length) miss.push('CME certificates');
+  return miss;
+}
+function showProblems(problems) {
+  const box = document.getElementById('submitMsg');
+  const list = problems.slice(0, 8).map(function(p) { return '<li>' + esc(p.msg) + '</li>'; }).join('');
+  const more = problems.length > 8 ? '<li>&hellip; and ' + (problems.length - 8) + ' more (highlighted in red)</li>' : '';
+  box.innerHTML = '<strong>Please complete the following before submitting:</strong><ul>' + list + more + '</ul>';
+  box.classList.add('on');
+  problems[0].el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/* ---------- Helpers ---------- */
+function loadScript(src) {
+  return new Promise(function(resolve, reject) {
+    const s = document.createElement('script');
+    s.src = src; s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+async function loadPdfMake() {
+  if (window.pdfMake && window.pdfMake.vfs) return;
+  const sources = [
+    ['https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/pdfmake.min.js', 'https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/vfs_fonts.js'],
+    ['https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.js']
+  ];
+  for (let i = 0; i < sources.length; i++) {
+    try { await loadScript(sources[i][0]); await loadScript(sources[i][1]); if (window.pdfMake && window.pdfMake.vfs) return; } catch (e) {}
+  }
+  throw new Error('The PDF tool could not be loaded. Please check your internet connection and try again.');
+}
+function makeRef() {
+  const d = new Date();
+  const pad = function(n) { return String(n).padStart(2, '0'); };
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let r = '';
+  for (let i = 0; i < 4; i++) r += chars[Math.floor(Math.random() * chars.length)];
+  return 'RC-' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + r;
+}
+function fmtDate(iso) {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso || '';
+  const p = iso.split('-');
+  return p[2] + '/' + p[1] + '/' + p[0];
+}
+function readAsDataURL(file) {
+  return new Promise(function(resolve, reject) {
+    const r = new FileReader();
+    r.onload = function() { resolve(r.result); };
+    r.onerror = function() { reject(new Error('Could not read ' + file.name)); };
+    r.readAsDataURL(file);
+  });
+}
+async function signatureImage() {
+  /* returns a PNG data URL that the PDF tool can use, or '' */
+  const f = document.getElementById('sigUpload').files[0];
+  if (!f || !f.type.startsWith('image/')) return '';
+  const url = await readAsDataURL(f);
+  return new Promise(function(resolve) {
+    const img = new Image();
+    img.onload = function() {
+      const scale = Math.min(1, 600 / img.width);
+      const c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(img.width * scale)); c.height = Math.max(1, Math.round(img.height * scale));
+      const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      resolve(c.toDataURL('image/png'));
+    };
+    img.onerror = function() { resolve(''); };
+    img.src = url;
+  });
+}
+
+/* ======================================================================
+   PDF OF THE APPLICATION (US Letter, same page plan as the printed form)
+   ====================================================================== */
+const PDF_C = { navy: '#0d2340', gold: '#c9962a', line: '#9aa3b0', dark: '#4a5568', pale: '#fdf6e3', head: '#cfd6e0', green: '#2d7a4f' };
+const BOX = { hLineWidth: function() { return 0.75; }, vLineWidth: function() { return 0.75; }, hLineColor: function() { return PDF_C.line; }, vLineColor: function() { return PDF_C.line; }, paddingLeft: function() { return 5; }, paddingRight: function() { return 5; }, paddingTop: function() { return 3; }, paddingBottom: function() { return 3; } };
+const SEC_LAYOUT = { hLineWidth: function(i, node) { return (i === 0 || i === node.table.body.length) ? 0.9 : 0; }, vLineWidth: function() { return 0.9; }, hLineColor: function() { return PDF_C.line; }, vLineColor: function() { return PDF_C.line; }, paddingLeft: function() { return 0; }, paddingRight: function() { return 0; }, paddingTop: function() { return 0; }, paddingBottom: function() { return 0; } };
+const GRID = { hLineWidth: function() { return 0.6; }, vLineWidth: function() { return 0.6; }, hLineColor: function() { return PDF_C.line; }, vLineColor: function() { return PDF_C.line; }, paddingLeft: function() { return 5; }, paddingRight: function() { return 5; }, paddingTop: function() { return 3; }, paddingBottom: function() { return 3; } };
+
+function ctrlValue(ctrl) {
+  if (!ctrl) return '';
+  if (ctrl.tagName === 'SELECT') return ctrl.value ? ctrl.options[ctrl.selectedIndex].text.trim() : '';
+  if (ctrl.type === 'date') return fmtDate(ctrl.value);
+  return (ctrl.value || '').trim();
+}
+function itemRef(el) {
+  const ref = el && el.querySelector('[data-addl-item]');
+  return ref ? ref.getAttribute('data-addl-item') : '';
+}
+function fieldValue(field) {
+  const radios = field.querySelectorAll('input[type="radio"]');
+  if (radios.length) {
+    const c = field.querySelector('input[type="radio"]:checked');
+    if (!c) return 'Not answered';
+    let v = c.closest('label').textContent.replace(/\s+/g, ' ').trim();
+    const n = itemRef(field);
+    if (n) v += ' — see Additional Information Sheet, item ' + n;
+    return v;
+  }
+  return ctrlValue(field.querySelector('input:not([type="file"]):not([type="radio"]), select, textarea'));
+}
+function pdfField(label, value) {
+  return { stack: [
+    { text: label, fontSize: 7.5, bold: true, color: PDF_C.navy, margin: [0, 0, 0, 2] },
+    { table: { widths: ['*'], body: [[{ text: value || ' ', fontSize: 9 }]] }, layout: BOX }
+  ], margin: [0, 0, 0, 6] };
+}
+function subHead(text) {
+  return { text: text, fontSize: 10, bold: true, color: PDF_C.navy, margin: [0, 4, 0, 6] };
+}
+function walkFields(container, exclude) {
+  const out = [];
+  const ROWS = '.row-2, .row-3, .row-4, .row-21, .row-auto, .row-name';
+  container.querySelectorAll('.sub-h, ' + ROWS + ', .field').forEach(function(el) {
+    if (!isShown(el)) return;
+    if (exclude && el.closest(exclude)) return;
+    if (el.matches('.sub-h')) { out.push(subHead(el.textContent.trim())); return; }
+    if (el.matches('.field') && el.parentElement.closest(ROWS)) return;   /* handled with its row */
+    const fields = el.matches('.field') ? [el] : Array.from(el.children).filter(function(c) { return c.matches('.field') && isShown(c); });
+    const cols = [];
+    fields.forEach(function(f) {
+      const hasCtrl = f.querySelector('input:not([type="file"]), select, textarea');
+      if (!hasCtrl) return;
+      cols.push(pdfField(fieldLabel(f), fieldValue(f)));
+    });
+    if (!cols.length) return;
+    if (cols.length === 1) { out.push(cols[0]); return; }
+    let widths = cols.map(function() { return '*'; });
+    if (el.matches('.row-21') && cols.length === 2) widths = ['*', 140];
+    if (el.matches('.row-name') && cols.length === 4) widths = [55, '*', '*', '*'];
+    out.push({ columns: cols.map(function(c, i) { return Object.assign({ width: widths[i] }, c); }), columnGap: 8 });
+  });
+  return out;
+}
+function checkbox(checked) {
+  return {
+    width: 14,
+    table: { widths: [8], heights: [8], body: [[{ text: checked ? 'X' : ' ', fontSize: 6.5, bold: true, color: PDF_C.green, alignment: 'center', lineHeight: 1 }]] },
+    layout: { hLineWidth: function() { return 0.8; }, vLineWidth: function() { return 0.8; }, hLineColor: function() { return PDF_C.dark; }, vLineColor: function() { return PDF_C.dark; }, paddingLeft: function() { return 0; }, paddingRight: function() { return 0; }, paddingTop: function() { return 0.5; }, paddingBottom: function() { return 0; } },
+    margin: [0, 1, 0, 0]
+  };
+}
+function pdfSection(num, title, sub, body, opts) {
+  opts = opts || {};
+  const head = {
+    fillColor: PDF_C.navy,
+    margin: [6, 5, 6, 5],
+    columns: [
+      { width: 24, table: { widths: [18], body: [[{ text: num, fillColor: PDF_C.gold, color: PDF_C.navy, bold: true, alignment: 'center', fontSize: 8, margin: [0, 2, 0, 2] }]] }, layout: 'noBorders' },
+      { width: '*', stack: [{ text: title, color: '#ffffff', bold: true, fontSize: 11 }, { text: sub || '', color: PDF_C.head, fontSize: 7.5 }] }
+    ]
+  };
+  const node = {
+    table: { headerRows: 1, widths: ['*'], body: [[head], [{ stack: body, margin: [9, 8, 9, 4] }]] },
+    layout: SEC_LAYOUT,
+    margin: [0, 0, 0, 10]
+  };
+  if (opts.pageBreak) node.pageBreak = opts.pageBreak;
+  else node.id = 'keep-' + num;   /* sections without a fixed page break are kept whole where possible */
+  return node;
+}
+function ynTable(sectionEl) {
+  const rows = [];
+  sectionEl.querySelectorAll('.yn-row').forEach(function(row) {
+    const q = row.querySelector('.yn-q').cloneNode(true);
+    const numEl = q.querySelector('.num');
+    const num = numEl ? numEl.textContent.trim() : '';
+    if (numEl) numEl.remove();
+    const c = row.querySelector('input[type="radio"]:checked');
+    const radios = row.querySelectorAll('input[type="radio"]');
+    const ans = !c ? 'Not answered' : (c === radios[0] ? 'Yes' : 'No');
+    const n = itemRef(row);
+    const cell = [{ text: ans, bold: true, fontSize: 9 }];
+    if (n) cell.push({ text: 'See Additional Information Sheet, item ' + n, italics: true, fontSize: 7.5 });
+    rows.push([{ text: num, bold: true, fontSize: 9 }, { text: q.textContent.replace(/\s+/g, ' ').trim(), fontSize: 9 }, { stack: cell }]);
+  });
+  return { table: { widths: [16, '*', 110], body: rows, dontBreakRows: true }, layout: GRID, margin: [0, 0, 0, 8] };
+}
+function textBlock(text, opts) {
+  return { table: { widths: ['*'], body: [[Object.assign({ text: text, fontSize: 9, fillColor: PDF_C.pale, margin: [4, 3, 4, 3] }, opts || {})]] }, layout: BOX, margin: [0, 0, 0, 8] };
+}
+
+function buildPdfDoc(ref, sigImg) {
+  const cat = document.getElementById('pwCategory');
+  const catLabel = cat.options[cat.selectedIndex].text;
+  const status = document.getElementById('pwStatus').value === 'external' ? 'External' : 'Internal (employed at SLBMC)';
+  const name = document.getElementById('sigName').value.trim() || fullName();
+  const signed = formatLongDate(document.getElementById('sigDate').value);
+  const today = formatLongDate(new Date().toISOString().slice(0, 10));
+  const content = [];
+
+  /* ----- Page 1 header ----- */
+  content.push({
+    table: { widths: ['*', 150], body: [[
+      { stack: [
+        { text: 'Sir Lester Bird Medical Centre', fontSize: 15, bold: true, color: '#ffffff' },
+        { text: 'Clinical Privilege Re-Credentialing Form', fontSize: 10, color: '#ffffff', margin: [0, 2, 0, 1] },
+        { text: 'MEDICAL STAFF EXECUTIVE COMMITTEE · CREDENTIALING COMMITTEE', fontSize: 7, color: PDF_C.head },
+        { text: 'clinical.privileges@msjmc.org   ·   +1 (268) 484-2700 / 484-2713', fontSize: 7.5, color: PDF_C.head, margin: [0, 5, 0, 0] }
+      ], fillColor: PDF_C.navy, margin: [10, 8, 6, 8] },
+      { stack: [
+        { text: 'REFERENCE', fontSize: 7, bold: true, color: PDF_C.navy },
+        { text: ref, fontSize: 11, bold: true, color: PDF_C.navy, margin: [0, 1, 0, 3] },
+        { text: 'Submitted online ' + today, fontSize: 7.5, color: PDF_C.dark }
+      ], fillColor: PDF_C.pale, margin: [8, 10, 6, 8] }
+    ]] },
+    layout: 'noBorders', margin: [0, 0, 0, 6]
+  });
+  content.push({ table: { widths: ['*'], body: [[{ text: [{ text: 'Pathway: ', bold: true }, 'Re-Credentialing · ' + catLabel + ' · ' + status], fontSize: 9 }]] }, layout: BOX, margin: [0, 0, 0, 10] });
+
+  /* ----- Section I ----- */
+  const secI = document.getElementById('secI');
+  const docRows = [];
+  secI.querySelectorAll('.doc-item').forEach(function(item) {
+    const label = item.querySelector('.doc-label').cloneNode(true);
+    label.querySelectorAll('.doc-fname, .cme-tag').forEach(function(x) { x.remove(); });
+    const f = item.querySelector('.doc-fname');
+    const status = item.classList.contains('done') ? (f && f.textContent.trim() ? f.textContent.replace('✓', '').trim() : 'Attached') : 'Not attached';
+    docRows.push({ columns: [checkbox(item.classList.contains('done')), { width: '*', stack: [{ text: label.textContent.replace(/\s+/g, ' ').trim(), fontSize: 9 }, { text: status, fontSize: 7.5, color: item.classList.contains('done') ? PDF_C.green : PDF_C.dark, italics: !item.classList.contains('done') }] }], columnGap: 4, margin: [0, 0, 0, 5] });
+  });
+  const other = fileNames('docOther');
+  if (other.length) docRows.push({ text: [{ text: 'Other supporting documents: ', bold: true }, other.join(', ')], fontSize: 8.5, margin: [0, 2, 0, 4] });
+  const cmt = secI.querySelector('.cmt-box');
+  content.push(pdfSection('I', 'Instructions', 'For existing SLBMC practitioners renewing their clinical privileges', [
+    textBlock(secI.querySelector('.doc-note').textContent.replace(/\s+/g, ' ').trim()),
+    subHead('Required Supporting Documents'),
+    { stack: docRows },
+    { table: { widths: ['*'], body: [[{ stack: [
+      { text: 'FOR CREDENTIALING COMMITTEE USE ONLY', fontSize: 7.5, bold: true, color: '#b8761a', margin: [0, 0, 0, 5] },
+      { columns: Array.from(cmt.querySelectorAll('.field')).map(function(f) { return pdfField(fieldLabel(f), ctrlValue(f.querySelector('input'))); }), columnGap: 8 }
+    ], fillColor: PDF_C.pale, margin: [4, 4, 4, 0] }]] }, layout: BOX, margin: [0, 6, 0, 4] }
+  ], { pageBreak: 'after' }));
+
+  /* ----- Section II ----- */
+  content.push(pdfSection('II', 'Applicant Identification', 'Current details', walkFields(document.querySelector('#secII .sec-body-inner'))));
+
+  /* ----- Section III ----- */
+  const secIII = document.querySelector('#secIII .sec-body-inner');
+  const iii = walkFields(secIII, '#otherLicences');
+  const lic = [];
+  document.querySelectorAll('#otherLicences .lic-slot').forEach(function(slot) {
+    const filled = Array.from(slot.querySelectorAll('input')).some(function(i) { return i.value.trim(); });
+    if (!filled) return;
+    lic.push({ text: 'Licence ' + (lic.filter(function(x) { return x.text; }).length + 1), fontSize: 8.5, bold: true, color: '#007a8c', margin: [0, 2, 0, 4] });
+    walkFields(slot).forEach(function(n) { lic.push(n); });
+  });
+  if (!lic.length) lic.push({ text: 'None declared.', italics: true, fontSize: 9, margin: [0, 0, 0, 6] });
+  const otherIdx = iii.findIndex(function(n) { return n.text === 'Other Current Medical Licences'; });
+  if (otherIdx >= 0) iii.splice.apply(iii, [otherIdx + 1, 0].concat(lic));
+  content.push(pdfSection('III', 'Current Medical Licences', 'All licences currently held', iii));
+
+  /* ----- Section IV ----- */
+  const secIV = document.querySelector('#secIV .sec-body-inner');
+  const ppOn = document.getElementById('ppBlock').classList.contains('on');
+  const iv = [pdfField('Do you also hold a private practice?', ppOn ? 'Yes' : 'No')];
+  if (ppOn) { iv.push(subHead('Private Practice Declaration')); walkFields(document.getElementById('ppBlock')).forEach(function(n) { iv.push(n); }); }
+  walkFields(secIV, '.pp-block').forEach(function(n) { iv.push(n); });
+  content.push(pdfSection('IV', 'Current Practice Location', 'Private practice and any changes since your last cycle', iv));
+
+  /* ----- Section V ----- */
+  content.push(pdfSection('V', 'Changes Since Last Credentialing Cycle', 'Events since your previous credentialing', [ynTable(document.getElementById('secVI'))]));
+
+  /* ----- Section VI ----- */
+  const secVIb = document.querySelector('#secVII .sec-body-inner');
+  const vi = [ynTable(document.getElementById('secVII'))].concat(walkFields(secVIb, '.yn-wrap'));
+  const fit = fileNames('fitUpload');
+  const fitIdx = vi.findIndex(function(n) { return n.text === 'Medical Fitness'; });
+  vi.splice(fitIdx >= 0 ? fitIdx + 2 : vi.length, 0, pdfField('Medical Fitness Certificate (signed and stamped)', fit.length ? 'Attached: ' + fit[0] : 'Not attached'));
+  content.push(pdfSection('VI', 'Health Status Declaration', 'Current health status at the time of re-credentialing', vi));
+
+  /* ----- Section VII ----- */
+  const secVII = document.getElementById('secVIII');
+  const sigFile = document.getElementById('sigUpload').files[0];
+  const sigCell = function() { return sigImg ? { image: sigImg, fit: [200, 46], margin: [2, 2, 2, 2] } : { text: sigFile ? 'Signature supplied as an attached file: ' + sigFile.name : ' ', fontSize: 9, margin: [2, 14, 2, 14] }; };
+  content.push(pdfSection('VII', 'Certification & Signature', 'Read and signed by the applicant', [
+    textBlock(secVII.querySelector('.cert-block').textContent.replace(/\s+/g, ' ').trim(), { italics: true }),
+    { columns: [Object.assign({ width: '*' }, pdfField('Full Printed Name', name)), Object.assign({ width: 140 }, pdfField('Date', fmtDate(document.getElementById('sigDate').value)))], columnGap: 8 },
+    { text: 'Signature', fontSize: 7.5, bold: true, color: PDF_C.navy, margin: [0, 0, 0, 2] },
+    { table: { widths: ['*'], body: [[sigCell()]] }, layout: BOX, margin: [0, 0, 0, 6] },
+    { text: secVII.querySelector('.warn-block').textContent.replace(/\s+/g, ' ').trim(), fontSize: 7.5, italics: true, color: PDF_C.dark, margin: [0, 0, 0, 4] }
+  ]));
+
+  /* ----- Section VIII: CME (own page) ----- */
+  const catVal = cat.value;
+  const annual = catVal === 'ho-gp' ? 15 : 30;
+  const annualWords = annual === 15 ? 'fifteen (15)' : 'thirty (30)';
+  const years = parseInt(document.getElementById('cyclePeriod').value, 10);
+  const waived = document.getElementById('cmeWaiver').classList.contains('on');
+  const cme = [{ text: [{ text: 'Requirement: ', bold: true }, annualWords + ' credits per year × ' + years + '-year cycle = ' + (annual * years) + ' credits'], fontSize: 9, margin: [0, 0, 0, 6] }];
+  if (waived) {
+    const letter = fileNames('waiverUpload');
+    cme.push(textBlock('The applicant is enrolled in an active educational programme, so the CME requirement is waived for this cycle. Enrolment letter: ' + (letter.length ? 'attached (' + letter[0] + ')' : 'not attached') + '.'));
+  } else {
+    const body = [[
+      { text: 'NAME OF ACTIVITY', bold: true, fontSize: 7.5, color: '#ffffff', fillColor: PDF_C.navy },
+      { text: 'FACILITATOR', bold: true, fontSize: 7.5, color: '#ffffff', fillColor: PDF_C.navy },
+      { text: 'DATE', bold: true, fontSize: 7.5, color: '#ffffff', fillColor: PDF_C.navy },
+      { text: 'CREDITS', bold: true, fontSize: 7.5, color: '#ffffff', fillColor: PDF_C.navy, alignment: 'right' }
+    ]];
+    document.querySelectorAll('#cmeTableBody tr').forEach(function(tr) {
+      const v = Array.from(tr.querySelectorAll('input')).map(function(i) { return i.value.trim(); });
+      if (!v.some(Boolean)) return;
+      body.push([{ text: v[0], fontSize: 9 }, { text: v[1], fontSize: 9 }, { text: v[2], fontSize: 9 }, { text: v[3], fontSize: 9, alignment: 'right' }]);
+    });
+    if (body.length === 1) body.push([{ text: 'No CME activities listed.', italics: true, fontSize: 9, colSpan: 4 }, {}, {}, {}]);
+    body.push([{ text: 'TOTAL CREDITS', bold: true, fontSize: 9, colSpan: 3, alignment: 'right', fillColor: PDF_C.pale }, {}, {}, { text: document.getElementById('cmeTotal').value, bold: true, fontSize: 9, alignment: 'right', fillColor: PDF_C.pale }]);
+    cme.push({ table: { headerRows: 1, widths: ['37%', '34%', '13%', '16%'], body: body, dontBreakRows: true }, layout: GRID, margin: [0, 0, 0, 8] });
+    const certs = fileNames('cmeUpload');
+    cme.push({ text: [{ text: 'Certificates attached: ', bold: true }, certs.length ? certs.length + ' — ' + certs.join(', ') : 'none'], fontSize: 8.5, margin: [0, 0, 0, 4] });
+  }
+  content.push(pdfSection('VIII', 'Continuing Medical Education Summary', 'CME credits earned during the previous credentialing period', cme, { pageBreak: 'before' }));
+
+  /* ----- Additional Information Sheet (only when something was answered Yes) ----- */
+  const items = window.ADDL_ITEMS || [];
+  if (items.length) {
+    const body = [[
+      { text: 'ITEM', bold: true, fontSize: 7.5, color: '#ffffff', fillColor: PDF_C.navy },
+      { text: 'SECTION AND QUESTION', bold: true, fontSize: 7.5, color: '#ffffff', fillColor: PDF_C.navy },
+      { text: 'EXPLANATION', bold: true, fontSize: 7.5, color: '#ffffff', fillColor: PDF_C.navy }
+    ]];
+    items.forEach(function(it) {
+      body.push([{ text: String(it.n), fontSize: 9 }, { stack: [{ text: it.sec, bold: true, fontSize: 8.5 }, { text: it.q, fontSize: 8, color: PDF_C.dark }] }, { text: (it.ex || '').trim() || 'No explanation entered.', fontSize: 9 }]);
+    });
+    content.push(pdfSection('+', 'Additional Information Sheet', 'Explanations for questions answered “Yes”', [
+      { table: { headerRows: 1, widths: [28, '38%', '*'], body: body, dontBreakRows: true }, layout: GRID, margin: [0, 0, 0, 10] },
+      { text: 'I confirm that the explanations above are complete and accurate, and form part of my re-credentialing application.', italics: true, fontSize: 9, margin: [0, 0, 0, 6] },
+      { columns: [Object.assign({ width: '*' }, pdfField('Full Printed Name', name)), Object.assign({ width: 110 }, pdfField('Date', fmtDate(document.getElementById('sigDate').value)))], columnGap: 8 },
+      { text: 'Signature', fontSize: 7.5, bold: true, color: PDF_C.navy, margin: [0, 0, 0, 2] },
+      { table: { widths: ['*'], body: [[sigCell()]] }, layout: BOX }
+    ], { pageBreak: 'before' }));
+  }
+
+  const footerText = 'SLBMC Clinical Privilege Form  ·  ' + (name || 'Applicant') + (signed ? '  ·  Signed ' + signed : '') + '  ·  ' + ref;
+  return {
+    pageSize: 'LETTER',
+    pageMargins: [36, 36, 36, 46],
+    info: { title: 'Clinical Privilege Re-Credentialing Form – ' + name, author: name, subject: ref },
+    defaultStyle: { fontSize: 9, color: '#1a2535', lineHeight: 1.15 },
+    content: content,
+    footer: function(currentPage, pageCount) {
+      return { columns: [{ text: footerText, fontSize: 7.5, color: PDF_C.dark }, { text: 'Page ' + currentPage + ' of ' + pageCount, fontSize: 7.5, color: PDF_C.dark, alignment: 'right', width: 70 }], margin: [36, 16, 36, 0] };
+    },
+    /* keep each section whole: if one would be split, start it on a new page instead */
+    pageBreakBefore: function(node) {
+      return !!(node.id && node.id.indexOf('keep-') === 0 && node.pageNumbers && node.pageNumbers.length > 1 && node.startPosition && node.startPosition.top > 120);
+    }
+  };
+}
+function pdfBase64(docDef) {
+  return new Promise(function(resolve) { pdfMake.createPdf(docDef).getBase64(resolve); });
+}
+
+/* ---------- Sending ---------- */
+function setStatus(t) { document.getElementById('subStatus').textContent = t; }
+function overlay(on) { document.getElementById('subOverlay').classList.toggle('on', on); }
+
+async function collectFiles() {
+  const groups = [
+    ['docCV', 'Curriculum Vitae'], ['docLic', 'AB Medical Licence'], ['docBLS', 'BLS-ACLS Certificate'],
+    ['docInd', 'Indemnity Insurance Certificate'], ['fitUpload', 'Medical Fitness Certificate'], ['sigUpload', 'Signature'],
+    ['cmeUpload', 'CME Certificate'], ['waiverUpload', 'Training Programme Enrolment Letter'], ['docOther', 'Supporting Document']
+  ];
+  if (!document.getElementById('cmeWaiver').classList.contains('on')) groups.splice(7, 1);
+  else groups.splice(6, 1);
+  const out = [];
+  let total = 0;
+  for (const g of groups) {
+    const files = Array.from(document.getElementById(g[0]).files || []);
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
+      if (f.size > MAX_FILE_MB * 1024 * 1024) throw new Error('“' + f.name + '” is larger than ' + MAX_FILE_MB + ' MB. Please reduce its size (for example, take a smaller photo or save a lower-resolution PDF) and try again.');
+      total += f.size;
+      const data = (await readAsDataURL(f)).split(',')[1];
+      out.push({ label: files.length > 1 ? g[1] + ' ' + (i + 1) : g[1], name: f.name, mimeType: f.type || 'application/octet-stream', data: data });
+    }
+  }
+  if (total > MAX_TOTAL_MB * 1024 * 1024) throw new Error('Your attachments add up to more than ' + MAX_TOTAL_MB + ' MB. Please reduce the size of some files and try again.');
+  return out;
+}
+
+async function submitApplication() {
+  const msg = document.getElementById('submitMsg');
+  msg.classList.remove('on');
+  updateAddl();
+  const problems = validateForm();
+  if (problems.length) { showProblems(problems); return; }
+  const missing = missingDocuments();
+  if (missing.length && !confirm('These documents are not attached yet:\n\n• ' + missing.join('\n• ') + '\n\nYour application may be delayed until they are received. Submit anyway?')) return;
+  if (!/^https:\/\/script\.google\.com\//.test(SUBMIT_URL)) {
+    alert('Online submission has not been switched on yet. Please use “Print / Save as PDF” and e-mail your form and documents to clinical.privileges@msjmc.org.');
+    return;
+  }
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  overlay(true);
+  try {
+    setStatus('Preparing your application…');
+    await loadPdfMake();
+    const ref = makeRef();
+    const sig = await signatureImage();
+    const docDef = buildPdfDoc(ref, sig);
+    const pdf = await pdfBase64(docDef);
+    setStatus('Attaching your documents…');
+    const files = await collectFiles();
+    const last = document.getElementById('nmLast').value.trim(), first = document.getElementById('nmFirst').value.trim();
+    const cat = document.getElementById('pwCategory');
+    const payload = {
+      ref: ref,
+      stage: 'Re-Credentialing',
+      category: cat.options[cat.selectedIndex].text,
+      status: document.getElementById('pwStatus').value === 'external' ? 'External' : 'Internal',
+      applicant: {
+        title: document.getElementById('nmTitle').value, firstName: first,
+        middleName: document.getElementById('nmMiddle').value.trim(), lastName: last,
+        email: document.getElementById('appEmail').value.trim(), mobile: document.getElementById('appMobile').value.trim()
+      },
+      pdf: { name: ref + ' - Clinical Privilege Form - ' + last + ', ' + first + '.pdf', data: pdf },
+      files: files,
+      website: document.getElementById('hpWebsite').value
+    };
+    setStatus('Sending to the Office of the Medical Director…');
+    const res = await fetch(SUBMIT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.error || 'The application could not be saved.');
+    overlay(false);
+    showSubmitted(out.ref || ref, payload.applicant.email, docDef, payload.pdf.name);
+  } catch (err) {
+    overlay(false);
+    btn.disabled = false;
+    msg.innerHTML = '<strong>Your application was not sent.</strong><br>' + esc(err.message || String(err)) +
+      '<br>Please try again. If the problem continues, use “Print / Save as PDF” and e-mail your form and documents to clinical.privileges@msjmc.org.';
+    msg.classList.add('on');
+    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+function showSubmitted(ref, email, docDef, fileName) {
+  document.getElementById('actionBar').style.display = 'none';
+  const box = document.getElementById('subDone');
+  box.innerHTML = '<h3>Application submitted</h3>' +
+    'Thank you. Your re-credentialing application and documents have been received by the Office of the Medical Director.<br>' +
+    'Your reference number is:<br><span class="ref">' + esc(ref) + '</span><br>' +
+    'A confirmation with a copy of your form has been e-mailed to <strong>' + esc(email) + '</strong>. Please quote your reference number in any correspondence.' +
+    '<div style="margin-top:14px;"><button type="button" class="btn-action btn-primary" id="dlCopy">Download a copy (PDF)</button></div>';
+  box.classList.add('on');
+  document.getElementById('dlCopy').onclick = function() { pdfMake.createPdf(docDef).download(fileName); };
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 /* Scroll-to-top */
