@@ -1177,6 +1177,15 @@ function readPathwayFromAddress() {
   const status = params.get('status');
   if (cat && CATEGORY_LABELS[cat]) document.getElementById('pwCategory').value = cat;
   if (status === 'internal' || status === 'external') document.getElementById('pwStatus').value = status;
+  /* opened from the staff entrance (OMD Vitals): internal only, and "Portal home" returns to the staff page */
+  if (params.get('from') === 'staff') {
+    const st = document.getElementById('pwStatus');
+    st.value = 'internal';
+    st.disabled = true;
+    st.title = 'Staff re-credentialing is for SLBMC staff (Internal)';
+    const back = document.querySelector('.pw-back');
+    if (back) { back.href = './?staff'; back.innerHTML = '&larr; Staff portal home'; }
+  }
 }
 
 /* CME target based on physician category */
@@ -2299,6 +2308,7 @@ function restoreDraft(d) {
 
   /* recalculate everything that depends on the answers */
   document.getElementById('sigName').dataset.edited = d.sigEdited ? '1' : '';
+  if (new URLSearchParams(location.search).get('from') === 'staff') document.getElementById('pwStatus').value = 'internal';
   applyPathway();
   syncNames();
   document.getElementById('cmtPeriod').value = document.getElementById('prevPeriod').value.replace(/\s–\s$/, '');
