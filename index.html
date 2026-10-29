@@ -101,6 +101,7 @@ main { max-width: 860px; margin: 0 auto; padding: 26px 16px 60px; }
 .pill { flex-shrink: 0; align-self: center; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 20px; }
 .pill.req { background: var(--coral-bg); color: var(--coral); }
 .pill.cond { background: var(--amber-bg); color: var(--amber); }
+.pill.sep { background: #e7eef8; color: var(--navy); }
 .cme-card { margin: 16px 0 4px; padding: 14px 16px; background: linear-gradient(135deg, #fff8ec 0%, #fffaf4 100%); border: 1.5px solid #f0d490; border-radius: 10px; font-size: 13.5px; color: #5a4810; line-height: 1.55; }
 .cme-card strong { color: #4a3610; }
 .cme-card .cme-big { font-size: 17px; font-weight: 700; color: var(--amber); }
@@ -187,21 +188,21 @@ main { max-width: 860px; margin: 0 auto; padding: 26px 16px 60px; }
    ========================================================================= */
 const DOCS = {
   /* Application & identity */
-  letter:        { label: 'Letter of Application', note: 'Addressed to the Chair, Credentialing Committee', flag: 'req' },
+  letter:        { label: 'Letter of Application', note: '', flag: 'req' },
   form:          { label: 'Completed SLBMC Clinical Privilege Application Form', note: 'Fully completed in blue or black ink and signed', flag: 'req' },
   formRenewal:   { label: 'Completed SLBMC Clinical Privilege Re-Credentialing Form', note: 'Completed and submitted online through this portal', flag: 'req' },
   cv:            { label: 'Detailed Curriculum Vitae / Résumé', note: 'Chronological, including all employment history and training', flag: 'req' },
   cvUpdated:     { label: 'Updated Curriculum Vitae / Résumé', note: 'Reflecting any new training, posts, or publications since last credentialing', flag: 'req' },
-  passport:      { label: 'Copy of Passport Bio Page', note: 'Clear photocopy of the photograph and identification page', flag: 'req' },
+  passport:      { label: 'Copy of Passport Bio Page', note: 'Clear copy of the photograph and identification page', flag: 'req' },
   passportLocal: { label: 'Copy of Birth Certificate or Passport Bio Page', note: 'Government-issued identification', flag: 'req' },
-  photo:         { label: 'Passport-Size Photograph', note: 'Recent, certified on the reverse', flag: 'req' },
+  photo:         { label: 'Passport-Size Photograph', note: 'Recent', flag: 'req' },
 
   /* Academic & professional qualifications */
   mbbs:          { label: 'Certified Copies of Medical School Certificate and Transcripts', note: 'Official English translation required where documents are not in English', flag: 'req' },
   postgrad:      { label: 'Certified Copies of Post-Graduate Certificates and Transcripts', note: 'Specialty training, fellowships, and additional qualifications', flag: 'req' },
   internship:    { label: 'Internship Certificate', note: 'Evidence of completion of required internship', flag: 'req' },
   boardCert:     { label: 'Specialty Board Certification', note: 'From the relevant specialty board', flag: 'req' },
-  goodStanding:  { label: 'Certificate of Good Standing', note: 'From every medical council where currently or previously licensed in the last five (5) years. Sent directly by the regulator.', flag: 'req' },
+  goodStanding:  { label: 'Certificate of Good Standing', note: '', flag: 'req' },
   qualifyingExam:{ label: 'CAMC Parts 1 & 2, or Equivalent', note: 'Acceptable equivalents include USMLE Steps 1 & 2 or PLAB Parts 1 & 2', flag: 'cond' },
 
   /* Licensure & certifications */
@@ -214,7 +215,7 @@ const DOCS = {
   narcotic:      { label: 'Narcotic Certificate / Dangerous Drugs Authorisation', note: 'Required if prescribing or handling controlled substances', flag: 'cond' },
 
   /* Background & health */
-  immunisation:  { label: 'Immunisation Record', note: 'Up to date, per Occupational Health policy', flag: 'req' },
+  immunisation:  { label: 'Immunisation Record', note: 'Up to date, per Employee Health policy', flag: 'req' },
   police:        { label: 'Recent Police Record / Certificate of Character', note: 'Not older than three (3) months at submission', flag: 'req' },
   references:    { label: 'Three (3) Professional Reference Letters', note: 'Not older than three (3) months; from supervisors or colleagues familiar with your clinical work', flag: 'req' },
   fitness:       { label: 'Medical Fitness Certificate', note: 'Signed and stamped by your examining physician — a template is provided in the online form', flag: 'req' },
@@ -229,11 +230,12 @@ const DOCS = {
   cmeRecords30:  { label: 'Continuing Medical Education (CME) Records — thirty (30) credits per year', note: 'Certificates for every activity listed on your CME summary', flag: 'req' },
 
   /* Emergency specific */
-  emergencyNotice: { label: 'Notice / Justification for Emergency or Temporary Credentialing', note: 'Written explanation of the circumstances requiring expedited review', flag: 'req' }
+  emergencyNotice: { label: 'Notice for Emergency / Temporary Credentialing', note: 'To be submitted directly to the Credentialing Committee by the requesting physician or the Medical Director', flag: 'sep' },
+  aAndBEm:       { label: 'Current Antigua & Barbuda Medical Licence', note: 'Or evidence of temporary registration with the Antigua & Barbuda Medical Council', flag: 'req' }
 };
 
-const BACKGROUND_HEALTH = [DOCS.immunisation, DOCS.police, DOCS.references];
-const BACKGROUND_HEALTH_EXT = [DOCS.immunisation, DOCS.police, DOCS.references, DOCS.indemnity, DOCS.workPermit];
+const BACKGROUND_HEALTH = [DOCS.immunisation, DOCS.police, DOCS.references, DOCS.fitness];
+const BACKGROUND_HEALTH_EXT = [DOCS.immunisation, DOCS.police, DOCS.references, DOCS.fitness, DOCS.indemnity, DOCS.workPermit];
 function renewalDocs(cme, external) {
   const list = [DOCS.formRenewal, DOCS.cvUpdated, DOCS.aAndBCurrent, DOCS.blsAcls, cme];
   if (external) list.push(DOCS.indemnity);
@@ -358,10 +360,9 @@ const CHECKLISTS = {
 
   /* ------- EMERGENCY / TEMPORARY ------- */
   'emergency': {
-    title: 'Emergency / Temporary Credentialing',
-    subtitle: 'For urgent or temporary clinical appointments. All items must be submitted for Committee review.',
-    groups: [{ name: 'Required Documents', items: [DOCS.form, DOCS.emergencyNotice, DOCS.cv, DOCS.licence, DOCS.aAndBLicence, DOCS.passport, DOCS.indemnity] }],
-    signature: 'Signature of Medical Director (if indemnity coverage is under SLBMC)'
+    title: 'Emergency / Temporary Credentialing \u2014 Consultant / Specialist',
+    subtitle: 'For a visiting specialist granted temporary privileges to perform a specific procedure or clinical service. For longer-term locum cover, please apply under New Credentialing instead.',
+    groups: [{ name: 'Required Documents', items: [DOCS.form, DOCS.emergencyNotice, DOCS.cv, DOCS.licence, DOCS.aAndBEm, DOCS.passport, DOCS.indemnity] }]
   }
 };
 
@@ -436,7 +437,7 @@ function renderHome() {
       tile('renewal', '2', 'Renew my privileges', 'Re-credentialing for physicians already credentialed at SLBMC') +
       tile('interview', '3', 'Prepare for my interview', 'What to submit before your pre-interview with the Credentialing Committee') +
     '</div>' +
-    '<button class="emergency-link" onclick="go(\'emergency\')"><span>&#9888;</span><span><strong>Emergency or temporary credentialing?</strong> See the requirements for urgent or temporary appointments &rarr;</span></button>' +
+    '<button class="emergency-link" onclick="go(\'emergency\')"><span>&#9888;</span><span><strong>Emergency / temporary credentialing (Specialists)?</strong> Temporary privileges to perform a specific procedure or service &rarr;</span></button>' +
     '<div class="help"><strong>Need help?</strong> Contact the Office of the Medical Director on +1 (268) 484-2700 / 484-2713 or e-mail <a href="mailto:clinical.privileges@msjmc.org">clinical.privileges@msjmc.org</a>.</div>' +
     '</div>';
 }
@@ -515,8 +516,8 @@ function renderChecklist(type, cat, status) {
     html += '<div class="group-name">' + esc(g.name) + '</div>';
     g.items.forEach(function(d) {
       n++;
-      html += '<label class="item"><input type="checkbox" onchange="tickItem(this)"><span class="item-text"><span class="item-label" style="display:block;">' + esc(d.label) + '</span><span class="item-note" style="display:block;">' + esc(d.note) + '</span></span>' +
-        '<span class="pill ' + d.flag + '">' + (d.flag === 'req' ? 'Required' : 'If applicable') + '</span></label>';
+      html += '<label class="item"><input type="checkbox" onchange="tickItem(this)"><span class="item-text"><span class="item-label" style="display:block;">' + esc(d.label) + '</span>' + (d.note ? '<span class="item-note" style="display:block;">' + esc(d.note) + '</span>' : '') + '</span>' +
+        '<span class="pill ' + d.flag + '">' + ({ req: 'Required', cond: 'If applicable', sep: 'Submitted separately' })[d.flag] + '</span></label>';
     });
   });
 
@@ -540,13 +541,22 @@ function renderChecklist(type, cat, status) {
 
 function nextStepBox(type, cat, status) {
   if (type === 'renewal') return '<div class="note-box info"><strong>Next step:</strong> complete the online re-credentialing form. You will attach each of these documents in the form, and it is sent straight to the Office of the Medical Director when you submit.</div>';
-  if (type === 'interview') return '<div class="note-box info"><strong>Next step:</strong> e-mail these documents to <a href="mailto:clinical.privileges@msjmc.org">clinical.privileges@msjmc.org</a> before your scheduled interview, or bring them with you. Print this checklist to keep track.</div>';
-  return '<div class="note-box info"><strong>Next step:</strong> the online application form for this pathway is being prepared. Until it is available, please print this checklist and e-mail your application and documents to <a href="mailto:clinical.privileges@msjmc.org">clinical.privileges@msjmc.org</a>, or contact the Office of the Medical Director.</div>';
+  if (type === 'interview') return '<div class="note-box info"><strong>Next step:</strong> complete the online Clinical Privilege Application Form before your scheduled interview. You will attach these documents in the form, and it is sent straight to the Office of the Medical Director when you submit.</div>';
+  if (type === 'emergency') return '<div class="note-box info"><strong>Next step:</strong> complete the shortened online application form and attach your documents. The Notice for Emergency / Temporary Credentialing is sent to the Credentialing Committee separately by the requesting physician or the Medical Director.</div>';
+  if (type === 'new') return '<div class="note-box info"><strong>Next step:</strong> complete the online Clinical Privilege Application Form. The form adjusts itself to your category, you attach each of these documents in it, and it is sent straight to the Office of the Medical Director when you submit.</div>';
+  return '<div class="note-box info"><strong>Next step:</strong> please print this checklist and e-mail your documents to <a href="mailto:clinical.privileges@msjmc.org">clinical.privileges@msjmc.org</a>, or contact the Office of the Medical Director.</div>';
 }
 function actionButtons(type, cat, status, cl) {
   const print = '<button class="btn btn-ghost" onclick="window.print()">Print checklist</button>';
   if (type === 'renewal') {
     const url = 'clinical-privilege-form.html?category=' + CATEGORIES[cat].form + '&status=' + status + (STAFF ? '&from=staff' : '');
+    return print + '<a class="btn btn-primary" href="' + url + '">Continue to the online form &rarr;</a>';
+  }
+  if (type === 'emergency') {
+    return print + '<a class="btn btn-primary" href="clinical-privilege-application.html?stage=emergency">Continue to the online form &rarr;</a>';
+  }
+  if (type === 'new' || type === 'interview') {
+    const url = 'clinical-privilege-application.html?stage=' + (type === 'new' ? 'new' : 'interview') + '&category=' + CATEGORIES[cat].form + (status ? '&status=' + status : '');
     return print + '<a class="btn btn-primary" href="' + url + '">Continue to the online form &rarr;</a>';
   }
   const subject = encodeURIComponent((type === 'emergency' ? 'Emergency / Temporary Credentialing' : cl.title.replace(/—/g, '-')) + ' - application documents');
