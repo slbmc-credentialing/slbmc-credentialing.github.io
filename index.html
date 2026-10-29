@@ -394,6 +394,13 @@ function externalDesc(cat) {
    #/emergency              checklist
    ========================================================================= */
 const app = document.getElementById('app');
+/* Staff entrance (linked from OMD Vitals): https://slbmc-credentialing.github.io/?staff
+   Shows re-credentialing for internal SLBMC staff only. */
+const STAFF = new URLSearchParams(location.search).has('staff');
+if (STAFF) {
+  document.querySelector('header h1').textContent = 'SLBMC Staff Re-Credentialing';
+  document.querySelector('header .subtitle').innerHTML = 'Renewal of clinical privileges for SLBMC staff &middot; Office of the Medical Director';
+}
 function go(path) { location.hash = '#/' + path; }
 function parts() { return location.hash.replace(/^#\/?/, '').split('/').filter(Boolean); }
 function esc(t) { return String(t).replace(/[&<>"]/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -401,6 +408,10 @@ function esc(t) { return String(t).replace(/[&<>"]/g, function(c) { return { '&'
 function render() {
   const p = parts();
   window.scrollTo(0, 0);
+  if (STAFF) {
+    if (p[0] === 'renewal' && CATEGORIES[p[1]]) return renderChecklist('renewal', p[1], 'internal');
+    return renderCategory('renewal');
+  }
   if (!p.length) return renderHome();
   if (p[0] === 'emergency') return renderChecklist('emergency', null, null);
   const type = p[0];
@@ -440,15 +451,24 @@ function stepHeader(stepNo, total, backTo) {
     '<div class="progress"><div style="width:' + Math.round(stepNo / total * 100) + '%"></div></div>';
 }
 function renderCategory(type) {
-  const total = type === 'interview' ? 2 : 3;
-  let html = '<div class="screen">' + stepHeader(1, total, '') +
-    '<h2 class="question">Which best describes your position?</h2>' +
+  const total = STAFF ? 2 : (type === 'interview' ? 2 : 3);
+  let html = '<div class="screen">';
+  if (STAFF) {
+    document.title = 'SLBMC Staff Re-Credentialing';
+    html += '<p class="intro">Renew your clinical privileges at <strong>Sir Lester Bird Medical Centre</strong>. Choose your category to see the documents you need, then complete the online re-credentialing form.</p>' +
+      '<div class="step">Step 1 of 2</div><div class="progress"><div style="width:50%"></div></div>';
+  } else {
+    html += stepHeader(1, total, '');
+  }
+  html += '<h2 class="question">Which best describes your position?</h2>' +
     '<p class="question-hint">' + esc(TYPES[type].label) + ' &mdash; choose your physician category.</p><div class="options">';
   Object.keys(CATEGORIES).forEach(function(k) {
     const c = CATEGORIES[k];
     html += '<button class="option" style="--opt-colour:' + c.colour + '" onclick="go(\'' + type + '/' + k + '\')"><span class="option-dot"></span><span><span class="option-title" style="display:block;">' + esc(c.label) + '</span><span class="option-desc" style="display:block;">' + esc(c.desc) + '</span></span></button>';
   });
-  app.innerHTML = html + '</div></div>';
+  html += '</div>';
+  if (STAFF) html += '<div class="help"><strong>Need help?</strong> Contact the Office of the Medical Director on +1 (268) 484-2700 / 484-2713 or e-mail <a href="mailto:clinical.privileges@msjmc.org">clinical.privileges@msjmc.org</a>.</div>';
+  app.innerHTML = html + '</div>';
 }
 
 /* ---------- Question: internal / external ---------- */
@@ -470,8 +490,8 @@ function renderChecklist(type, cat, status) {
   if (!cl) return go('');
   document.title = cl.title + ' – SLBMC Credentialing Portal';
   const colour = type === 'emergency' ? 'var(--cat-emergency)' : CATEGORIES[cat].colour;
-  const total = type === 'interview' ? 2 : 3;
-  const backTo = type === 'emergency' ? '' : (type === 'interview' ? type : type + '/' + cat);
+  const total = STAFF ? 2 : (type === 'interview' ? 2 : 3);
+  const backTo = STAFF ? 'renewal' : (type === 'emergency' ? '' : (type === 'interview' ? type : type + '/' + cat));
 
   let html = '<div class="screen" style="--cat:' + colour + '">';
   html += type === 'emergency'
@@ -483,9 +503,9 @@ function renderChecklist(type, cat, status) {
   if (type === 'emergency') html += '<span class="chip cat">Emergency / Temporary</span>';
   else {
     html += '<span class="chip">' + esc(TYPES[type].label) + '</span><span class="chip cat">' + esc(CATEGORIES[cat].label) + '</span>';
-    if (status) html += '<span class="chip">' + (status === 'internal' ? 'Internal' : 'External') + '</span>';
+    if (status) html += '<span class="chip">' + (STAFF ? 'SLBMC staff' : (status === 'internal' ? 'Internal' : 'External')) + '</span>';
   }
-  html += '<button class="chip-change" onclick="go(\'\')">Change</button></div>';
+  html += '<button class="chip-change" onclick="go(\'' + (STAFF ? 'renewal' : '') + '\')">Change</button></div>';
 
   html += '<div class="cl-card"><div class="cl-head"><div class="cl-title">' + esc(cl.title) + '</div><div class="cl-sub">' + esc(cl.subtitle) + '</div>' +
     '<div class="cl-progress"><div class="bar"><div id="clBar"></div></div><span id="clCount"></span></div></div><div class="cl-body">';
@@ -526,7 +546,7 @@ function nextStepBox(type, cat, status) {
 function actionButtons(type, cat, status, cl) {
   const print = '<button class="btn btn-ghost" onclick="window.print()">Print checklist</button>';
   if (type === 'renewal') {
-    const url = 'clinical-privilege-form.html?category=' + CATEGORIES[cat].form + '&status=' + status;
+    const url = 'clinical-privilege-form.html?category=' + CATEGORIES[cat].form + '&status=' + status + (STAFF ? '&from=staff' : '');
     return print + '<a class="btn btn-primary" href="' + url + '">Continue to the online form &rarr;</a>';
   }
   const subject = encodeURIComponent((type === 'emergency' ? 'Emergency / Temporary Credentialing' : cl.title.replace(/—/g, '-')) + ' - application documents');
