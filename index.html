@@ -90,9 +90,10 @@ main { max-width: 860px; margin: 0 auto; padding: 26px 16px 60px; }
 .cl-progress .bar > div { height: 100%; width: 0; background: var(--green); border-radius: 100px; transition: width 0.25s; }
 .cl-body { padding: 4px 22px 22px; }
 .group-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--navy); padding-left: 10px; border-left: 3px solid var(--gold); margin: 16px 0 10px; }
-.item { display: flex; gap: 12px; align-items: flex-start; padding: 11px 14px; border: 1px solid var(--gray-light); border-radius: 8px; margin-bottom: 7px; cursor: pointer; background: var(--white); transition: background 0.12s; }
-.item:hover { background: #fafbfc; }
-.item input { width: 19px; height: 19px; accent-color: var(--green); flex-shrink: 0; margin-top: 2px; cursor: pointer; }
+.item { display: flex; gap: 12px; align-items: flex-start; padding: 11px 14px; border: 1px solid var(--gray-light); border-radius: 8px; margin-bottom: 7px; background: var(--white); }
+.item-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cat, var(--gold)); flex-shrink: 0; margin-top: 8px; }
+.cl-key { margin-top: 12px; font-size: 13px; color: var(--gray-dark); }
+.cl-key .pill { margin: 0 2px; }
 .item-text { flex: 1; min-width: 0; }
 .item-label { font-size: 14.5px; font-weight: 600; color: var(--navy); }
 .item-note { font-size: 13px; color: var(--gray-dark); margin-top: 1px; }
@@ -153,7 +154,7 @@ main { max-width: 860px; margin: 0 auto; padding: 26px 16px 60px; }
   .sig-line .lbl { font-size: 9.5px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
   .sig-line .box { border: 1px solid var(--gray-mid); border-radius: 3px; height: 26px; }
   .print-foot { margin-top: 12px; font-size: 9.5px; color: var(--gray-dark); }
-  header, .cl-card, .chip, .item, .item.done, .pill, .cme-card, .note-box, .group-name {
+  header, .cl-card, .chip, .item, .item-dot, .cl-key, .pill, .cme-card, .note-box, .group-name {
     -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
 }
@@ -250,7 +251,7 @@ const CHECKLISTS = {
   /* ------- HOUSE OFFICER / GP ------- */
   'ho-gp-new-internal': {
     title: 'House Officer / General Practitioner — New Credentialing',
-    subtitle: 'Complete all items below before submitting your application.',
+    subtitle: 'Have the documents below ready before you start your application.',
     groups: [
       { name: 'Application & Identity', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.passportLocal, DOCS.photo] },
       { name: 'Academic & Professional Qualifications', items: [DOCS.mbbs, DOCS.internship, DOCS.goodStanding, DOCS.qualifyingExam] },
@@ -287,7 +288,7 @@ const CHECKLISTS = {
   /* ------- REGISTRAR ------- */
   'registrar-new-internal': {
     title: 'Registrar — New Credentialing',
-    subtitle: 'Complete all items below before submitting your application.',
+    subtitle: 'Have the documents below ready before you start your application.',
     groups: [
       { name: 'Application & Identity', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.passportLocal, DOCS.photo] },
       { name: 'Academic & Professional Qualifications', items: [DOCS.mbbs, DOCS.internship, DOCS.postgrad, DOCS.goodStanding, DOCS.qualifyingExam] },
@@ -324,7 +325,7 @@ const CHECKLISTS = {
   /* ------- CONSULTANT / SPECIALIST ------- */
   'consultant-new-internal': {
     title: 'Consultant / Specialist — New Credentialing',
-    subtitle: 'Complete all items below before submitting your application for specialist privileges.',
+    subtitle: 'Have the documents below ready before you start your application for specialist privileges.',
     groups: [
       { name: 'Application & Identity', items: [DOCS.letter, DOCS.form, DOCS.cv, DOCS.passportLocal, DOCS.photo] },
       { name: 'Academic & Professional Qualifications', items: [DOCS.mbbs, DOCS.postgrad, DOCS.boardCert, DOCS.goodStanding] },
@@ -509,15 +510,15 @@ function renderChecklist(type, cat, status) {
   html += '<button class="chip-change" onclick="go(\'' + (STAFF ? 'renewal' : '') + '\')">Change</button></div>';
 
   html += '<div class="cl-card"><div class="cl-head"><div class="cl-title">' + esc(cl.title) + '</div><div class="cl-sub">' + esc(cl.subtitle) + '</div>' +
-    '<div class="cl-progress"><div class="bar"><div id="clBar"></div></div><span id="clCount"></span></div></div><div class="cl-body">';
+    '<div class="cl-key">All documents listed are <strong>required</strong>, unless marked <span class="pill cond">If applicable</span> or <span class="pill sep">Submitted separately</span>. You will attach them in the online form.</div></div><div class="cl-body">';
 
   let n = 0;
   cl.groups.forEach(function(g) {
     html += '<div class="group-name">' + esc(g.name) + '</div>';
     g.items.forEach(function(d) {
       n++;
-      html += '<label class="item"><input type="checkbox" onchange="tickItem(this)"><span class="item-text"><span class="item-label" style="display:block;">' + esc(d.label) + '</span>' + (d.note ? '<span class="item-note" style="display:block;">' + esc(d.note) + '</span>' : '') + '</span>' +
-        '<span class="pill ' + d.flag + '">' + ({ req: 'Required', cond: 'If applicable', sep: 'Submitted separately' })[d.flag] + '</span></label>';
+      html += '<div class="item"><span class="item-dot"></span><span class="item-text"><span class="item-label" style="display:block;">' + esc(d.label) + '</span>' + (d.note ? '<span class="item-note" style="display:block;">' + esc(d.note) + '</span>' : '') + '</span>' +
+        (d.flag === 'req' ? '' : '<span class="pill ' + d.flag + '">' + ({ cond: 'If applicable', sep: 'Submitted separately' })[d.flag] + '</span>') + '</div>';
     });
   });
 
@@ -536,7 +537,6 @@ function renderChecklist(type, cat, status) {
 
   html += '<div class="actions">' + actionButtons(type, cat, status, cl) + '</div>';
   app.innerHTML = html + '</div>';
-  updateCount();
 }
 
 function nextStepBox(type, cat, status) {
@@ -547,7 +547,7 @@ function nextStepBox(type, cat, status) {
   return '<div class="note-box info"><strong>Next step:</strong> please print this checklist and e-mail your documents to <a href="mailto:clinical.privileges@msjmc.org">clinical.privileges@msjmc.org</a>, or contact the Office of the Medical Director.</div>';
 }
 function actionButtons(type, cat, status, cl) {
-  const print = '<button class="btn btn-ghost" onclick="window.print()">Print checklist</button>';
+  const print = '<button class="btn btn-ghost" onclick="window.print()">Print this list</button>';
   if (type === 'renewal') {
     const url = 'clinical-privilege-form.html?category=' + CATEGORIES[cat].form + '&status=' + status + (STAFF ? '&from=staff' : '');
     return print + '<a class="btn btn-primary" href="' + url + '">Continue to the online form &rarr;</a>';
@@ -561,18 +561,6 @@ function actionButtons(type, cat, status, cl) {
   }
   const subject = encodeURIComponent((type === 'emergency' ? 'Emergency / Temporary Credentialing' : cl.title.replace(/—/g, '-')) + ' - application documents');
   return print + '<a class="btn btn-primary" href="mailto:clinical.privileges@msjmc.org?subject=' + subject + '">E-mail the Credentialing Office</a>';
-}
-function tickItem(cb) {
-  cb.closest('.item').classList.toggle('done', cb.checked);
-  updateCount();
-}
-function updateCount() {
-  const all = app.querySelectorAll('.item input');
-  const done = app.querySelectorAll('.item input:checked').length;
-  const bar = document.getElementById('clBar'), cnt = document.getElementById('clCount');
-  if (!bar) return;
-  bar.style.width = (all.length ? Math.round(done / all.length * 100) : 0) + '%';
-  cnt.textContent = done + ' of ' + all.length + ' ready';
 }
 
 render();
