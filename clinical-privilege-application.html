@@ -471,6 +471,13 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
   .na-toggle, .slot, .pill, .explain-block { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
 }
+
+/* Upload "Clear" link and multi-file hint */
+.doc-clear { background: none; border: 0; padding: 2px 4px; margin-left: 6px; font-family: inherit; font-size: 12px; font-weight: 600; color: var(--coral); text-decoration: underline; cursor: pointer; }
+.doc-clear:hover { color: #8a2f12; }
+.fit-actions .doc-clear, .cert-upload .doc-clear { align-self: center; }
+.upload-help { font-size: 12px; color: var(--gray-dark); font-style: italic; margin: -4px 0 10px; }
+@media print { .doc-clear, .upload-help { display: none !important; } }
 </style>
 </head>
 <body>
@@ -531,6 +538,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
     </div>
     <h3 class="sub-h first">Required Supporting Documents</h3>
     <p class="hint" style="margin-bottom:12px;" id="docIntro">Please attach the following with your application. They will be verified by the Credentialing Committee on receipt.</p>
+    <p class="upload-help">You can attach more than one file for each document &mdash; click &ldquo;Attach&rdquo; again to add more. Each file must be no larger than ten (10) MB, and thirty-five (35) MB in total.</p>
     <div class="doc-list" id="docList"></div>
     <div class="other-docs">
       <div><strong>Other supporting documents</strong> <span class="opt">(optional &mdash; e.g. documents supporting a &ldquo;Yes&rdquo; answer)</span><span class="doc-fname" id="docOtherList"></span></div>
@@ -711,7 +719,7 @@ main { max-width: 940px; margin: 0 auto; padding: 24px 18px 60px; }
             <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 1.5h5.5L13 5v9.5H4z M9.5 1.5V5H13" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 8.5h5M6 11h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
             View certificate template
           </button>
-          <input type="file" id="fitUpload" accept="image/*,.pdf" style="display:none;" onchange="handleFitUpload(this)">
+          <input type="file" id="fitUpload" multiple accept="image/*,.pdf" style="display:none;" onchange="handleFitUpload(this)">
           <label for="fitUpload" class="cert-upload-btn">
             <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M8 2v8m0 0l-3-3m3 3l3-3M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Upload signed certificate
@@ -1152,14 +1160,15 @@ function applyMask(el, deleting) {
 function handleFitUpload(input) {
   const box = document.getElementById('fitFile');
   const line = document.getElementById('fitPrintLine');
-  const file = input.files[0];
-  if (!file) { box.innerHTML = ''; line.innerHTML = 'Medical Fitness Certificate attached: &#9744; Yes &nbsp; &#9744; No'; return; }
+  const files = Array.from(input.files || []);
+  if (!files.length) { box.innerHTML = ''; line.innerHTML = 'Medical Fitness Certificate attached: &#9744; Yes &nbsp; &#9744; No'; return; }
   box.innerHTML = '';
+  const names = files.map(function(f) { return f.name; }).join(', ');
   const tag = document.createElement('span');
   tag.className = 'fname';
-  tag.textContent = '\u2713 ' + file.name;
+  tag.textContent = '\u2713 ' + names;
   box.appendChild(tag);
-  line.textContent = 'Medical Fitness Certificate attached: Yes (' + file.name + ')';
+  line.textContent = 'Medical Fitness Certificate attached: Yes (' + names + ')';
 }
 function examineeName() {
   return fullName() || '[Applicant\u2019s full name]';
@@ -1712,7 +1721,7 @@ function walk(container) {
     if (el.matches('.field') && el.parentElement.closest(ROWS_SEL)) return;
     if (el.matches('.field') && el.querySelector('.fit-box')) {
       const fit = fileNames('fitUpload');
-      out.push(pdfField('Medical Fitness Certificate (signed and stamped)', fit.length ? 'Attached: ' + fit[0] : 'Not attached'));
+      out.push(pdfField('Medical Fitness Certificate (signed and stamped)', fit.length ? 'Attached: ' + fit.join(', ') : 'Not attached'));
       return;
     }
     const fields = el.matches('.field') ? [el] : Array.from(el.children).filter(function(c) { return c.matches('.field') && isShown(c); });
@@ -2023,5 +2032,100 @@ window.addEventListener('scroll', function() {
 });
 
 </script>
+<script>
+/* ======================================================================
+   DOCUMENT UPLOADS — more than one file per document, a "Clear" link
+   on each document, and an immediate warning for over-size files.
+   (The applicant's signature is not affected: it stays a single photo.)
+   ====================================================================== */
+(function() {
+  const PICKED = {};   /* files chosen so far, by upload box */
+  const canMerge = (function() { try { return typeof DataTransfer !== 'undefined' && !!new DataTransfer().items; } catch (e) { return false; } })();
+  function boxes() { return Array.from(document.querySelectorAll('main input[type="file"]:not(#sigUpload)')); }
+  function isDocBox(el) { return el && el.type === 'file' && el.id !== 'sigUpload' && !!el.closest('main'); }
+  function mb(n) { return n / (1024 * 1024); }
+  function setFiles(input, list) {
+    PICKED[input.id] = list;
+    if (!canMerge) return;
+    const dt = new DataTransfer();
+    list.forEach(function(f) { dt.items.add(f); });
+    input.files = dt.files;
+  }
+  function totalExcept(id) {
+    return boxes().reduce(function(sum, b) {
+      if (b.id === id) return sum;
+      return sum + Array.from(b.files || []).reduce(function(s, f) { return s + f.size; }, 0);
+    }, 0);
+  }
+
+  /* Runs before the form's own handlers, so they always see the full list */
+  document.addEventListener('change', function(e) {
+    const input = e.target;
+    if (!isDocBox(input)) return;
+    if (input.dataset.clearing) { delete input.dataset.clearing; refreshClear(); return; }
+    const before = canMerge ? (PICKED[input.id] || []) : [];
+    const picked = Array.from(input.files || []);
+    const tooBig = [], keep = [];
+    let running = totalExcept(input.id) + before.reduce(function(s, f) { return s + f.size; }, 0);
+    let overTotal = false;
+    picked.forEach(function(f) {
+      if (mb(f.size) > MAX_FILE_MB) { tooBig.push(f.name + ' (' + mb(f.size).toFixed(1) + ' MB)'); return; }
+      if (before.some(function(b) { return b.name === f.name && b.size === f.size; })) return; /* already attached */
+      if (mb(running + f.size) > MAX_TOTAL_MB) { overTotal = true; tooBig.push(f.name); return; }
+      running += f.size;
+      keep.push(f);
+    });
+    setFiles(input, before.concat(keep));
+    if (!canMerge && tooBig.length) input.value = '';
+    if (tooBig.length) {
+      alert((overTotal
+        ? 'All your attachments together must not exceed ' + MAX_TOTAL_MB + ' MB. '
+        : '') +
+        'The following file(s) were NOT attached because they are too large (the limit is ' + MAX_FILE_MB + ' MB per file):\n\n' +
+        tooBig.join('\n') +
+        '\n\nPlease make them smaller (for example, take a smaller photo or save a lower-resolution PDF) and attach them again.');
+    }
+    refreshClear();
+  }, true);
+
+  function clearBox(id) {
+    const input = document.getElementById(id);
+    if (!input) return;
+    PICKED[id] = [];
+    input.value = '';
+    input.dataset.clearing = '1';
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+    refreshClear();
+  }
+  window.clearUploads = clearBox;
+
+  function refreshClear() {
+    boxes().forEach(function(b) {
+      const link = document.querySelector('.doc-clear[data-for="' + b.id + '"]');
+      if (link) link.style.display = (b.files && b.files.length) ? '' : 'none';
+    });
+  }
+  window.refreshUploadClear = refreshClear;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    boxes().forEach(function(b) {
+      b.multiple = true;
+      const label = document.querySelector('label[for="' + b.id + '"]');
+      if (!label || document.querySelector('.doc-clear[data-for="' + b.id + '"]')) return;
+      const a = document.createElement('button');
+      a.type = 'button';
+      a.className = 'doc-clear';
+      a.setAttribute('data-for', b.id);
+      a.textContent = 'Clear';
+      a.title = 'Remove the file(s) attached here';
+      a.style.display = 'none';
+      a.onclick = function() { clearBox(b.id); };
+      label.insertAdjacentElement('afterend', a);
+    });
+    refreshClear();
+  });
+})();
+</script>
+
 </body>
 </html>
